@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ElevesModule } from './module/eleves/eleves.module';
+import { StudentsModule } from './modules/students/students.module';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { ElevesModule } from './module/eleves/eleves.module';
         synchronize: true,
       }),
     }),
-    ElevesModule,
+    StudentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
