@@ -13,16 +13,19 @@ export class StudentsService {
       private readonly studentRepository: Repository<Student>,
   ) {}
   create(createStudentDto: CreateStudentDto) {
-    const student = this.studentRepository.create(createStudentDto);
+    const student = this.studentRepository.create({
+      ...createStudentDto,
+      classe: createStudentDto.classId? { id: createStudentDto.classId } : undefined,
+    });
     return this.studentRepository.save(student);
   }
 
   findAll() {
-    return this.studentRepository.find();
+    return this.studentRepository.find({ relations: {classe:true} });
   }
 
   findOne(id: number) {
-    return this.studentRepository.findOneBy({ id });
+    return this.studentRepository.findOne({ where : {id}, relations: {classe:true} });
   }
 
   update(id: number, updateStudentDto: UpdateStudentDto) {
@@ -32,4 +35,6 @@ export class StudentsService {
   remove(id: number) {
     return this.studentRepository.delete(id);
   }
+
+
 }

@@ -1,4 +1,4 @@
-import {IsDateString, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength} from "class-validator";
+import {IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength} from "class-validator";
 
 export class CreateStudentDto {
     @IsString()
@@ -19,4 +19,9 @@ export class CreateStudentDto {
     @IsOptional()
     @IsString()
     photo?: string;
+
+    @IsOptional()
+    @IsInt()
+    classId: number;
+
 }

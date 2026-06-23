@@ -1,10 +1,11 @@
 import {
   Column,
   CreateDateColumn,
-  Entity,
+  Entity, ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import {Class} from "../../classes/entities/class.entity";
 
 @Entity()
 export class Student {
@@ -28,4 +29,7 @@ export class Student {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(()=> Class, (classe)=> classe.students)
+  classe: Class;
 }
