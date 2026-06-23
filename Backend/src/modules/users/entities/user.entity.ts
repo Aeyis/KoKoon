@@ -1,5 +1,6 @@
-import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import {Exclude} from "class-transformer";
+import {Class} from "../../classes/entities/class.entity";
 
 export enum UserRole {
     TEACHER = 'TEACHER',
@@ -34,4 +35,6 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @OneToMany(() => Class, (classe) => classe.teacher)
+    classes: Class[];
 }
