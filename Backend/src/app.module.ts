@@ -8,6 +8,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ClassesModule } from './modules/classes/classes.module';
 import { AttendanceModule } from './modules/attendance/attendance.module';
+import { SchoolsModule } from './modules/schools/schools.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AttendanceModule } from './modules/attendance/attendance.module';
     AuthModule,
     ClassesModule,
     AttendanceModule,
+    SchoolsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

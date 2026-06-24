@@ -1,6 +1,7 @@
 import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Student} from "../../students/entities/student.entity";
 import {User} from "../../users/entities/user.entity";
+import {School} from "../../schools/entities/school.entity";
 
 @Entity()
 export class Class {
@@ -18,5 +19,8 @@ export class Class {
 
     @ManyToOne(()=> User, (user)=> user.classes)
     teacher: User;
+
+    @ManyToOne(()=> School, (school)=> school.classes, { nullable: true })
+    school: School;
 }
 
