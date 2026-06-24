@@ -3,9 +3,11 @@ import {Exclude} from "class-transformer";
 import {Class} from "../../classes/entities/class.entity";
 
 export enum UserRole {
+    ADMIN = 'ADMIN',
+    PRINCIPAL = 'PRINCIPAL',
     TEACHER = 'TEACHER',
     RESPONSABLE = 'RESPONSABLE',
-    PRINCIPAL = 'PRINCIPAL',
+
 }
 
 @Entity()
