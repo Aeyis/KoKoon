@@ -9,6 +9,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ClassesModule } from './modules/classes/classes.module';
 import { AttendanceModule } from './modules/attendance/attendance.module';
 import { SchoolsModule } from './modules/schools/schools.module';
+import { MedicalRecordsModule } from './modules/medical-records/medical-records.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { SchoolsModule } from './modules/schools/schools.module';
     ClassesModule,
     AttendanceModule,
     SchoolsModule,
+    MedicalRecordsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
