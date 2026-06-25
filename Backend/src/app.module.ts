@@ -15,6 +15,7 @@ import { SubjectsModule } from './modules/report-card/subjects/subjects.module';
 import { PeriodsModule } from './modules/report-card/periods/periods.module';
 import { EvaluationsModule } from './modules/report-card/evaluations/evaluations.module';
 import { ReportCardsModule } from './modules/report-card/report-cards/report-cards.module';
+import { ClassJournalsModule } from './modules/class-journals/class-journals.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ReportCardsModule } from './modules/report-card/report-cards/report-car
     PeriodsModule,
     EvaluationsModule,
     ReportCardsModule,
+    ClassJournalsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
