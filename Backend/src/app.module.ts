@@ -17,6 +17,7 @@ import { EvaluationsModule } from './modules/report-card/evaluations/evaluations
 import { ReportCardsModule } from './modules/report-card/report-cards/report-cards.module';
 import { ClassJournalsModule } from './modules/class-journals/class-journals.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { MessageModule } from './modules/message/message.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     ReportCardsModule,
     ClassJournalsModule,
     NotificationsModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
