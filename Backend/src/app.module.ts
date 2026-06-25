@@ -20,6 +20,7 @@ import { NotificationsModule } from './modules/communication/notifications/notif
 import { MessageModule } from './modules/communication/message/message.module';
 import { MeModule } from './modules/communication/me/me.module';
 import { ClassTeachersModule } from './modules/organization/class-teachers/class-teachers.module';
+import { SubstitutionsModule } from './modules/organization/substitutions/substitutions.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { ClassTeachersModule } from './modules/organization/class-teachers/class
     MessageModule,
     MeModule,
     ClassTeachersModule,
+    SubstitutionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
