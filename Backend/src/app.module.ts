@@ -14,6 +14,7 @@ import { BehaviorsModule } from './modules/behaviors/behaviors.module';
 import { SubjectsModule } from './modules/report-card/subjects/subjects.module';
 import { PeriodsModule } from './modules/report-card/periods/periods.module';
 import { EvaluationsModule } from './modules/report-card/evaluations/evaluations.module';
+import { ReportCardsModule } from './modules/report-card/report-cards/report-cards.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { EvaluationsModule } from './modules/report-card/evaluations/evaluations
     SubjectsModule,
     PeriodsModule,
     EvaluationsModule,
+    ReportCardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
