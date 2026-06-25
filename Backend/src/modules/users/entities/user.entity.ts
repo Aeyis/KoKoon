@@ -7,8 +7,8 @@ import {
     UpdateDateColumn
 } from "typeorm";
 import {Exclude} from "class-transformer";
-import {Class} from "../../organization/classes/entities/class.entity";
 import {Student} from "../../students/entities/student.entity";
+import {School} from "../../organization/schools/entities/school.entity";
 
 export enum UserRole {
     ADMIN = 'ADMIN',
@@ -47,4 +47,8 @@ export class User {
     @ManyToMany(()=>Student, (student)=>student.guardians)
     @JoinTable()
     children: Student[];
+
+    @ManyToMany(()=>School, (school)=>school.staff)
+    @JoinTable()
+    schools: School[];
 }

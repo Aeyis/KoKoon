@@ -21,7 +21,7 @@ export class SchoolsService {
   }
 
   findOne(id: number) {
-    return this.schoolRepository.findOne({ where: { id } });
+    return this.schoolRepository.findOne({ where: { id }, relations: { staff: true } });
   }
 
   update(id: number, dto: UpdateSchoolDto) {
@@ -30,5 +30,23 @@ export class SchoolsService {
 
   remove(id: number) {
     return this.schoolRepository.delete(id);
+  }
+
+  async addStaff(schoolId: number, userId: number) {
+    await this.schoolRepository
+        .createQueryBuilder()
+        .relation(School, 'staff')
+        .of(schoolId)
+        .add(userId);
+    return this.findOne(schoolId);
+  }
+
+  async removeStaff(schoolId: number, userId: number) {
+    await this.schoolRepository
+        .createQueryBuilder()
+        .relation(School, 'staff')
+        .of(schoolId)
+        .remove(userId);
+    return this.findOne(schoolId);
   }
 }

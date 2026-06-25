@@ -1,5 +1,14 @@
-import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToMany,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from "typeorm";
 import {Class} from "../../classes/entities/class.entity";
+import {User} from "../../../users/entities/user.entity";
 
 @Entity()
 export class School {
@@ -32,4 +41,7 @@ export class School {
 
     @OneToMany(()=> Class, (classe) => classe.school)
     classes: Class[];
+
+    @ManyToMany(()=> User, (user)=>user.schools)
+    staff: User[];
 }

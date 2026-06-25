@@ -1,7 +1,7 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
-import { SchoolsService } from './schools.service';
-import { CreateSchoolDto } from './dto/create-school.dto';
-import { UpdateSchoolDto } from './dto/update-school.dto';
+import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards} from '@nestjs/common';
+import {SchoolsService} from './schools.service';
+import {CreateSchoolDto} from './dto/create-school.dto';
+import {UpdateSchoolDto} from './dto/update-school.dto';
 import {JwtAuthGuard} from "../../auth/guards/jwt-auth-guard";
 import {RolesGuards} from "../../auth/guards/roles.guards";
 import {Roles} from "../../auth/decorators/roles.decorator";
@@ -28,7 +28,7 @@ export class SchoolsController {
     return this.schoolsService.findOne(+id);
   }
 
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSchoolDto: UpdateSchoolDto) {
     return this.schoolsService.update(+id, updateSchoolDto);
@@ -38,5 +38,17 @@ export class SchoolsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.schoolsService.remove(+id);
+  }
+
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL)
+  @Post(':id/staff/:userId')
+  addStaff(@Param('id') id: string, @Param('userId') userId: string) {
+    return this.schoolsService.addStaff(+id, +userId);
+  }
+
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL)
+  @Delete(':id/staff/:userId')
+  removeStaff(@Param('id') id: string, @Param('userId') userId: string) {
+    return this.schoolsService.removeStaff(+id, +userId);
   }
 }
