@@ -11,6 +11,9 @@ import { AttendanceModule } from './modules/attendance/attendance.module';
 import { SchoolsModule } from './modules/schools/schools.module';
 import { MedicalRecordsModule } from './modules/medical-records/medical-records.module';
 import { BehaviorsModule } from './modules/behaviors/behaviors.module';
+import { SubjectsModule } from './modules/report-card/subjects/subjects.module';
+import { PeriodsModule } from './modules/report-card/periods/periods.module';
+import { EvaluationsModule } from './modules/report-card/evaluations/evaluations.module';
 
 @Module({
   imports: [
@@ -37,6 +40,9 @@ import { BehaviorsModule } from './modules/behaviors/behaviors.module';
     SchoolsModule,
     MedicalRecordsModule,
     BehaviorsModule,
+    SubjectsModule,
+    PeriodsModule,
+    EvaluationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
