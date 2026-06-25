@@ -10,6 +10,7 @@ import { ClassesModule } from './modules/classes/classes.module';
 import { AttendanceModule } from './modules/attendance/attendance.module';
 import { SchoolsModule } from './modules/schools/schools.module';
 import { MedicalRecordsModule } from './modules/medical-records/medical-records.module';
+import { BehaviorsModule } from './modules/behaviors/behaviors.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MedicalRecordsModule } from './modules/medical-records/medical-records.
     AttendanceModule,
     SchoolsModule,
     MedicalRecordsModule,
+    BehaviorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
