@@ -8,7 +8,7 @@ import {
     UpdateDateColumn
 } from "typeorm";
 import {Exclude} from "class-transformer";
-import {Class} from "../../classes/entities/class.entity";
+import {Class} from "../../organization/classes/entities/class.entity";
 import {Student} from "../../students/entities/student.entity";
 
 export enum UserRole {

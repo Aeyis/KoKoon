@@ -5,8 +5,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import {Class} from "../../classes/entities/class.entity";
-import {MedicalRecord} from "../../medical-records/entities/medical-record.entity";
+import {Class} from "../../organization/classes/entities/class.entity";
+import {MedicalRecord} from "../../school-life/medical-records/entities/medical-record.entity";
 import {User} from "../../users/entities/user.entity";
 
 @Entity()
