@@ -4,6 +4,7 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {Student} from "./entities/student.entity";
+import {User} from "../users/entities/user.entity";
 
 
 @Injectable()
@@ -36,4 +37,15 @@ export class StudentsService {
     return this.studentRepository.delete(id);
   }
 
+  async addGuardian(studentId: number, userId: number) {
+    await this.studentRepository.manager
+        .createQueryBuilder()
+        .relation(User, 'children')
+        .of(userId)
+        .add(studentId);
+    return this.studentRepository.findOne({
+      where: { id: studentId },
+      relations: { guardians: true },
+    });
+  }
 }

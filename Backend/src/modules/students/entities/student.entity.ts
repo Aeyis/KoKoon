@@ -1,12 +1,13 @@
 import {
   Column,
   CreateDateColumn,
-  Entity, ManyToOne, OneToOne,
+  Entity, ManyToMany, ManyToOne, OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import {Class} from "../../classes/entities/class.entity";
 import {MedicalRecord} from "../../medical-records/entities/medical-record.entity";
+import {User} from "../../users/entities/user.entity";
 
 @Entity()
 export class Student {
@@ -36,4 +37,7 @@ export class Student {
 
   @OneToOne(()=>MedicalRecord, (medicalRecord) => medicalRecord.student)
   medicalRecord: MedicalRecord;
+
+  @ManyToMany(()=>User, (user)=>user.children)
+  guardians: User[];
 }

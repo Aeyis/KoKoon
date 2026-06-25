@@ -1,13 +1,21 @@
-import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    Entity, JoinTable,
+    ManyToMany,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from "typeorm";
 import {Exclude} from "class-transformer";
 import {Class} from "../../classes/entities/class.entity";
+import {Student} from "../../students/entities/student.entity";
 
 export enum UserRole {
     ADMIN = 'ADMIN',
     PRINCIPAL = 'PRINCIPAL',
     TEACHER = 'TEACHER',
     RESPONSABLE = 'RESPONSABLE',
-
 }
 
 @Entity()
@@ -39,4 +47,8 @@ export class User {
 
     @OneToMany(() => Class, (classe) => classe.teacher)
     classes: Class[];
+
+    @ManyToMany(()=>Student, (student)=>student.guardians)
+    @JoinTable()
+    children: Student[];
 }

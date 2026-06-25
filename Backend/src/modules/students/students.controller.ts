@@ -15,6 +15,7 @@ import {JwtAuthGuard} from "../auth/guards/jwt-auth-guard";
 import {RolesGuards} from "../auth/guards/roles.guards";
 import {UserRole} from "../users/entities/user.entity";
 import {Roles} from "../auth/decorators/roles.decorator";
+import {AddGuardianDto} from "./dto/add-guardian.dto";
 
 
 @UseGuards(JwtAuthGuard, RolesGuards)
@@ -48,5 +49,10 @@ export class StudentsController {
     return this.studentsService.remove(+id);
   }
 
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
+  @Post(':id/guardians')
+  addGuardian(@Param('id') id: string, @Body() dto: AddGuardianDto) {
+    return this.studentsService.addGuardian(+id, dto.userId);
+  }
 
 }
