@@ -18,6 +18,7 @@ import { ReportCardsModule } from './modules/report-card/report-cards/report-car
 import { ClassJournalsModule } from './modules/class-journals/class-journals.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { MessageModule } from './modules/message/message.module';
+import { MeModule } from './modules/me/me.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { MessageModule } from './modules/message/message.module';
     ClassJournalsModule,
     NotificationsModule,
     MessageModule,
+    MeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
