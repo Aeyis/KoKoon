@@ -21,6 +21,7 @@ import { MessageModule } from './modules/communication/message/message.module';
 import { MeModule } from './modules/communication/me/me.module';
 import { ClassTeachersModule } from './modules/organization/class-teachers/class-teachers.module';
 import { SubstitutionsModule } from './modules/organization/substitutions/substitutions.module';
+import { typeOrmConfig } from './config/database.config';
 
 @Module({
   imports: [
@@ -28,16 +29,7 @@ import { SubstitutionsModule } from './modules/organization/substitutions/substi
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: +configService.get('DB_PORT'),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
+      useFactory: typeOrmConfig,
     }),
     StudentsModule,
     UsersModule,
