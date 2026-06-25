@@ -3,7 +3,6 @@ import {
     CreateDateColumn,
     Entity, JoinTable,
     ManyToMany,
-    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
@@ -44,9 +43,6 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: Date;
-
-    @OneToMany(() => Class, (classe) => classe.teacher)
-    classes: Class[];
 
     @ManyToMany(()=>Student, (student)=>student.guardians)
     @JoinTable()

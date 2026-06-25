@@ -19,6 +19,7 @@ import { ClassJournalsModule } from './modules/school-life/class-journals/class-
 import { NotificationsModule } from './modules/communication/notifications/notifications.module';
 import { MessageModule } from './modules/communication/message/message.module';
 import { MeModule } from './modules/communication/me/me.module';
+import { ClassTeachersModule } from './modules/organization/class-teachers/class-teachers.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { MeModule } from './modules/communication/me/me.module';
     NotificationsModule,
     MessageModule,
     MeModule,
+    ClassTeachersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

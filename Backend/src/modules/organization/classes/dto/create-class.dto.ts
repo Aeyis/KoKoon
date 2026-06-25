@@ -8,8 +8,4 @@ export class CreateClassDto {
     @IsString()
     @IsNotEmpty()
     schoolYear: string;
-
-    @IsOptional()
-    @IsInt()
-    teacherId: number;
 }
