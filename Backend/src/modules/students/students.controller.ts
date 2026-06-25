@@ -16,8 +16,10 @@ import {RolesGuards} from "../auth/guards/roles.guards";
 import {UserRole} from "../users/entities/user.entity";
 import {Roles} from "../auth/decorators/roles.decorator";
 import {AddGuardianDto} from "./dto/add-guardian.dto";
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuards)
 @Controller('students')
 

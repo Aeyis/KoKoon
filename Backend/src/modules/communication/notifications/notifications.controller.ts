@@ -5,7 +5,9 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth-guard';
 import { RolesGuards } from '../../auth/guards/roles.guards';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../users/entities/user.entity';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuards)
 @Controller('notifications')
 export class NotificationsController {

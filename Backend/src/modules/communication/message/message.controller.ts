@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Param, Delete, Patch, UseGuards, Request }
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth-guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('messages')
 export class MessageController {
