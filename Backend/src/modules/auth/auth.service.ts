@@ -12,7 +12,7 @@ export class AuthService {
     ) {}
     async login(loginDto: LoginDto) {
         const user = await this.usersService.findByEmail(loginDto.email);
-        if (!user || !(await bcrypt.compare(loginDto.password, user.password))) {
+        if (!user || !user.password || !(await bcrypt.compare(loginDto.password, user.password))) {
             throw new UnauthorizedException('Invalid email or password');
         }
         const payload = { sub: user.id, email: user.email, role: user.role };

@@ -26,8 +26,18 @@ export class User {
     email: string;
 
     @Exclude()
-    @Column()
-    password: string;
+    @Column({ type: 'varchar', nullable: true })// tant que prof n'a pas activé de cpte pas de mdp
+    password: string | null;
+
+    @Exclude()
+    @Column({ type: 'varchar', nullable: true })
+    invitationToken: string|null;
+
+    @Column({ type: 'timestamp', nullable: true })
+    invitationExpireAt: Date|null;
+
+    @Column({ type:'varchar',nullable:true})
+    theme: string|null;
 
     @Column({ type: 'enum', enum: UserRole })
     role: UserRole;
