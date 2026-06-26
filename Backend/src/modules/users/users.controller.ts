@@ -7,6 +7,7 @@ import { RolesGuards } from '../auth/guards/roles.guards';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from './entities/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { UpdateThemeDto } from './dto/update-theme.dto';
 
 
 @ApiBearerAuth()
@@ -35,6 +36,11 @@ export class UsersController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
+  }
+
+  @Patch('me/theme')
+  updateMyTheme(@Request() req, @Body() dto: UpdateThemeDto) {
+    return this.usersService.updateTheme(req.user.id, dto.theme);
   }
 
   @Roles(UserRole.ADMIN, UserRole.PRINCIPAL)

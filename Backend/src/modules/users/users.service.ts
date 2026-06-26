@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {InjectRepository} from "@nestjs/typeorm";
-import {User} from "./entities/user.entity";
+import {User, ThemeMode} from "./entities/user.entity";
 import {Repository} from "typeorm";
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
@@ -49,6 +49,10 @@ export class UsersService {
     user.invitationToken = null;   // token usage unique puis on l'efface
     user.invitationExpireAt = null;
     return this.usersRepository.save(user);
+  }
+
+  updateTheme(id: number, theme: ThemeMode) {
+    return this.usersRepository.update(id, { theme });
   }
 
   findAll() { return this.usersRepository.find(); }

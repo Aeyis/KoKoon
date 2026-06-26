@@ -17,6 +17,11 @@ export enum UserRole {
     RESPONSABLE = 'RESPONSABLE',
 }
 
+export enum ThemeMode {
+    LIGHT = 'LIGHT',
+    DARK = 'DARK',
+}
+
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -36,8 +41,8 @@ export class User {
     @Column({ type: 'timestamp', nullable: true })
     invitationExpireAt: Date|null;
 
-    @Column({ type:'varchar',nullable:true})
-    theme: string|null;
+    @Column({ type: 'varchar', nullable: true })
+    theme: ThemeMode | null;
 
     @Column({ type: 'enum', enum: UserRole })
     role: UserRole;
