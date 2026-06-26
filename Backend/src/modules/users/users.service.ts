@@ -5,6 +5,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {User} from "./entities/user.entity";
 import {Repository} from "typeorm";
 import * as crypto from 'crypto';
+import * as bcrypt from 'bcrypt';
 import {MailService} from "../mail/mail.service";
 
 @Injectable()
@@ -37,6 +38,17 @@ export class UsersService {
 
   findByEmail(email: string){
     return this.usersRepository.findOneBy({ email });
+  }
+
+  findByInvitationToken(hashedToken: string) {
+    return this.usersRepository.findOneBy({ invitationToken: hashedToken });
+  }
+
+  async activateAccount(user: User, plainPassword: string) {
+    user.password = await bcrypt.hash(plainPassword, 10);
+    user.invitationToken = null;   // token usage unique puis on l'efface
+    user.invitationExpireAt = null;
+    return this.usersRepository.save(user);
   }
 
   findAll() { return this.usersRepository.find(); }
