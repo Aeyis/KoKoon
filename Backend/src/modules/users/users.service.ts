@@ -4,19 +4,35 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {User} from "./entities/user.entity";
 import {Repository} from "typeorm";
-import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
+import {MailService} from "../mail/mail.service";
 
 @Injectable()
 export class UsersService {
   constructor(
       @InjectRepository(User)
-      private readonly usersRepository: Repository<User>
+      private readonly usersRepository: Repository<User>,
+      private readonly mailService: MailService,
   ) {}
 
   async create(createUserDto: CreateUserDto){
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-    const user = this.usersRepository.create({ ...createUserDto, password: hashedPassword });
-    return this.usersRepository.save(user);
+    const rawToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7); // lien vaut 7 jours
+
+    const user = this.usersRepository.create({
+      ...createUserDto,
+      password: null,
+      invitationToken: hashedToken,
+      invitationExpireAt: expiresAt,
+    });
+    await this.usersRepository.save(user);
+
+    await this.mailService.sendInvitation(user.email, rawToken);
+
+    return user;
   }
 
   findByEmail(email: string){

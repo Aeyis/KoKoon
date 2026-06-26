@@ -22,6 +22,7 @@ import { MeModule } from './modules/communication/me/me.module';
 import { ClassTeachersModule } from './modules/organization/class-teachers/class-teachers.module';
 import { SubstitutionsModule } from './modules/organization/substitutions/substitutions.module';
 import { typeOrmConfig } from './config/database.config';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { typeOrmConfig } from './config/database.config';
     MeModule,
     ClassTeachersModule,
     SubstitutionsModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
