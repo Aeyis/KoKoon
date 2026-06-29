@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, ForbiddenException} from '@nestjs/common';
 import { BehaviorsService } from './behaviors.service';
 import { CreateBehaviorDto } from './dto/create-behavior.dto';
 import { UpdateBehaviorDto } from './dto/update-behavior.dto';
@@ -7,38 +7,59 @@ import {RolesGuards} from "../../auth/guards/roles.guards";
 import {Roles} from "../../auth/decorators/roles.decorator";
 import {UserRole} from "../../users/entities/user.entity";
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { ClassAccessService } from '../../organization/class-access/class-access.service';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuards)
 @Controller('behaviors')
 export class BehaviorsController {
-  constructor(private readonly behaviorsService: BehaviorsService) {}
+  constructor(
+      private readonly behaviorsService: BehaviorsService,
+      private readonly classAccess: ClassAccessService,
+  ) {}
 
-  @Roles(UserRole.TEACHER)
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Post()
-  create(@Body() createBehaviorDto: CreateBehaviorDto) {
+  async create(@Request() req, @Body() createBehaviorDto: CreateBehaviorDto) {
+    const classId = await this.classAccess.studentClassId(createBehaviorDto.studentId);
+    await this.assertAccess(req.user, classId);
     return this.behaviorsService.create(createBehaviorDto);
   }
 
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Get()
-  findAll() {
-    return this.behaviorsService.findAll();
+  async findAll(@Request() req) {
+    const ids = await this.classAccess.accessibleClassIds(req.user);
+    return this.behaviorsService.findAll(ids);
   }
 
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.behaviorsService.findOne(+id);
+  async findOne(@Request() req, @Param('id') id: string) {
+    const behavior = await this.behaviorsService.findOne(+id);
+    await this.assertAccess(req.user, behavior.student?.classe?.id);
+    return behavior;
   }
 
-  @Roles(UserRole.TEACHER)
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBehaviorDto: UpdateBehaviorDto) {
+  async update(@Request() req, @Param('id') id: string, @Body() updateBehaviorDto: UpdateBehaviorDto) {
+    const behavior = await this.behaviorsService.findOne(+id);
+    await this.assertAccess(req.user, behavior.student?.classe?.id);
     return this.behaviorsService.update(+id, updateBehaviorDto);
   }
 
-  @Roles(UserRole.TEACHER)
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Request() req, @Param('id') id: string) {
+    const behavior = await this.behaviorsService.findOne(+id);
+    await this.assertAccess(req.user, behavior.student?.classe?.id);
     return this.behaviorsService.remove(+id);
+  }
+
+  private async assertAccess(user: { id: number; role: UserRole }, classId: number | null | undefined) {
+    if (!(await this.classAccess.canAccess(user, classId))) {
+      throw new ForbiddenException('You do not have access to this class');
+    }
   }
 }

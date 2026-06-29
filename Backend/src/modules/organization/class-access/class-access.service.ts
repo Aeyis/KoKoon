@@ -1,8 +1,9 @@
-import {Injectable} from "@nestjs/common";
+import {Injectable, NotFoundException} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {ClassTeacher} from "../class-teachers/entities/class-teacher.entity";
 import {LessThanOrEqual, MoreThanOrEqual, Repository} from "typeorm";
 import {Substitution} from "../substitutions/entities/substitution.entity";
+import {Student} from "../../students/entities/student.entity";
 import {UserRole} from "../../users/entities/user.entity";
 
 export interface AuthUser {
@@ -17,7 +18,19 @@ export class ClassAccessService {
         private readonly classTeacherRepository: Repository<ClassTeacher>,
         @InjectRepository(Substitution)
         private readonly substitutionRepository: Repository<Substitution>,
+        @InjectRepository(Student)
+        private readonly studentRepository: Repository<Student>,
     ) {}
+
+    /** Resout la classe d'un eleve (pour les modules rattaches a un student). */
+    async studentClassId(studentId: number): Promise<number | null> {
+        const student = await this.studentRepository.findOne({
+            where: { id: studentId },
+            relations: { classe: true },
+        });
+        if (!student) throw new NotFoundException('Student not found');
+        return student.classe?.id ?? null;
+    }
 
     private isWideView(role: UserRole): boolean {
         // MVP : ADMIN et PRINCIPAL voient tout (school-scoping plus tard).

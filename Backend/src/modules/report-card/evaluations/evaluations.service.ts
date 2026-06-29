@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Evaluation } from './entities/evaluation.entity';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
@@ -25,15 +25,23 @@ export class EvaluationsService {
     return this.evaluationRepository.save(evaluation);
   }
 
-  findAll() {
-    return this.evaluationRepository.find({ relations: { student: true, subject: true, period: true } });
-  }
-
-  findOne(id: number) {
-    return this.evaluationRepository.findOne({
-      where: { id },
+  findAll(classIds: number[] | null = null) {
+    if (classIds === null) {
+      return this.evaluationRepository.find({ relations: { student: true, subject: true, period: true } });
+    }
+    return this.evaluationRepository.find({
+      where: { student: { classe: { id: In(classIds) } } },
       relations: { student: true, subject: true, period: true },
     });
+  }
+
+  async findOne(id: number) {
+    const evaluation = await this.evaluationRepository.findOne({
+      where: { id },
+      relations: { student: { classe: true }, subject: true, period: true },
+    });
+    if (!evaluation) throw new NotFoundException('Evaluation not found');
+    return evaluation;
   }
 
   update(id: number, dto: UpdateEvaluationDto) {

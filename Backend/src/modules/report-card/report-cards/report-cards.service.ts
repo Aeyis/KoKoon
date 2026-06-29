@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ReportCard } from './entities/report-card.entity';
 import { Evaluation } from '../evaluations/entities/evaluation.entity';
 import { CreateReportCardDto } from './dto/create-report-card.dto';
@@ -34,14 +34,20 @@ export class ReportCardsService {
     }
   }
 
-  findAll() {
-    return this.reportCardRepository.find({ relations: { student: true, period: true } });
+  findAll(classIds: number[] | null = null) {
+    if (classIds === null) {
+      return this.reportCardRepository.find({ relations: { student: true, period: true } });
+    }
+    return this.reportCardRepository.find({
+      where: { student: { classe: { id: In(classIds) } } },
+      relations: { student: true, period: true },
+    });
   }
 
   async findOne(id: number) {
     const reportCard = await this.reportCardRepository.findOne({
       where: { id },
-      relations: { student: true, period: true },
+      relations: { student: { classe: true }, period: true },
     });
     if (!reportCard) {
       throw new NotFoundException('Report card not found');

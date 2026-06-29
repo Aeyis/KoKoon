@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ClassJournal } from './entities/class-journal.entity';
 import { CreateClassJournalDto } from './dto/create-class-journal.dto';
 import { UpdateClassJournalDto } from './dto/update-class-journal.dto';
@@ -24,12 +24,20 @@ export class ClassJournalsService {
     return this.classJournalRepository.save(entry);
   }
 
-  findAll() {
-    return this.classJournalRepository.find({ relations: { classe: true, subject: true } });
+  findAll(classIds: number[] | null = null) {
+    if (classIds === null) {
+      return this.classJournalRepository.find({ relations: { classe: true, subject: true } });
+    }
+    return this.classJournalRepository.find({
+      where: { classe: { id: In(classIds) } },
+      relations: { classe: true, subject: true },
+    });
   }
 
-  findOne(id: number) {
-    return this.classJournalRepository.findOne({ where: { id }, relations: { classe: true, subject: true } });
+  async findOne(id: number) {
+    const entry = await this.classJournalRepository.findOne({ where: { id }, relations: { classe: true, subject: true } });
+    if (!entry) throw new NotFoundException('Class journal not found');
+    return entry;
   }
 
   update(id: number, dto: UpdateClassJournalDto) {

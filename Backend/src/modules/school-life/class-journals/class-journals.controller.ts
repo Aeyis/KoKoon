@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, ForbiddenException } from '@nestjs/common';
 import { ClassJournalsService } from './class-journals.service';
 import { CreateClassJournalDto } from './dto/create-class-journal.dto';
 import { UpdateClassJournalDto } from './dto/update-class-journal.dto';
@@ -7,38 +7,58 @@ import { RolesGuards } from '../../auth/guards/roles.guards';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../users/entities/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { ClassAccessService } from '../../organization/class-access/class-access.service';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuards)
 @Controller('class-journals')
 export class ClassJournalsController {
-  constructor(private readonly classJournalsService: ClassJournalsService) {}
+  constructor(
+      private readonly classJournalsService: ClassJournalsService,
+      private readonly classAccess: ClassAccessService,
+  ) {}
 
-  @Roles(UserRole.TEACHER)
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Post()
-  create(@Body() createClassJournalDto: CreateClassJournalDto) {
+  async create(@Request() req, @Body() createClassJournalDto: CreateClassJournalDto) {
+    await this.assertAccess(req.user, createClassJournalDto.classId);
     return this.classJournalsService.create(createClassJournalDto);
   }
 
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Get()
-  findAll() {
-    return this.classJournalsService.findAll();
+  async findAll(@Request() req) {
+    const ids = await this.classAccess.accessibleClassIds(req.user);
+    return this.classJournalsService.findAll(ids);
   }
 
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.classJournalsService.findOne(+id);
+  async findOne(@Request() req, @Param('id') id: string) {
+    const entry = await this.classJournalsService.findOne(+id);
+    await this.assertAccess(req.user, entry.classe?.id);
+    return entry;
   }
 
-  @Roles(UserRole.TEACHER)
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClassJournalDto: UpdateClassJournalDto) {
+  async update(@Request() req, @Param('id') id: string, @Body() updateClassJournalDto: UpdateClassJournalDto) {
+    const entry = await this.classJournalsService.findOne(+id);
+    await this.assertAccess(req.user, entry.classe?.id);
     return this.classJournalsService.update(+id, updateClassJournalDto);
   }
 
-  @Roles(UserRole.TEACHER)
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Request() req, @Param('id') id: string) {
+    const entry = await this.classJournalsService.findOne(+id);
+    await this.assertAccess(req.user, entry.classe?.id);
     return this.classJournalsService.remove(+id);
+  }
+
+  private async assertAccess(user: { id: number; role: UserRole }, classId: number | null | undefined) {
+    if (!(await this.classAccess.canAccess(user, classId))) {
+      throw new ForbiddenException('You do not have access to this class');
+    }
   }
 }
