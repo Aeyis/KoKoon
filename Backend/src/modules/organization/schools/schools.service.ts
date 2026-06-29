@@ -4,6 +4,8 @@ import { UpdateSchoolDto } from './dto/update-school.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {School} from "./entities/school.entity";
+import * as crypto from 'crypto';
+import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class SchoolsService {
@@ -12,7 +14,8 @@ export class SchoolsService {
       private readonly schoolRepository: Repository<School>,
   ) {}
   create(dto: CreateSchoolDto) {
-    const school = this.schoolRepository.create(dto);
+    const code = crypto.randomBytes(4).toString('hex').toUpperCase(); // ex: "A1B2C3D4"
+    const school = this.schoolRepository.create({ ...dto, code });
     return this.schoolRepository.save(school);
   }
 
@@ -48,5 +51,13 @@ export class SchoolsService {
         .of(schoolId)
         .remove(userId);
     return this.findOne(schoolId);
+  }
+
+  async joinByCode(code: string, userId: number) {
+    const school = await this.schoolRepository.findOneBy({ code });
+    if (!school) {
+      throw new NotFoundException('Invalid school code');
+    }
+    return this.addStaff(school.id, userId);
   }
 }

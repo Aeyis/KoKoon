@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Request} from '@nestjs/common';
 import {SchoolsService} from './schools.service';
 import {CreateSchoolDto} from './dto/create-school.dto';
 import {UpdateSchoolDto} from './dto/update-school.dto';
@@ -7,6 +7,7 @@ import {RolesGuards} from "../../auth/guards/roles.guards";
 import {Roles} from "../../auth/decorators/roles.decorator";
 import {UserRole} from "../../users/entities/user.entity";
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { JoinSchoolDto } from './dto/join-school.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuards)
@@ -23,6 +24,12 @@ export class SchoolsController {
   @Get()
   findAll() {
     return this.schoolsService.findAll();
+  }
+
+  @Roles(UserRole.TEACHER)
+  @Post('join')
+  joinByCode(@Request() req, @Body() dto: JoinSchoolDto) {
+    return this.schoolsService.joinByCode(dto.code, req.user.id);
   }
 
   @Get(':id')

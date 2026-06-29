@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Request, ForbiddenException} from '@nestjs/common';
 import {AttendanceService} from './attendance.service';
 import {CreateAttendanceDto} from './dto/create-attendance.dto';
 import {UpdateAttendanceDto} from './dto/update-attendance.dto';
@@ -7,38 +7,59 @@ import {JwtAuthGuard} from "../../auth/guards/jwt-auth-guard";
 import {Roles} from "../../auth/decorators/roles.decorator";
 import {UserRole} from "../../users/entities/user.entity";
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { ClassAccessService } from '../../organization/class-access/class-access.service';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuards)
 @Controller('attendance')
 export class AttendanceController {
-  constructor(private readonly attendanceService: AttendanceService) {}
+  constructor(
+      private readonly attendanceService: AttendanceService,
+      private readonly classAccess: ClassAccessService,
+  ) {}
 
-  @Roles(UserRole.TEACHER)
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Post()
-  create(@Body() createAttendanceDto: CreateAttendanceDto) {
+  async create(@Request() req, @Body() createAttendanceDto: CreateAttendanceDto) {
+    const classId = await this.attendanceService.studentClassId(createAttendanceDto.studentId);
+    await this.assertAccess(req.user, classId);
     return this.attendanceService.create(createAttendanceDto);
   }
 
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Get()
-  findAll() {
-    return this.attendanceService.findAll();
+  async findAll(@Request() req) {
+    const ids = await this.classAccess.accessibleClassIds(req.user);
+    return this.attendanceService.findAll(ids);
   }
 
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.attendanceService.findOne(+id);
+  async findOne(@Request() req, @Param('id') id: string) {
+    const att = await this.attendanceService.findOne(+id);
+    await this.assertAccess(req.user, att.student?.classe?.id);
+    return att;
   }
 
-  @Roles(UserRole.TEACHER)
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAttendanceDto: UpdateAttendanceDto) {
+  async update(@Request() req, @Param('id') id: string, @Body() updateAttendanceDto: UpdateAttendanceDto) {
+    const att = await this.attendanceService.findOne(+id);
+    await this.assertAccess(req.user, att.student?.classe?.id);
     return this.attendanceService.update(+id, updateAttendanceDto);
   }
 
-  @Roles(UserRole.TEACHER)
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL, UserRole.TEACHER)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Request() req, @Param('id') id: string) {
+    const att = await this.attendanceService.findOne(+id);
+    await this.assertAccess(req.user, att.student?.classe?.id);
     return this.attendanceService.remove(+id);
+  }
+
+  private async assertAccess(user: { id: number; role: UserRole }, classId: number | null | undefined) {
+    if (!(await this.classAccess.canAccess(user, classId))) {
+      throw new ForbiddenException('You do not have access to this class');
+    }
   }
 }

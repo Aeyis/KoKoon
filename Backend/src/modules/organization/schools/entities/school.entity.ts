@@ -33,6 +33,9 @@ export class School {
     @Column({ nullable: true })
     email: string;
 
+    @Column({ type:'varchar', unique:true, nullable: true })
+    code: string|null;
+
     @CreateDateColumn()
     createdAt: Date;
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {InjectRepository} from "@nestjs/typeorm";
@@ -29,7 +29,14 @@ export class UsersService {
       invitationToken: hashedToken,
       invitationExpireAt: expiresAt,
     });
-    await this.usersRepository.save(user);
+    try {
+      await this.usersRepository.save(user);
+    } catch (e: any) {
+      if (e.code === '23505') {
+        throw new ConflictException('Email already in use');
+      }
+      throw e;
+    }
 
     await this.mailService.sendInvitation(user.email, rawToken);
 

@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
+import {In, Repository} from "typeorm";
 import {Class} from "./entities/class.entity";
 
 @Injectable()
@@ -17,12 +17,22 @@ export class ClassesService {
     return this.classRepository.save(entity);
   }
 
-  findAll() { return this.classRepository.find({relations: {students:true}}); }
+  findAll(classIds: number[] | null = null) {
+    if (classIds === null) {
+      return this.classRepository.find({ relations: { students: true } });
+    }
+    return this.classRepository.find({ where: { id: In(classIds) }, relations: { students: true } });
+  }
+
   update(id:number, dto: UpdateClassDto) {
     return this.classRepository.update(id, dto);
   }
 
-  findOne(id:number) { return this.classRepository.findOne({where:{id}, relations: {students:true}}); }
+  async findOne(id:number) {
+    const classe = await this.classRepository.findOne({where:{id}, relations: {students:true}});
+    if (!classe) throw new NotFoundException('Class not found');
+    return classe;
+  }
 
   remove(id:number) { return this.classRepository.delete(id); }
 }
