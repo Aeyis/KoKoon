@@ -1,0 +1,72 @@
+.navbar {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: min(94%, 28rem);
+}
+
+.navbar__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4.25rem;
+  padding: 0 1.25rem;
+  border-radius: 999px; // pilule (override le radius de .glass)
+}
+
+.navbar__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-decoration: none;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.68rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+
+  mat-icon {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.navbar__item.is-active {
+  color: var(--mat-sys-primary);
+}
+
+.navbar__spacer {
+  flex: 0 0 4rem; // réserve la place du bouton central
+}
+
+.navbar__center {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -45%); // dépasse au-dessus de la barre
+  display: grid;
+  place-items: center;
+  width: 3.9rem;
+  height: 3.9rem;
+  border-radius: 50%;
+  background: var(--mat-sys-primary); // coral
+  color: var(--mat-sys-on-primary);
+  border: 4px solid var(--mat-sys-surface); // anneau qui détache du fond
+  box-shadow: 0 10px 24px rgba(239, 126, 94, 0.5);
+  text-decoration: none;
+  transition: transform 0.2s ease;
+
+  mat-icon {
+    font-size: 1.7rem;
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+}
+
+.navbar__center:hover {
+  transform: translate(-50%, -55%);
+}
