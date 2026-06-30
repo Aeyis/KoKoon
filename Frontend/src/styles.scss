@@ -4,14 +4,15 @@
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+@use './styles/theme-colors' as theme;
 
 html {
   height: 100%;
   @include mat.theme(
     (
       color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
+        primary: theme.$primary-palette,
+        tertiary: theme.$tertiary-palette,
       ),
       typography: Roboto,
       density: 0,
@@ -29,6 +30,11 @@ body {
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
   background-color: var(--mat-sys-surface);
+  background-image: radial-gradient(36rem 36rem at 12% 8%, rgba(239,126,94,0.38), transparent 60%),
+radial-gradient(32rem 32rem at 88% 22%, rgba(255,170,120,0.28), transparent 62%),
+radial-gradient(34rem 34rem at 78% 92%, rgba(127,184,158,0.30), transparent 60%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
 
@@ -37,3 +43,13 @@ body {
   height: 100%;
 }
 /* You can add global styles to this file, and also import other style files */
+
+//class glass
+.glass {
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(60,40,30,0.12);
+}
