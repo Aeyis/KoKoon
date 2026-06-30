@@ -7,4 +7,9 @@ export const routes: Routes = [{
     loadComponent: () =>
       import('@features/auth/login-page/login-page').then((m) => m.LoginPage),
   },
+  {
+    path:'dashboard',
+    loadComponent:() =>
+      import('@features/dashboard/dashboard-page/dashboard-page').then((m) => m.DashboardPage),
+  },
 ];
