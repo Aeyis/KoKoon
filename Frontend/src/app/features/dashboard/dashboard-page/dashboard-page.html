@@ -1,4 +1,5 @@
-<main class="dashboard glass" style="margin: 2rem; padding: 2rem;">
-  <h1>Hello!</h1>
-  <p>login complete = welcome to KoKoon</p>
+<main class="home">
+  <header class="home__header">
+    <h1 class="home__greeting">Hello {{ auth.currentUser()?.firstName}} HOY </h1>
+  </header>
 </main>

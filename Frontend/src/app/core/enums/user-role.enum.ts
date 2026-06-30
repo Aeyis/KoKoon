@@ -1,0 +1,6 @@
+export enum UserRole {
+  ADMIN= 'ADMIN',
+  PRINCIPAL = 'PRINCIPAL',
+  TEACHER = 'TEACHER',
+  RESPONSABLE = 'RESPONSABLE',
+}
