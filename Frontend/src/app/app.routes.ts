@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import {isConnectedGuard} from '@core/guards/is-connected.guard';
 
 export const routes: Routes = [{
   path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -9,6 +10,7 @@ export const routes: Routes = [{
   },
   {
     path:'dashboard',
+    canActivate: [isConnectedGuard],
     loadComponent:() =>
       import('@features/dashboard/dashboard-page/dashboard-page').then((m) => m.DashboardPage),
   },
