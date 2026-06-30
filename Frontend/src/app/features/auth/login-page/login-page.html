@@ -1,0 +1,31 @@
+<main class="login">
+  <form class="login__card glass" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <header class="brand">
+      <span class="brand__logo"><mat-icon>location_on</mat-icon></span>
+    </header>
+    <h1 class="login__title">Login</h1>
+    <p class="login__subtitle">Nice to see you again!</p>
+
+    <label class="field">
+      <mat-icon class="field__icon">mail</mat-icon>
+      <input
+        class="field__input"
+        type="email"
+        formControlName="email"
+        placeholder="mail address"
+        autocomplete="email"
+      />
+    </label>
+    <label class="field">
+      <mat-icon class="field__icon">lock</mat-icon>
+      <input
+        class="field__input"
+        type="password"
+        formControlName="password"
+        placeholder="password"
+        autocomplete="current-password"
+      />
+    </label>
+    <button class="submit" type="submit">Connexion <mat-icon>arrow_forward</mat-icon></button>
+  </form>
+</main>
