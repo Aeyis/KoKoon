@@ -1,5 +1,35 @@
 <main class="home">
   <header class="home__header">
-    <h1 class="home__greeting">Hello {{ auth.currentUser()?.firstName}} HOY </h1>
+    <h1 class="home__greeting">Hello {{ auth.currentUser()?.firstName }} 👋</h1>
   </header>
+
+  <section class="card glass">
+    <div class="card__head">
+      <h2 class="card__title">Today's attendance</h2>
+      <span class="card__count">{{ presentCount() }} present · {{ absentCount() }} absent</span>
+    </div>
+
+    <ul class="students">
+      @for (student of students(); track student.id) {
+        <li class="student">
+          <span class="student__avatar">{{ student.firstName[0] }}{{ student.lastName[0] }}</span>
+          <span class="student__name">{{ student.firstName }} {{ student.lastName }}</span>
+          <button
+            class="student__status"
+            [class.is-absent]="isAbsent(student.id)"
+            type="button"
+            (click)="toggle(student.id)"
+          >
+            {{ isAbsent(student.id) ? 'Absent' : 'Present' }}
+          </button>
+        </li>
+      } @empty {
+        <li class="student__empty">No students yet.</li>
+      }
+    </ul>
+
+    <button class="validate" type="button" (click)="validate()">
+      <mat-icon>check</mat-icon> Validate attendance
+    </button>
+  </section>
 </main>
