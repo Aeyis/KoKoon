@@ -4,9 +4,17 @@
   </header>
 
   <section class="card glass">
-    <div class="card__head">
-      <h2 class="card__title">Today's attendance</h2>
-      <span class="card__count">{{ presentCount() }} present · {{ absentCount() }} absent</span>
+    <div class="attendance__head">
+      <div class="ring" [style.--p]="presentRatio() + '%'">
+        <span class="ring__num">{{ presentCount() }}</span>
+      </div>
+      <div class="attendance__meta">
+        <h2 class="card__title">Today's attendance</h2>
+        <span class="card__count">{{ presentCount() }} present · {{ absentCount() }} absent</span>
+      </div>
+      <button class="pill" type="button" (click)="toggleAll()">
+        {{ allPresent() ? 'All absent' : 'All present' }}
+      </button>
     </div>
 
     <ul class="students">
@@ -35,5 +43,59 @@
     <button class="validate" type="button" (click)="validate()">
       <mat-icon>check</mat-icon> Validate attendance
     </button>
+  </section>
+
+  <section class="card glass">
+    <div class="card__head">
+      <h2 class="card__title">Class journal</h2>
+      <span class="card__count">{{ todoCount() }} to do</span>
+    </div>
+
+    <ul class="journal">
+      @for (item of todayJournal(); track item.id) {
+        <li class="journal__item">
+          <label class="journal__check">
+            <input
+              type="checkbox"
+              [checked]="item.done"
+              (change)="toggleJournalDone(item)"
+            />
+            <span class="journal__content" [class.is-done]="item.done">{{ item.content }}</span>
+          </label>
+          @if (item.category) {
+            <span class="chip" [class]="'chip chip--' + item.category">{{ item.category }}</span>
+          }
+        </li>
+      } @empty {
+        <li class="journal__empty">Nothing planned today.</li>
+      }
+    </ul>
+
+    <a class="card__link" routerLink="/class-journal">Open full journal →</a>
+  </section>
+
+  <section class="card glass">
+    <div class="card__head">
+      <h2 class="card__title">Today's events</h2>
+    </div>
+
+    <ul class="events">
+      @for (event of todayEvents(); track event.id) {
+        <li class="event">
+          <span class="event__date">
+            <strong>{{ eventDay(event) }}</strong>
+            <small>{{ eventMonth(event) }}</small>
+          </span>
+          <span class="event__body">
+            <span class="event__title">{{ event.title }}</span>
+            <span class="event__sub">{{ eventSubtitle(event) }}</span>
+          </span>
+        </li>
+      } @empty {
+        <li class="journal__empty">No events.</li>
+      }
+    </ul>
+
+    <a class="card__link" routerLink="/agenda">Open agenda →</a>
   </section>
 </main>

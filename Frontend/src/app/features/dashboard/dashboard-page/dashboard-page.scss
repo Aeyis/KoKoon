@@ -33,26 +33,85 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
+/* en-tête de la carte présences : anneau + titre + bouton pilule */
+.attendance__head {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.1rem;
+}
+
+.attendance__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.ring {
+  --p: 0%;
+  position: relative;
+  flex: none;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(var(--mat-sys-tertiary) var(--p), rgba(0, 0, 0, 0.08) 0);
+}
+
+.ring::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.ring__num {
+  position: relative;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--mat-sys-tertiary);
+}
+
+.pill {
+  margin-left: auto;
+  align-self: center;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
 .students {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
 .student {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.student:last-child {
+  border-bottom: 0;
 }
 
 .student__avatar {
   display: grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   background: var(--mat-sys-secondary-container);
   color: var(--mat-sys-on-secondary-container);
@@ -104,4 +163,131 @@
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
+}
+
+.card__link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--mat-sys-primary);
+  text-decoration: none;
+}
+
+/* --- carte Journal de classe --- */
+.journal {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.journal__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.journal__check {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  flex: 1;
+}
+
+.journal__check input {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--mat-sys-tertiary);
+  cursor: pointer;
+}
+
+.journal__content.is-done {
+  text-decoration: line-through;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.journal__empty {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.85rem;
+}
+
+.chip {
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+.chip--TODO {
+  background: rgba(96, 165, 214, 0.25);
+  color: #2f6690;
+}
+.chip--CORRECTION {
+  background: rgba(230, 140, 170, 0.28);
+  color: #a83e63;
+}
+.chip--OUTING {
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+.chip--EVENT {
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+}
+
+/* --- carte Événements du jour --- */
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.event {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.event__date {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 16px;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  line-height: 1;
+}
+
+.event__date strong {
+  font-size: 1.1rem;
+}
+.event__date small {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+}
+
+.event__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.event__title {
+  font-weight: 600;
+}
+
+.event__sub {
+  font-size: 0.78rem;
+  color: var(--mat-sys-on-surface-variant);
 }
