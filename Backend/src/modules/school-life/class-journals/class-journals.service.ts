@@ -8,8 +8,8 @@ import { UpdateClassJournalDto } from './dto/update-class-journal.dto';
 @Injectable()
 export class ClassJournalsService {
   constructor(
-      @InjectRepository(ClassJournal)
-      private readonly classJournalRepository: Repository<ClassJournal>,
+    @InjectRepository(ClassJournal)
+    private readonly classJournalRepository: Repository<ClassJournal>,
   ) {}
 
   create(dto: CreateClassJournalDto) {
@@ -18,6 +18,8 @@ export class ClassJournalsService {
       content: dto.content,
       homework: dto.homework,
       preparation: dto.preparation,
+      done: dto.done ?? false,
+      category: dto.category ?? null,
       classe: { id: dto.classId },
       subject: dto.subjectId ? { id: dto.subjectId } : undefined,
     });
@@ -26,7 +28,9 @@ export class ClassJournalsService {
 
   findAll(classIds: number[] | null = null) {
     if (classIds === null) {
-      return this.classJournalRepository.find({ relations: { classe: true, subject: true } });
+      return this.classJournalRepository.find({
+        relations: { classe: true, subject: true },
+      });
     }
     return this.classJournalRepository.find({
       where: { classe: { id: In(classIds) } },
@@ -35,7 +39,10 @@ export class ClassJournalsService {
   }
 
   async findOne(id: number) {
-    const entry = await this.classJournalRepository.findOne({ where: { id }, relations: { classe: true, subject: true } });
+    const entry = await this.classJournalRepository.findOne({
+      where: { id },
+      relations: { classe: true, subject: true },
+    });
     if (!entry) throw new NotFoundException('Class journal not found');
     return entry;
   }

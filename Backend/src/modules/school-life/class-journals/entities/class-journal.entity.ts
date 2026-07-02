@@ -1,33 +1,54 @@
-import {Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
-import {Class} from "../../../organization/classes/entities/class.entity";
-import {Subject} from "../../../report-card/subjects/entities/subject.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Class } from '../../../organization/classes/entities/class.entity';
+import { Subject } from '../../../report-card/subjects/entities/subject.entity';
+
+export enum JournalCategory {
+  TODO = 'TODO',
+  CORRECTION = 'CORRECTION',
+  OUTING = 'OUTING',
+  EVENT = 'EVENT',
+  OTHER = 'OTHER',
+}
 
 @Entity()
 export class ClassJournal {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ type: 'date'})
-    date:string;
+  @Column({ type: 'date' })
+  date: string;
 
-    @Column( { type: 'text' } )
-    content: string;
+  @Column({ type: 'text' })
+  content: string;
 
-    @Column( { type: 'text', nullable: true } )
-    homework: string;
+  @Column({ default: false })
+  done: boolean;
 
-    @Column( { type: 'text', nullable: true } )
-    preparation: string;
+  @Column({ type: 'varchar', nullable: true })
+  category: JournalCategory | null;
 
-    @ManyToOne(()=>Class)
-    classe: Class;
+  @Column({ type: 'text', nullable: true })
+  homework: string;
 
-    @ManyToOne(()=> Subject, { nullable:true })
-    subject: Subject;
+  @Column({ type: 'text', nullable: true })
+  preparation: string;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @ManyToOne(() => Class)
+  classe: Class;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @ManyToOne(() => Subject, { nullable: true })
+  subject: Subject;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
