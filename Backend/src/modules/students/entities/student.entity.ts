@@ -9,6 +9,11 @@ import {Class} from "../../organization/classes/entities/class.entity";
 import {MedicalRecord} from "../../school-life/medical-records/entities/medical-record.entity";
 import {User} from "../../users/entities/user.entity";
 
+export enum Sex {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+}
+
 @Entity()
 export class Student {
   @PrimaryGeneratedColumn()
@@ -19,6 +24,9 @@ export class Student {
 
   @Column({ length: 100 })
   firstName: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  sex: Sex|null;
 
   @Column({ type: 'date' })
   birthDate: string;

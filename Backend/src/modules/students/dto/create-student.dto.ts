@@ -1,4 +1,5 @@
-import {IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength} from "class-validator";
+import {IsDateString, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength} from "class-validator";
+import {Sex} from "../entities/student.entity";
 
 export class CreateStudentDto {
     @IsString()
@@ -24,4 +25,6 @@ export class CreateStudentDto {
     @IsInt()
     classId: number;
 
+    @IsEnum(Sex)
+    sex: Sex;
 }

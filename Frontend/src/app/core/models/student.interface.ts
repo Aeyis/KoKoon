@@ -4,4 +4,5 @@ export interface Student {
   lastName: string;
   birthDate: string;
   photo: string | null;
+  sex : 'MALE' | 'FEMALE' | null;
 }

@@ -12,7 +12,11 @@
     <ul class="students">
       @for (student of students(); track student.id) {
         <li class="student">
-          <span class="student__avatar">{{ student.firstName[0] }}{{ student.lastName[0] }}</span>
+          <span class="student__avatar"
+            [class.is-male]="student.sex === 'MALE'"
+            [class.is-female]="student.sex === 'FEMALE'"
+          >{{ student.firstName[0] }}{{ student.lastName[0] }}
+          </span>
           <span class="student__name">{{ student.firstName }} {{ student.lastName }}</span>
           <button
             class="student__status"

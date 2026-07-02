@@ -60,6 +60,15 @@
   font-weight: 600;
 }
 
+.student__avatar.is-male {
+  background: rgba(96,165,214,0.30);
+  color: #2f6690;
+}
+.student__avatar.is-female {
+  background: rgba(230,140,170,0.32);
+  color: #a83e63;
+}
+
 .student__name {
   font-weight: 500;
 }
