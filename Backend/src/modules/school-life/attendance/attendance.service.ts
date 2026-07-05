@@ -1,4 +1,4 @@
-import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Attendance, AttendanceStatus } from './entities/attendance.entity';
@@ -25,19 +25,23 @@ export class AttendanceService {
   }
 
   async create(dto: CreateAttendanceDto) {
-    const att = this.attendanceRepository.create({
-      ...dto,
-      student: { id: dto.studentId },
+    const existing = await this.attendanceRepository.findOne({
+      where: { student: { id: dto.studentId }, date: dto.date, session: dto.session },
     });
+
     let saved: Attendance;
-    try {
+    if (existing) {
+      existing.status = dto.status;
+      if (dto.justification !== undefined) existing.justification = dto.justification;
+      saved = await this.attendanceRepository.save(existing);
+    } else {
+      const att = this.attendanceRepository.create({
+        ...dto,
+        student: { id: dto.studentId },
+      });
       saved = await this.attendanceRepository.save(att);
-    } catch (e) {
-      if (e.code === '23505') {
-        throw new ConflictException('Attendance already recorded for this half-day');
-      }
-      throw e;
     }
+
     if (dto.status === AttendanceStatus.ABSENT) {
       await this.notificationsService.notifyAbsence(dto.studentId);
     }

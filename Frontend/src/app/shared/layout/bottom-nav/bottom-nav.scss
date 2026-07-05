@@ -1,72 +1,93 @@
 .navbar {
   position: fixed;
-  left: 50%;
-  bottom: 1rem;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 100;
-  width: min(94%, 28rem);
 }
 
 .navbar__bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 4.25rem;
-  padding: 0 1.25rem;
-  border-radius: 999px; // pilule (override le radius de .glass)
+  justify-content: center;
+  gap: 1.4rem;
+  width: 100%;
+  height: 4.5rem;
+  padding: 0 0.5rem;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--mat-sys-surface);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .navbar__item {
-  flex: 1;
+  flex: 0 0 auto;
+  width: 3.6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
+  justify-content: center;
+  gap: 0.15rem;
+  height: 3.4rem;
+  border: 2px solid transparent;
+  border-radius: 16px;
   text-decoration: none;
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 0.68rem;
-  font-weight: 500;
-  transition: color 0.2s ease;
+  opacity: 0.55;
+  transition:
+    opacity 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
 
-  mat-icon {
-    font-size: 1.5rem;
-    width: 1.5rem;
-    height: 1.5rem;
+  img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
   }
 }
 
+.navbar__label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--mat-sys-on-surface-variant);
+}
+
 .navbar__item.is-active {
-  color: var(--mat-sys-primary);
+  opacity: 1;
+  background: var(--mat-sys-primary-container);
+  border-color: var(--mat-sys-primary);
+
+  .navbar__label {
+    color: var(--mat-sys-on-primary-container);
+  }
+}
+
+.navbar__item:nth-child(1),
+.navbar__item:nth-child(2) {
+  transform: translateX(-0.75rem);
 }
 
 .navbar__spacer {
-  flex: 0 0 4rem; // réserve la place du bouton central
+  flex: 0 0 4.5rem;
 }
 
 .navbar__center {
   position: absolute;
   left: 50%;
   top: 0;
-  transform: translate(-50%, -45%); // dépasse au-dessus de la barre
+  transform: translate(-50%, -30%);
   display: grid;
   place-items: center;
-  width: 3.9rem;
-  height: 3.9rem;
-  border-radius: 50%;
-  background: var(--mat-sys-primary); // coral
-  color: var(--mat-sys-on-primary);
-  border: 4px solid var(--mat-sys-surface); // anneau qui détache du fond
-  box-shadow: 0 10px 24px rgba(239, 126, 94, 0.5);
   text-decoration: none;
-  transition: transform 0.2s ease;
+  transition: transform 0.15s ease;
 
-  mat-icon {
-    font-size: 1.7rem;
-    width: 1.7rem;
-    height: 1.7rem;
+  img {
+    width: 3.9rem;
+    height: 3.9rem;
+    object-fit: contain;
   }
 }
 
 .navbar__center:hover {
-  transform: translate(-50%, -55%);
+  transform: translate(-50%, -36%);
 }

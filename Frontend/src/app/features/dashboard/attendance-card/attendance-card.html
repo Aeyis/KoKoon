@@ -1,0 +1,67 @@
+<section
+  class="attendance-card glass"
+  [class.is-validated]="validated()"
+  [class.is-locked]="locked()"
+>
+  <div class="attendance__head">
+    <div class="ring" [style.--p]="presentRatio() + '%'">
+      <span class="ring__num">{{ presentCount() }}</span>
+    </div>
+    <div class="attendance__meta">
+      <h2 class="card__title">{{ title() }}</h2>
+      @if (locked()) {
+        <span class="card__count">{{ lockedReason() }}</span>
+      } @else {
+        <span class="card__count">{{ presentCount() }} present · {{ absentCount() }} absent</span>
+      }
+    </div>
+
+    @if (locked()) {
+      <mat-icon class="attendance__lock">lock</mat-icon>
+    } @else if (validated()) {
+      <div class="attendance__done">
+        <svg class="check" viewBox="0 0 52 52" aria-hidden="true">
+          <circle class="check__circle" cx="26" cy="26" r="24" />
+          <path class="check__mark" d="M15 27 l7 7 l15 -16" />
+        </svg>
+        <button class="edit-link" type="button" (click)="edit()">Edit</button>
+      </div>
+    } @else {
+      <button class="pill" type="button" (click)="toggleAll()">
+        {{ allPresent() ? 'All absent' : 'All present' }}
+      </button>
+    }
+  </div>
+
+  @if (!locked()) {
+    <div class="attendance__body">
+      <div class="attendance__body-inner">
+        <div class="students">
+          @for (student of students(); track student.id) {
+            <button
+              class="student"
+              type="button"
+              [class.is-present]="!isAbsent(student.id)"
+              [class.is-absent]="isAbsent(student.id)"
+              (click)="toggle(student.id)"
+            >
+              <span
+                class="student__avatar"
+                [class.is-male]="student.sex === 'MALE'"
+                [class.is-female]="student.sex === 'FEMALE'"
+              >{{ student.firstName[0] }}{{ student.lastName[0] }}</span>
+              <span class="student__name">{{ student.firstName }} {{ student.lastName }}</span>
+              <mat-icon class="student__mark">{{ isAbsent(student.id) ? 'close' : 'check' }}</mat-icon>
+            </button>
+          } @empty {
+            <p class="student__empty">No students yet.</p>
+          }
+        </div>
+
+        <button class="validate" type="button" (click)="validate()">
+          <mat-icon>check</mat-icon> Validate attendance
+        </button>
+      </div>
+    </div>
+  }
+</section>

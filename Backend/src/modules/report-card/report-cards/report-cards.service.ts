@@ -91,6 +91,7 @@ export class ReportCardsService {
     const overallAverage = subjects.length
         ? subjects.reduce((a, s) => a + s.average, 0) / subjects.length
         : 0;
+
 // On fait la moyenne des moyennes par matiere. pas de matiere renvoie 0 au lieu de faire .../0 (qui donne NaN) -//
     return {
       subjects,

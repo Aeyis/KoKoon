@@ -1,5 +1,11 @@
-<router-outlet />
+@if (auth.isConnected()) {
+  <app-top-bar />
+}
+
+<main class="app-shell" [class.app-shell--connected]="auth.isConnected()">
+  <router-outlet />
+</main>
 
 @if (auth.isConnected()) {
-  <app-bottom-nav/>
+  <app-bottom-nav />
 }
