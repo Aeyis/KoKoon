@@ -7,10 +7,15 @@
   </header>
 
   <div class="tabs">
-    <button class="tab is-active" type="button">List</button>
-    <button class="tab" type="button" disabled>Seating plan</button>
+    <button class="tab" type="button" [class.is-active]="view() === 'list'" (click)="view.set('list')">List</button>
+    <button class="tab" type="button" [class.is-active]="view() === 'seating'" (click)="view.set('seating')">Seating plan</button>
   </div>
 
+  @if (view() === 'seating') {
+    @if (classId(); as cid) {
+      <app-seating-plan [classId]="cid" [students]="students()" />
+    }
+  } @else {
   <div class="students">
     @for (student of students(); track student.id) {
       <a class="student" [routerLink]="['/class', student.id]">
@@ -34,4 +39,5 @@
       <p class="empty">No students yet.</p>
     }
   </div>
+  }
 </main>

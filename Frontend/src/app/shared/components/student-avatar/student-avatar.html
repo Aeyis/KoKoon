@@ -2,4 +2,7 @@
   class="avatar"
   [class.is-male]="sex() === 'MALE'"
   [class.is-female]="sex() === 'FEMALE'"
+  [style.width.rem]="size()"
+  [style.height.rem]="size()"
+  [style.font-size.rem]="size() * 0.32"
 >{{ firstName()[0] }}{{ lastName()[0] }}</span>

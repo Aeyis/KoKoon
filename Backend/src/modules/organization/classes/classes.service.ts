@@ -3,7 +3,7 @@ import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {In, Repository} from "typeorm";
-import {Class} from "./entities/class.entity";
+import {Class, SeatingPlan} from "./entities/class.entity";
 
 @Injectable()
 export class ClassesService {
@@ -32,6 +32,16 @@ export class ClassesService {
     const classe = await this.classRepository.findOne({where:{id}, relations: {students:true}});
     if (!classe) throw new NotFoundException('Class not found');
     return classe;
+  }
+
+  async getSeating(id: number) {
+    const classe = await this.findOne(id);
+    return classe.seating ?? null;
+  }
+
+  async setSeating(id: number, seating: SeatingPlan) {
+    await this.classRepository.update(id, { seating });
+    return seating;
   }
 
   remove(id:number) { return this.classRepository.delete(id); }

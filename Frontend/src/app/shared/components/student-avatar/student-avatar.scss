@@ -1,12 +1,9 @@
 .avatar {
   display: grid;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
   border-radius: 50%;
   background: var(--mat-sys-secondary-container);
   color: var(--mat-sys-on-secondary-container);
-  font-size: 0.8rem;
   font-weight: 600;
 }
 
