@@ -1,0 +1,21 @@
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.avatar.is-male {
+  background: rgba(96, 165, 214, 0.3);
+  color: #2f6690;
+}
+
+.avatar.is-female {
+  background: rgba(230, 140, 170, 0.32);
+  color: #a83e63;
+}

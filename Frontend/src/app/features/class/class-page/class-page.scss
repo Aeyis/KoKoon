@@ -1,0 +1,102 @@
+.class {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 7rem;
+}
+
+.class__title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.class__sub {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin: 1.25rem 0;
+  padding: 0.25rem;
+  background: var(--mat-sys-surface-container-high);
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.tab {
+  border: 0;
+  background: transparent;
+  border-radius: 999px;
+  padding: 0.35rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface-variant);
+  cursor: pointer;
+}
+
+.tab.is-active {
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+}
+
+.tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.students {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.student {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 16px;
+  background: var(--mat-sys-surface);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-bottom-width: 4px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.student__name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.student__chevron {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.status {
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.status.is-present {
+  background: rgba(127, 184, 158, 0.22);
+  color: #2f7d5b;
+}
+
+.status.is-absent {
+  background: rgba(224, 108, 108, 0.18);
+  color: #b23b3b;
+}
+
+.status.is-late {
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
+.empty {
+  color: var(--mat-sys-on-surface-variant);
+}

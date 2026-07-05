@@ -45,11 +45,11 @@
               [class.is-absent]="isAbsent(student.id)"
               (click)="toggle(student.id)"
             >
-              <span
-                class="student__avatar"
-                [class.is-male]="student.sex === 'MALE'"
-                [class.is-female]="student.sex === 'FEMALE'"
-              >{{ student.firstName[0] }}{{ student.lastName[0] }}</span>
+              <app-student-avatar
+                [firstName]="student.firstName"
+                [lastName]="student.lastName"
+                [sex]="student.sex"
+              />
               <span class="student__name">{{ student.firstName }} {{ student.lastName }}</span>
               <mat-icon class="student__mark">{{ isAbsent(student.id) ? 'close' : 'check' }}</mat-icon>
             </button>

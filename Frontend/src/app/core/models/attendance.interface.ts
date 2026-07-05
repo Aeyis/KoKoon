@@ -7,3 +7,12 @@ export interface CreateAttendance {
   status: AttendanceStatus;
   justification?: string;
 }
+
+export interface Attendance {
+  id: number;
+  date: string;
+  session: AttendanceSession;
+  status: AttendanceStatus;
+  justification: string | null;
+  student: { id: number };
+}

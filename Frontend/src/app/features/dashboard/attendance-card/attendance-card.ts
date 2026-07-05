@@ -3,10 +3,11 @@ import { MatIcon } from '@angular/material/icon';
 import { Student } from '@core/models/student.interface';
 import { AttendanceService } from '@core/services/attendance.service';
 import { AttendanceSession, AttendanceStatus } from '@core/enums/attendance.enum';
+import { StudentAvatar } from '@shared/components/student-avatar/student-avatar';
 
 @Component({
   selector: 'app-attendance-card',
-  imports: [MatIcon],
+  imports: [MatIcon, StudentAvatar],
   templateUrl: './attendance-card.html',
   styleUrl: './attendance-card.scss',
 })

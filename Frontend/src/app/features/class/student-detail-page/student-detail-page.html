@@ -1,0 +1,63 @@
+<main class="detail">
+  <header class="detail__header">
+    <a class="back" routerLink="/class" aria-label="Back">
+      <mat-icon>arrow_back</mat-icon>
+    </a>
+    <h1 class="detail__name">{{ student()?.firstName }} {{ student()?.lastName }}</h1>
+  </header>
+
+  @if (student(); as s) {
+    <section class="card glass">
+      <h2 class="card__title"><mat-icon class="card__icon">favorite</mat-icon> Health</h2>
+      <div class="field">
+        <span class="field__label">Allergies</span>
+        <span class="field__value" [class.muted]="!s.medicalRecord?.allergies">
+          {{ s.medicalRecord?.allergies || 'Nothing to report' }}
+        </span>
+      </div>
+      <div class="field">
+        <span class="field__label">Diet</span>
+        <span class="field__value" [class.muted]="!s.medicalRecord?.diet">
+          {{ s.medicalRecord?.diet || 'Nothing to report' }}
+        </span>
+      </div>
+      <div class="field">
+        <span class="field__label">Conditions &amp; follow-up</span>
+        <span class="field__value" [class.muted]="!s.medicalRecord?.medicalConditions">
+          {{ s.medicalRecord?.medicalConditions || 'Nothing to report' }}
+        </span>
+      </div>
+    </section>
+
+    <section class="card glass">
+      <h2 class="card__title"><mat-icon class="card__icon">contacts</mat-icon> Contacts</h2>
+      @for (g of s.guardians; track g.id) {
+        <div class="contact">
+          <span class="contact__name">{{ g.firstName }} {{ g.lastName }}</span>
+          <span class="contact__email">{{ g.email }}</span>
+        </div>
+      } @empty {
+        <p class="muted">No contact linked.</p>
+      }
+      @if (s.medicalRecord?.emergencyContact) {
+        <div class="contact">
+          <span class="contact__name">Emergency</span>
+          <span class="contact__email">{{ s.medicalRecord?.emergencyContact }}</span>
+        </div>
+      }
+    </section>
+
+    <section class="card glass">
+      <h2 class="card__title"><mat-icon class="card__icon">event_available</mat-icon> This month's attendance</h2>
+      <div class="month">
+        <div class="ring" [style.--p]="monthRatio() + '%'">
+          <span class="ring__num">{{ monthRatio() }}%</span>
+        </div>
+        <div class="month__counts">
+          <span class="count count--present">{{ monthPresent() }} present</span>
+          <span class="count count--absent">{{ monthAbsent() }} absent</span>
+        </div>
+      </div>
+    </section>
+  }
+</main>

@@ -1,1 +1,37 @@
-<p>class-page works!</p>
+<main class="class">
+  <header class="class__header">
+    <h1 class="class__title">My class</h1>
+    <p class="class__sub">
+      {{ presentCount() }}/{{ students().length }} present today · Tap for details
+    </p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab is-active" type="button">List</button>
+    <button class="tab" type="button" disabled>Seating plan</button>
+  </div>
+
+  <div class="students">
+    @for (student of students(); track student.id) {
+      <a class="student" [routerLink]="['/class', student.id]">
+        <app-student-avatar
+          [firstName]="student.firstName"
+          [lastName]="student.lastName"
+          [sex]="student.sex"
+        />
+        <span class="student__name">{{ student.firstName }} {{ student.lastName }}</span>
+        @if (statusOf(student.id); as st) {
+          <span
+            class="status"
+            [class.is-present]="st === AttendanceStatus.PRESENT"
+            [class.is-absent]="st === AttendanceStatus.ABSENT"
+            [class.is-late]="st === AttendanceStatus.LATE"
+          >{{ statusLabel(st) }}</span>
+        }
+        <mat-icon class="student__chevron">chevron_right</mat-icon>
+      </a>
+    } @empty {
+      <p class="empty">No students yet.</p>
+    }
+  </div>
+</main>

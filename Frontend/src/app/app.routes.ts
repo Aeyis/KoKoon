@@ -21,6 +21,12 @@ export const routes: Routes = [{
       import('@features/class/class-page/class-page').then((m) => m.ClassPage),
   },
   {
+    path: 'class/:id',
+    canActivate: [isConnectedGuard],
+    loadComponent:() =>
+      import('@features/class/student-detail-page/student-detail-page').then((m) => m.StudentDetailPage),
+  },
+  {
     path: 'class-journal',
     canActivate: [isConnectedGuard],
     loadComponent:() =>
