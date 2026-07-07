@@ -21,6 +21,7 @@ export class SeatingPlan implements OnInit {
   protected readonly plan = signal<SeatingPlanData>({ rows: 5, cols: 5, desks: [] });
   protected readonly editing = signal(false);
   protected readonly selectedStudentId = signal<number | null>(null);
+  protected readonly selectedDeskId = signal<string | null>(null);
 
   protected readonly cells = computed(() => {
     const p = this.plan();
@@ -98,6 +99,12 @@ export class SeatingPlan implements OnInit {
 
   protected removeDesk(id: string): void {
     this.plan.update((p) => ({ ...p, desks: p.desks.filter((d) => d.id !== id) }));
+    this.selectedDeskId.set(null);
+  }
+
+  protected selectDesk(id: string): void {
+    if (!this.editing()) return;
+    this.selectedDeskId.update((cur) => (cur === id ? null : id));
   }
 
   protected rotate(id: string): void {
@@ -155,6 +162,9 @@ export class SeatingPlan implements OnInit {
   }
 
   protected save(): void {
-    this._classService.setSeating(this.classId(), this.plan()).subscribe(() => this.editing.set(false));
+    this._classService.setSeating(this.classId(), this.plan()).subscribe(() => {
+      this.editing.set(false);
+      this.selectedDeskId.set(null);
+    });
   }
 }

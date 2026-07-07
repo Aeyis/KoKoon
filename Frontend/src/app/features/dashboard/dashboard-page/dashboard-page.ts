@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
-import { StudentService } from '@core/services/student.service';
+import { ClassService } from '@core/services/class.service';
 import { JournalService } from '@core/services/journal.service';
 import { EventService } from '@core/services/event.service';
 import { Student } from '@core/models/student.interface';
@@ -18,7 +18,7 @@ import { AttendanceCard } from '../attendance-card/attendance-card';
 })
 export class DashboardPage implements OnInit {
   protected readonly auth = inject(AuthService);
-  private readonly _studentService = inject(StudentService);
+  private readonly _classService = inject(ClassService);
   private readonly _journalService = inject(JournalService);
   private readonly _eventService = inject(EventService);
 
@@ -50,7 +50,7 @@ export class DashboardPage implements OnInit {
 
   ngOnInit(): void {
     this.auth.loadCurrentUser().subscribe();
-    this._studentService.getAll().subscribe((list) => this.students.set(list));
+    this._classService.getAll().subscribe((classes) => this.students.set(classes[0]?.students ?? []));
     this._journalService.getAll().subscribe((list) => this.journal.set(list));
     this._eventService.getAll().subscribe((list) => this.events.set(list));
   }

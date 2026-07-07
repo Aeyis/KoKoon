@@ -16,67 +16,76 @@
 
   @if (editing()) {
     <div class="dims">
-      <span class="dims__label">Rows</span>
-      <button class="dims__btn" type="button" (click)="removeRow()">−</button>
-      <span class="dims__val">{{ plan().rows }}</span>
-      <button class="dims__btn" type="button" (click)="addRow()">+</button>
-      <span class="dims__label">Cols</span>
-      <button class="dims__btn" type="button" (click)="removeCol()">−</button>
-      <span class="dims__val">{{ plan().cols }}</span>
-      <button class="dims__btn" type="button" (click)="addCol()">+</button>
+      <div class="dims__row">
+        <span class="dims__label">Rows</span>
+        <button class="dims__btn" type="button" (click)="removeRow()">−</button>
+        <span class="dims__val">{{ plan().rows }}</span>
+        <button class="dims__btn" type="button" (click)="addRow()">+</button>
+      </div>
+      <div class="dims__row">
+        <span class="dims__label">Cols</span>
+        <button class="dims__btn" type="button" (click)="removeCol()">−</button>
+        <span class="dims__val">{{ plan().cols }}</span>
+        <button class="dims__btn" type="button" (click)="addCol()">+</button>
+      </div>
+    </div>
+  }
+
+  @if (editing() && selectedDeskId(); as deskId) {
+    <div class="desk-actions">
+      <span class="desk-actions__label">Selected desk</span>
+      <button class="btn btn--ghost" type="button" (click)="rotate(deskId)">
+        <mat-icon>screen_rotation</mat-icon> Rotate
+      </button>
+      <button class="btn btn--danger" type="button" (click)="removeDesk(deskId)">
+        <mat-icon>delete</mat-icon> Remove
+      </button>
     </div>
   }
 
   <div class="board">Board</div>
 
-  <div
-    class="grid"
-    cdkDropListGroup
-    [class.is-editing]="editing()"
-    [style.grid-template-columns]="'repeat(' + plan().cols + ', 1fr)'"
-  >
-    @for (cell of cells(); track cell.key) {
-      <div class="cell" cdkDropList (cdkDropListDropped)="dropDesk($event, cell.row, cell.col)">
-        @if (deskAt(cell.row, cell.col); as desk) {
-          <div
-            class="desk"
-            [class.is-v]="desk.orientation === 'V'"
-            cdkDrag
-            [cdkDragData]="desk"
-            [cdkDragDisabled]="!editing()"
-          >
-            <div class="desk__seats">
-              @for (seat of desk.seats; track $index) {
-                <button
-                  class="seat"
-                  type="button"
-                  [class.filled]="seat !== null"
-                  [disabled]="!editing()"
-                  (click)="onSeat(desk, $index)"
-                >
-                  @if (seat !== null && studentById()[seat]; as st) {
-                    <app-student-avatar [firstName]="st.firstName" [lastName]="st.lastName" [sex]="st.sex" [size]="1.3" />
-                  } @else if (editing()) {
-                    <mat-icon class="seat__add">add</mat-icon>
-                  }
-                </button>
-              }
-            </div>
-
-            @if (editing()) {
-              <div class="desk__tools">
-                <button type="button" (click)="rotate(desk.id)" aria-label="Rotate">
-                  <mat-icon>screen_rotation</mat-icon>
-                </button>
-                <button type="button" (click)="removeDesk(desk.id)" aria-label="Remove">
-                  <mat-icon>delete</mat-icon>
-                </button>
+  <div class="grid-wrap">
+    <div
+      class="grid"
+      cdkDropListGroup
+      [class.is-editing]="editing()"
+      [style.grid-template-columns]="'repeat(' + plan().cols + ', minmax(5rem, 1fr))'"
+    >
+      @for (cell of cells(); track cell.key) {
+        <div class="cell" cdkDropList (cdkDropListDropped)="dropDesk($event, cell.row, cell.col)">
+          @if (deskAt(cell.row, cell.col); as desk) {
+            <div
+              class="desk"
+              [class.is-v]="desk.orientation === 'V'"
+              [class.is-selected]="selectedDeskId() === desk.id"
+              cdkDrag
+              [cdkDragData]="desk"
+              [cdkDragDisabled]="!editing()"
+              (click)="selectDesk(desk.id)"
+            >
+              <div class="desk__seats">
+                @for (seat of desk.seats; track $index) {
+                  <button
+                    class="seat"
+                    type="button"
+                    [class.filled]="seat !== null"
+                    [disabled]="!editing()"
+                    (click)="onSeat(desk, $index); $event.stopPropagation()"
+                  >
+                    @if (seat !== null && studentById()[seat]; as st) {
+                      <app-student-avatar [firstName]="st.firstName" [lastName]="st.lastName" [sex]="st.sex" [size]="1.8" />
+                    } @else if (editing()) {
+                      <mat-icon class="seat__add">add</mat-icon>
+                    }
+                  </button>
+                }
               </div>
-            }
-          </div>
-        }
-      </div>
-    }
+            </div>
+          }
+        </div>
+      }
+    </div>
   </div>
 
   @if (editing()) {

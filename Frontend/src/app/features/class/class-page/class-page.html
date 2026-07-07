@@ -6,7 +6,7 @@
     </p>
   </header>
 
-  <div class="tabs">
+  <div class="tabs" [attr.data-view]="view()">
     <button class="tab" type="button" [class.is-active]="view() === 'list'" (click)="view.set('list')">List</button>
     <button class="tab" type="button" [class.is-active]="view() === 'seating'" (click)="view.set('seating')">Seating plan</button>
   </div>
