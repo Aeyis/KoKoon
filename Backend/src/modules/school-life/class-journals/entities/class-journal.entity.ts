@@ -25,6 +25,12 @@ export class ClassJournal {
   @Column({ type: 'date' })
   date: string;
 
+  @Column({ type: 'int', nullable: true })
+  period: number | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  title: string | null;
+
   @Column({ type: 'text' })
   content: string;
 

@@ -1,30 +1,52 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { JournalService } from '@core/services/journal.service';
-import { JournalCategory } from '@core/enums/journal.enum';
 import { ClassJournal } from '@core/models/journal.interface';
+import { PERIODS } from '@core/constants/periods';
+import {WeekPlanner} from '@features/class-journal/week-planner/week-planner';
 
 @Component({
   selector: 'app-class-journal-page',
-  imports: [],
+  imports: [WeekPlanner],
+
   templateUrl: './class-journal-page.html',
   styleUrl: './class-journal-page.scss',
 })
 export class ClassJournalPage implements OnInit {
   private readonly _journalService = inject(JournalService);
 
-  protected readonly JournalCategory = JournalCategory;
-  protected readonly entries = signal<ClassJournal[]>([]);
+  private readonly _today = new Date().toISOString().slice(0, 10);
 
-  protected readonly days = computed(() => {
-    const groups: Record<string, ClassJournal[]> = {};
+  protected readonly entries = signal<ClassJournal[]>([]);
+  protected readonly view = signal<'day' | 'week'>('day');
+
+  private readonly _byPeriod = computed(() => {
+    const map = new Map<number, ClassJournal>();
     for (const e of this.entries()) {
-      const day = e.date.slice(0, 10);
-      (groups[day] ??= []).push(e);
+      if (e.date.slice(0, 10) === this._today && e.period != null) {
+        map.set(e.period, e);
+      }
     }
-    return Object.keys(groups)
-      .sort((a, b) => b.localeCompare(a))
-      .map((date) => ({ date, items: groups[date] }));
+    return map;
   });
+
+  protected readonly halves = computed(() => [
+    { label: 'Morning', rows: this._rowsFor('AM') },
+    { label: 'Afternoon', rows: this._rowsFor('PM') },
+  ]);
+
+  protected readonly todayLabel = computed(() => {
+    const [y, m, d] = this._today.split('-').map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString('en', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    });
+  });
+
+  protected readonly doneCount = computed(
+    () => [...this._byPeriod().values()].filter((e) => e.done).length,
+  );
+  protected readonly totalCount = computed(() => this._byPeriod().size);
 
   ngOnInit(): void {
     this._journalService.getAll().subscribe((list) => this.entries.set(list));
@@ -37,5 +59,12 @@ export class ClassJournalPage implements OnInit {
         list.map((e) => (e.id === item.id ? { ...e, done: next } : e)),
       );
     });
+  }
+
+  private _rowsFor(half: 'AM' | 'PM') {
+    return PERIODS.filter((p) => p.half === half).map((period) => ({
+      period,
+      entry: this._byPeriod().get(period.n) ?? null,
+    }));
   }
 }

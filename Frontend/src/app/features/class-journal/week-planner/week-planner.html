@@ -1,0 +1,43 @@
+<div class="planner">
+  <div class="grid-wrap">
+    <div class="grid">
+      <div class="corner"></div>
+      @for (d of days(); track d.date) {
+        <div class="dayhead" [class.is-today]="d.isToday">
+          <span class="dayhead__wd">{{ d.weekday }}</span>
+          <span class="dayhead__num">{{ d.num }}</span>
+        </div>
+      }
+
+      @for (p of PERIODS; track p.n) {
+        <div class="rowhead">
+          <span class="rowhead__p">{{ p.label }}</span>
+          <span class="rowhead__t">{{ p.time }}</span>
+        </div>
+
+        @for (d of days(); track d.date) {
+          @if (cell(d.date, p.n); as e) {
+            <div
+              class="cell cell--filled"
+              [class.is-done]="e.done"
+              [attr.data-subject]="e.subject?.name"
+            >
+              <span class="cell__title">{{ e.title || e.content }}</span>
+            </div>
+          } @else {
+            <div class="cell cell--free"></div>
+          }
+        }
+      }
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="legend__item"><span class="legend__dot" data-subject="Francais"></span>French</span>
+    <span class="legend__item"><span class="legend__dot" data-subject="Mathematiques"></span>Maths</span>
+    <span class="legend__item"><span class="legend__dot" data-subject="Éveil"></span>Discovery</span>
+    <span class="legend__item"><span class="legend__dot" data-subject="Arts"></span>Arts</span>
+    <span class="legend__item"><span class="legend__dot" data-subject="Éducation physique"></span>PE</span>
+    <span class="legend__item"><span class="legend__dot" data-subject="Rituel"></span>Ritual</span>
+  </div>
+</div>

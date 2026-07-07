@@ -1,1 +1,58 @@
-<p>class-journal-page works!</p>
+<main class="journal">
+  <header class="journal__header">
+    <h1 class="journal__title">Class journal</h1>
+    <p class="journal__sub">{{ todayLabel() }} · {{ doneCount() }}/{{ totalCount() }} done</p>
+  </header>
+
+  <div class="tabs" [attr.data-view]="view()">
+    <button class="tab" type="button" [class.is-active]="view() === 'day'" (click)="view.set('day')">Day</button>
+    <button class="tab" type="button" [class.is-active]="view() === 'week'" (click)="view.set('week')">Week</button>
+  </div>
+
+  @if (view() === 'day') {
+    @for (half of halves(); track half.label) {
+    <section class="half">
+      <h2 class="half__label">{{ half.label }}</h2>
+
+      @for (row of half.rows; track row.period.n) {
+        <div class="slot">
+          <div class="slot__period">
+            <span class="slot__p">{{ row.period.label }}</span>
+            <span class="slot__time">{{ row.period.time }}</span>
+          </div>
+
+          @if (row.entry; as e) {
+            <article class="card" [class.is-done]="e.done" [attr.data-subject]="e.subject?.name">
+              <button
+                class="card__check"
+                type="button"
+                [class.checked]="e.done"
+                (click)="toggleDone(e)"
+              >
+                @if (e.done) { ✓ }
+              </button>
+
+              <div class="card__body">
+                @if (e.subject) {
+                  <span class="chip" [attr.data-subject]="e.subject.name">{{ e.subject.name }}</span>
+                }
+                <p class="card__title">{{ e.title || e.content }}</p>
+                @if (e.title && e.content) {
+                  <p class="card__desc">{{ e.content }}</p>
+                }
+                @if (e.homework) {
+                  <p class="card__meta"><strong>Homework:</strong> {{ e.homework }}</p>
+                }
+              </div>
+            </article>
+          } @else {
+            <div class="free">Free</div>
+          }
+        </div>
+      }
+    </section>
+    }
+  } @else {
+    <app-week-planner [entries]="entries()" />
+  }
+</main>

@@ -15,6 +15,8 @@ export class ClassJournalsService {
   create(dto: CreateClassJournalDto) {
     const entry = this.classJournalRepository.create({
       date: dto.date,
+      period: dto.period ?? null,
+      title: dto.title ?? null,
       content: dto.content,
       homework: dto.homework,
       preparation: dto.preparation,

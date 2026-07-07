@@ -6,12 +6,24 @@ import {
   IsString,
   IsBoolean,
   IsEnum,
+  Min,
+  Max,
 } from 'class-validator';
 import { JournalCategory } from '../entities/class-journal.entity';
 
 export class CreateClassJournalDto {
   @IsDateString()
   date: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  @Max(6)
+  period?: number;
+
+  @IsOptional()
+  @IsString()
+  title?: string;
 
   @IsString()
   @IsNotEmpty()
