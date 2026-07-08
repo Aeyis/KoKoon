@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '@env';
 import {Observable} from 'rxjs';
-import {ClassJournal} from '@core/models/journal.interface';
+import {ClassJournal, NewJournalEntry} from '@core/models/journal.interface';
 
 @Injectable ({providedIn: 'root'})
 export class JournalService {
@@ -15,5 +15,8 @@ export class JournalService {
 
   setDone(id: number, done: boolean): Observable<ClassJournal> {
     return this._http.patch<ClassJournal>(`${this._apiUrl}class-journals/${id}`, {done});
+  }
+  create(payload: NewJournalEntry): Observable<ClassJournal> {
+    return this._http.post<ClassJournal>(`${this._apiUrl}class-journals`, payload);
   }
 }

@@ -22,7 +22,7 @@
           </div>
 
           @if (row.entry; as e) {
-            <article class="card" [class.is-done]="e.done" [attr.data-subject]="e.subject?.name">
+            <article class="card" [class.is-done]="e.done" [style.border-left-color]="e.color">
               <button
                 class="card__check"
                 type="button"
@@ -34,7 +34,7 @@
 
               <div class="card__body">
                 @if (e.subject) {
-                  <span class="chip" [attr.data-subject]="e.subject.name">{{ e.subject.name }}</span>
+                  <span class="chip">{{ e.subject.name }}</span>
                 }
                 <p class="card__title">{{ e.title || e.content }}</p>
                 @if (e.title && e.content) {
@@ -54,5 +54,13 @@
     }
   } @else {
     <app-week-planner [entries]="entries()" />
+  }
+
+  <button class="fab" type="button" (click)="showForm.set(true)">+ Add task</button>
+
+  @if (showForm()) {
+    @if (classId(); as cid) {
+      <app-task-form [classId]="cid" (saved)="onSaved()" (cancelled)="showForm.set(false)" />
+    }
   }
 </main>

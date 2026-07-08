@@ -20,7 +20,8 @@
             <div
               class="cell cell--filled"
               [class.is-done]="e.done"
-              [attr.data-subject]="e.subject?.name"
+              [style.background]="e.color ? e.color + '22' : null"
+              [style.border-left-color]="e.color"
             >
               <span class="cell__title">{{ e.title || e.content }}</span>
             </div>
@@ -32,12 +33,4 @@
     </div>
   </div>
 
-  <div class="legend">
-    <span class="legend__item"><span class="legend__dot" data-subject="Francais"></span>French</span>
-    <span class="legend__item"><span class="legend__dot" data-subject="Mathematiques"></span>Maths</span>
-    <span class="legend__item"><span class="legend__dot" data-subject="Éveil"></span>Discovery</span>
-    <span class="legend__item"><span class="legend__dot" data-subject="Arts"></span>Arts</span>
-    <span class="legend__item"><span class="legend__dot" data-subject="Éducation physique"></span>PE</span>
-    <span class="legend__item"><span class="legend__dot" data-subject="Rituel"></span>Ritual</span>
-  </div>
 </div>

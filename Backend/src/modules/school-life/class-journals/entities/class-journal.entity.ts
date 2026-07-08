@@ -31,6 +31,9 @@ export class ClassJournal {
   @Column({ type: 'varchar', nullable: true })
   title: string | null;
 
+  @Column({ type: 'varchar', nullable: true })
+  color: string | null;
+
   @Column({ type: 'text' })
   content: string;
 

@@ -4,6 +4,24 @@
   padding: 1.5rem 1.25rem 7rem;
 }
 
+.fab {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 5.5rem;
+  z-index: 50;
+  min-height: 3.5rem;
+  padding: 0 1.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .journal__title {
   margin: 0;
   font-size: 1.6rem;
@@ -197,51 +215,4 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
-/* subject colors — chip + card left accent */
-.chip[data-subject='Francais'] {
-  background: rgba(91, 141, 239, 0.16);
-  color: #3a63b0;
-}
-.card[data-subject='Francais'] {
-  border-left-color: #5b8def;
-}
-
-.chip[data-subject='Mathematiques'] {
-  background: rgba(239, 126, 94, 0.18);
-  color: #b8502f;
-}
-.card[data-subject='Mathematiques'] {
-  border-left-color: #ef7e5e;
-}
-
-.chip[data-subject='Éveil'] {
-  background: rgba(127, 184, 158, 0.22);
-  color: #2f7d5b;
-}
-.card[data-subject='Éveil'] {
-  border-left-color: #7fb89e;
-}
-
-.chip[data-subject='Arts'] {
-  background: rgba(168, 120, 235, 0.18);
-  color: #6b3fb0;
-}
-.card[data-subject='Arts'] {
-  border-left-color: #a878eb;
-}
-
-.chip[data-subject='Éducation physique'] {
-  background: rgba(66, 190, 190, 0.18);
-  color: #0f7d7d;
-}
-.card[data-subject='Éducation physique'] {
-  border-left-color: #42bebe;
-}
-
-.chip[data-subject='Rituel'] {
-  background: rgba(245, 179, 66, 0.22);
-  color: #9a6b00;
-}
-.card[data-subject='Rituel'] {
-  border-left-color: #f5b342;
-}
+/* color = per-entry, chosen by the user (applied inline via [style.border-left-color]) */

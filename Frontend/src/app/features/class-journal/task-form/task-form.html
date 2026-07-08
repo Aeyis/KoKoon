@@ -1,0 +1,65 @@
+<div class="overlay">
+  <div class="sheet">
+    <header class="sheet__head">
+      <h2 class="sheet__title">New task</h2>
+      <button type="button" class="sheet__close" (click)="cancelled.emit()">✕</button>
+    </header>
+
+    <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+      <label class="label">Subject</label>
+      <div class="chips">
+        @for (s of subjects(); track s.id) {
+          <button
+            type="button"
+            class="chip"
+            [class.selected]="subjectId() === s.id"
+            (click)="subjectId.set(s.id)"
+          >
+            {{ s.name }}
+          </button>
+        }
+      </div>
+
+      <label class="label">Title</label>
+      <input class="input" type="text" formControlName="title" placeholder="e.g. Equivalent fractions" />
+
+      <label class="label">Description</label>
+      <textarea class="input" rows="3" formControlName="content" placeholder="Activity details…"></textarea>
+
+      <label class="label">Period</label>
+      <div class="chips">
+        @for (p of PERIODS; track p.n) {
+          <button
+            type="button"
+            class="chip"
+            [class.selected]="period() === p.n"
+            (click)="period.set(p.n)"
+          >
+            {{ p.label }} · {{ p.time }}
+          </button>
+        }
+      </div>
+
+      <label class="label">Homework (optional)</label>
+      <input class="input" type="text" formControlName="homework" placeholder="e.g. Exercises p.42" />
+
+      <label class="label">Color</label>
+      <div class="swatches">
+        @for (c of TASK_COLORS; track c) {
+          <button
+            type="button"
+            class="swatch"
+            [class.selected]="color() === c"
+            [style.background]="c"
+            (click)="color.set(c)"
+          ></button>
+        }
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn--ghost" (click)="cancelled.emit()">Cancel</button>
+        <button type="submit" class="btn" [disabled]="saving()">Save task</button>
+      </div>
+    </form>
+  </div>
+</div>

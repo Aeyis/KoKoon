@@ -17,6 +17,7 @@ export class ClassJournalsService {
       date: dto.date,
       period: dto.period ?? null,
       title: dto.title ?? null,
+      color: dto.color ?? null,
       content: dto.content,
       homework: dto.homework,
       preparation: dto.preparation,

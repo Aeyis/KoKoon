@@ -25,6 +25,10 @@ export class CreateClassJournalDto {
   @IsString()
   title?: string;
 
+  @IsOptional()
+  @IsString()
+  color?: string;
+
   @IsString()
   @IsNotEmpty()
   content: string;
