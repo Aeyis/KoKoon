@@ -20,23 +20,28 @@
   <section class="card glass">
     <div class="card__head">
       <h2 class="card__title">Class journal</h2>
-      <span class="card__count">{{ todoCount() }} to do</span>
+      @if (todayJournal().length > 0) {
+        <button class="checkall" type="button" (click)="toggleAllJournal()">
+          {{ allJournalDone() ? 'Uncheck all' : 'Check all' }}
+        </button>
+      }
     </div>
 
     <ul class="journal">
       @for (item of todayJournal(); track item.id) {
-        <li class="journal__item">
-          <label class="journal__check">
-            <input
-              type="checkbox"
-              [checked]="item.done"
-              (change)="toggleJournalDone(item)"
-            />
-            <span class="journal__content" [class.is-done]="item.done">{{ item.content }}</span>
-          </label>
-          @if (item.category) {
-            <span class="chip" [class]="'chip chip--' + item.category">{{ item.category }}</span>
-          }
+        <li>
+          <button
+            class="jrow"
+            type="button"
+            [class.is-done]="item.done"
+            (click)="toggleJournalDone(item)"
+          >
+            <span class="jrow__check">@if (item.done) { ✓ }</span>
+            <span class="jrow__content">{{ item.content }}</span>
+            @if (item.category) {
+              <span class="chip" [class]="'chip chip--' + item.category">{{ item.category }}</span>
+            }
+          </button>
         </li>
       } @empty {
         <li class="journal__empty">Nothing planned today.</li>

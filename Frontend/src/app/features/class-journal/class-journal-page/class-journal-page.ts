@@ -1,4 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
+import { MatIcon } from '@angular/material/icon';
+import { forkJoin } from 'rxjs';
 import { JournalService } from '@core/services/journal.service';
 import { ClassJournal } from '@core/models/journal.interface';
 import { PERIODS } from '@core/constants/periods';
@@ -8,7 +11,7 @@ import { ClassService } from '@core/services/class.service';
 
 @Component({
   selector: 'app-class-journal-page',
-  imports: [WeekPlanner, TaskForm],
+  imports: [WeekPlanner, TaskForm, CdkDrag, CdkDropList, CdkDropListGroup, MatIcon],
 
   templateUrl: './class-journal-page.html',
   styleUrl: './class-journal-page.scss',
@@ -21,8 +24,11 @@ export class ClassJournalPage implements OnInit {
 
   protected readonly entries = signal<ClassJournal[]>([]);
   protected readonly view = signal<'day' | 'week'>('day');
+  protected readonly moveMode = signal(false);
   protected readonly classId = signal<number | null>(null);
   protected readonly showForm = signal(false);
+  protected readonly formDate = signal<string | null>(null);
+  protected readonly formPeriod = signal<number | null>(null);
 
   private readonly _byPeriod = computed(() => {
     const map = new Map<number, ClassJournal>();
@@ -52,6 +58,10 @@ export class ClassJournalPage implements OnInit {
     () => [...this._byPeriod().values()].filter((e) => e.done).length,
   );
   protected readonly totalCount = computed(() => this._byPeriod().size);
+  protected readonly allDayDone = computed(() => {
+    const items = [...this._byPeriod().values()];
+    return items.length > 0 && items.every((e) => e.done);
+  });
 
   ngOnInit(): void {
     this._classService.getAll().subscribe((c) => this.classId.set(c[0]?.id ?? null));
@@ -62,9 +72,46 @@ export class ClassJournalPage implements OnInit {
     this._journalService.getAll().subscribe((list) => this.entries.set(list));
   }
 
-  protected onSaved(): void {
-    this.showForm.set(false);
+  protected openSlot(date: string, period: number): void {
+    this.formDate.set(date);
+    this.formPeriod.set(period);
+    this.showForm.set(true);
+  }
+
+  protected openDaySlot(period: number): void {
+    this.openSlot(this._today, period);
+  }
+
+  protected openEdit(entry: ClassJournal): void {
+    this.openSlot(entry.date.slice(0, 10), entry.period!);
+  }
+
+  protected onCreated(): void {
     this._load();
+  }
+
+  protected dropDay(event: CdkDragDrop<unknown>, period: number): void {
+    const dragged = event.item.data as ClassJournal;
+    if (dragged.period === period) return;
+    const target = this._byPeriod().get(period) ?? null;
+    this._journalService.move(dragged.id, this._today, period).subscribe(() => {
+      if (target && target.id !== dragged.id) {
+        this._journalService
+          .move(target.id, this._today, dragged.period!)
+          .subscribe(() => this._load());
+      } else {
+        this._load();
+      }
+    });
+  }
+
+  protected toggleAllDay(): void {
+    const items = [...this._byPeriod().values()];
+    if (!items.length) return;
+    const target = !this.allDayDone();
+    forkJoin(items.map((e) => this._journalService.setDone(e.id, target))).subscribe(() =>
+      this._load(),
+    );
   }
 
   protected toggleDone(item: ClassJournal): void {

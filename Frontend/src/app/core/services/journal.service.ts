@@ -19,4 +19,12 @@ export class JournalService {
   create(payload: NewJournalEntry): Observable<ClassJournal> {
     return this._http.post<ClassJournal>(`${this._apiUrl}class-journals`, payload);
   }
+
+  move(id: number, date: string, period: number): Observable<ClassJournal> {
+    return this._http.patch<ClassJournal>(`${this._apiUrl}class-journals/${id}`, { date, period });
+  }
+
+  update(id: number, patch: Partial<NewJournalEntry>): Observable<ClassJournal> {
+    return this._http.patch<ClassJournal>(`${this._apiUrl}class-journals/${id}`, patch);
+  }
 }

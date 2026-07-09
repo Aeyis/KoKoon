@@ -1,66 +1,113 @@
 <main class="journal">
   <header class="journal__header">
-    <h1 class="journal__title">Class journal</h1>
+    <div class="journal__top">
+      <h1 class="journal__title">Class journal</h1>
+      @if (view() === 'week') {
+        <button
+          class="movebtn"
+          type="button"
+          [class.is-on]="moveMode()"
+          (click)="moveMode.update((v) => !v)"
+        >
+          @if (moveMode()) {
+            Done
+          } @else {
+            <mat-icon>edit</mat-icon> Edit
+          }
+        </button>
+      }
+    </div>
     <p class="journal__sub">{{ todayLabel() }} · {{ doneCount() }}/{{ totalCount() }} done</p>
   </header>
 
   <div class="tabs" [attr.data-view]="view()">
-    <button class="tab" type="button" [class.is-active]="view() === 'day'" (click)="view.set('day')">Day</button>
+    <button class="tab" type="button" [class.is-active]="view() === 'day'" (click)="view.set('day'); moveMode.set(false)">Day</button>
     <button class="tab" type="button" [class.is-active]="view() === 'week'" (click)="view.set('week')">Week</button>
   </div>
 
   @if (view() === 'day') {
-    @for (half of halves(); track half.label) {
-    <section class="half">
-      <h2 class="half__label">{{ half.label }}</h2>
-
-      @for (row of half.rows; track row.period.n) {
-        <div class="slot">
-          <div class="slot__period">
-            <span class="slot__p">{{ row.period.label }}</span>
-            <span class="slot__time">{{ row.period.time }}</span>
-          </div>
-
-          @if (row.entry; as e) {
-            <article class="card" [class.is-done]="e.done" [style.border-left-color]="e.color">
-              <button
-                class="card__check"
-                type="button"
-                [class.checked]="e.done"
-                (click)="toggleDone(e)"
-              >
-                @if (e.done) { ✓ }
-              </button>
-
-              <div class="card__body">
-                @if (e.subject) {
-                  <span class="chip">{{ e.subject.name }}</span>
-                }
-                <p class="card__title">{{ e.title || e.content }}</p>
-                @if (e.title && e.content) {
-                  <p class="card__desc">{{ e.content }}</p>
-                }
-                @if (e.homework) {
-                  <p class="card__meta"><strong>Homework:</strong> {{ e.homework }}</p>
-                }
-              </div>
-            </article>
-          } @else {
-            <div class="free">Free</div>
-          }
-        </div>
-      }
-    </section>
+    @if (totalCount() > 0) {
+      <button class="checkall" type="button" (click)="toggleAllDay()">
+        {{ allDayDone() ? 'Uncheck all' : 'Check all' }}
+      </button>
     }
+    <div class="day" cdkDropListGroup>
+      @for (half of halves(); track half.label) {
+      <section class="half">
+        <h2 class="half__label">{{ half.label }}</h2>
+
+        @for (row of half.rows; track row.period.n) {
+          <div class="slot">
+            <div class="slot__period">
+              <span class="slot__p">{{ row.period.label }}</span>
+            </div>
+
+            <div class="slot__drop" cdkDropList (cdkDropListDropped)="dropDay($event, row.period.n)">
+              @if (row.entry; as e) {
+                <article
+                  class="card"
+                  cdkDrag
+                  [cdkDragData]="e"
+                  [cdkDragStartDelay]="{ touch: 150, mouse: 0 }"
+                  [class.is-done]="e.done"
+                  [style.border-left-color]="e.color"
+                  (click)="openDaySlot(row.period.n)"
+                >
+                  <div class="card__body">
+                    @if (e.subject) {
+                      <span class="chip">{{ e.subject.name }}</span>
+                    }
+                    <p class="card__title">{{ e.title || e.content }}</p>
+                    @if (e.title && e.content) {
+                      <p class="card__desc">{{ e.content }}</p>
+                    }
+                    @if (e.homework) {
+                      <p class="card__meta"><strong>Homework:</strong> {{ e.homework }}</p>
+                    }
+                  </div>
+
+                  <button
+                    class="card__check"
+                    type="button"
+                    [class.checked]="e.done"
+                    (click)="toggleDone(e); $event.stopPropagation()"
+                  >
+                    @if (e.done) { ✓ }
+                  </button>
+                </article>
+              } @else {
+                <button class="free" type="button" (click)="openDaySlot(row.period.n)">
+                  <span class="free__plus">+</span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </section>
+      }
+    </div>
   } @else {
-    <app-week-planner [entries]="entries()" />
+    <app-week-planner
+      [entries]="entries()"
+      [moveMode]="moveMode()"
+      (changed)="onCreated()"
+      (add)="openSlot($event.date, $event.period)"
+      (edit)="openEdit($event)"
+    />
   }
 
-  <button class="fab" type="button" (click)="showForm.set(true)">+ Add task</button>
-
-  @if (showForm()) {
-    @if (classId(); as cid) {
-      <app-task-form [classId]="cid" (saved)="onSaved()" (cancelled)="showForm.set(false)" />
+  @if (showForm() && classId(); as cid) {
+    @if (formDate(); as fd) {
+      @if (formPeriod(); as fp) {
+        <app-task-form
+          [classId]="cid"
+          [date]="fd"
+          [period]="fp"
+          [entries]="entries()"
+          (created)="onCreated()"
+          (cancelled)="showForm.set(false)"
+        />
+      }
     }
   }
 </main>

@@ -50,8 +50,14 @@ export class ClassJournalsService {
     return entry;
   }
 
-  update(id: number, dto: UpdateClassJournalDto) {
-    return this.classJournalRepository.update(id, dto);
+  async update(id: number, dto: UpdateClassJournalDto) {
+    const entry = await this.findOne(id);
+    const { subjectId, classId, ...rest } = dto as any;
+    Object.assign(entry, rest);
+    if (subjectId !== undefined) {
+      entry.subject = subjectId === null ? null : ({ id: subjectId } as any);
+    }
+    return this.classJournalRepository.save(entry);
   }
 
   remove(id: number) {

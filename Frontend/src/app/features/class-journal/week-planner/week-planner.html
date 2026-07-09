@@ -1,4 +1,10 @@
 <div class="planner">
+  <div class="weeknav">
+    <button class="weeknav__btn" type="button" (click)="prevWeek()" aria-label="Previous week">‹</button>
+    <span class="weeknav__label">{{ weekLabel() }}</span>
+    <button class="weeknav__btn" type="button" (click)="nextWeek()" aria-label="Next week">›</button>
+  </div>
+
   <div class="grid-wrap">
     <div class="grid">
       <div class="corner"></div>
@@ -12,25 +18,65 @@
       @for (p of PERIODS; track p.n) {
         <div class="rowhead">
           <span class="rowhead__p">{{ p.label }}</span>
-          <span class="rowhead__t">{{ p.time }}</span>
         </div>
 
         @for (d of days(); track d.date) {
-          @if (cell(d.date, p.n); as e) {
-            <div
-              class="cell cell--filled"
-              [class.is-done]="e.done"
-              [style.background]="e.color ? e.color + '22' : null"
-              [style.border-left-color]="e.color"
-            >
-              <span class="cell__title">{{ e.title || e.content }}</span>
-            </div>
-          } @else {
-            <div class="cell cell--free"></div>
-          }
+          <div class="cell">
+            @if (cell(d.date, p.n); as e) {
+              @if (!moveMode()) {
+                <div
+                  class="cell__item"
+                  [class.is-done]="e.done"
+                  [style.background]="e.color ? e.color + '22' : null"
+                  [style.border-left-color]="e.color"
+                  (click)="edit.emit(e)"
+                >
+                  <span class="cell__title">{{ e.subject?.name || e.title }}</span>
+                </div>
+              } @else if (selectedId() === e.id) {
+                <button
+                  class="cell__item is-selected"
+                  type="button"
+                  [style.background]="e.color ? e.color + '22' : null"
+                  [style.border-left-color]="e.color"
+                  (click)="select(null)"
+                >
+                  <span class="cell__title">{{ e.subject?.name || e.title }}</span>
+                </button>
+              } @else if (hasSelection()) {
+                <button
+                  class="cell__item is-target"
+                  type="button"
+                  [style.background]="e.color ? e.color + '22' : null"
+                  [style.border-left-color]="e.color"
+                  (click)="moveTo(d.date, p.n)"
+                >
+                  <span class="cell__title">{{ e.subject?.name || e.title }}</span>
+                  <span class="cell__badge">+</span>
+                </button>
+              } @else {
+                <button
+                  class="cell__item"
+                  type="button"
+                  [style.background]="e.color ? e.color + '22' : null"
+                  [style.border-left-color]="e.color"
+                  (click)="select(e.id)"
+                >
+                  <span class="cell__title">{{ e.subject?.name || e.title }}</span>
+                </button>
+              }
+            } @else {
+              @if (moveMode()) {
+                @if (hasSelection()) {
+                  <button class="cell__target" type="button" (click)="moveTo(d.date, p.n)">+</button>
+                }
+              } @else {
+                <button class="cell__add" type="button" (click)="add.emit({ date: d.date, period: p.n })">+</button>
+              }
+            }
+          </div>
         }
       }
     </div>
   </div>
-
 </div>

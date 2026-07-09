@@ -1,5 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
 import { ClassService } from '@core/services/class.service';
 import { JournalService } from '@core/services/journal.service';
@@ -43,6 +44,10 @@ export class DashboardPage implements OnInit {
   protected readonly todoCount = computed(
     () => this.todayJournal().filter((j) => !j.done).length,
   );
+  protected readonly allJournalDone = computed(() => {
+    const items = this.todayJournal();
+    return items.length > 0 && items.every((j) => j.done);
+  });
 
   protected readonly todayEvents = computed(() =>
     this.events().filter((e) => e.date.slice(0, 10) === this._today),
@@ -53,6 +58,18 @@ export class DashboardPage implements OnInit {
     this._classService.getAll().subscribe((classes) => this.students.set(classes[0]?.students ?? []));
     this._journalService.getAll().subscribe((list) => this.journal.set(list));
     this._eventService.getAll().subscribe((list) => this.events.set(list));
+  }
+
+  protected toggleAllJournal(): void {
+    const items = this.todayJournal();
+    if (!items.length) return;
+    const target = !this.allJournalDone();
+    forkJoin(items.map((i) => this._journalService.setDone(i.id, target))).subscribe(() => {
+      const ids = new Set(items.map((i) => i.id));
+      this.journal.update((list) =>
+        list.map((j) => (ids.has(j.id) ? { ...j, done: target } : j)),
+      );
+    });
   }
 
   protected toggleJournalDone(item: ClassJournal): void {
