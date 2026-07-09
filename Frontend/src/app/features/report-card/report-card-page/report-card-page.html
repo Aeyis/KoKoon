@@ -1,1 +1,52 @@
-<p>report-card-page works!</p>
+<main class="reportcard">
+  <header class="reportcard__header">
+    <h1 class="reportcard__title">Report cards</h1>
+    @if (classRoom(); as c) {
+      <p class="reportcard__sub">{{ c.name }} · {{ c.schoolYear }}</p>
+    }
+  </header>
+
+  <div class="tabs" [attr.data-tab]="tab()">
+    <button class="tab" type="button" [class.is-active]="tab() === 'behavior'" (click)="tab.set('behavior')">
+      Behavior
+    </button>
+    <button class="tab" type="button" [class.is-active]="tab() === 'results'" (click)="tab.set('results')">
+      Results
+    </button>
+    <button class="tab" type="button" [class.is-active]="tab() === 'send'" (click)="tab.set('send')">
+      Send
+    </button>
+  </div>
+
+  @if (tab() === 'results') {
+    @if (classAverage(); as avg) {
+      <div class="classavg glass">
+        <span class="classavg__score">{{ avg }}</span>
+        <span class="classavg__label">Class average · out of 100</span>
+      </div>
+    }
+
+    <ul class="students">
+      @for (s of students(); track s.id) {
+        <li>
+          <div class="student">
+            <span class="student__ball" data-behavior="none"></span>
+            <app-student-avatar [firstName]="s.firstName" [lastName]="s.lastName" [sex]="s.sex" />
+            <span class="student__body">
+              <span class="student__name">{{ s.firstName }} {{ s.lastName }}</span>
+              <span class="student__sub">Year average · {{ average(s.id) ?? '—' }}/100</span>
+            </span>
+            <span class="student__score">{{ average(s.id) ?? '—' }}</span>
+            <mat-icon class="student__chevron">chevron_right</mat-icon>
+          </div>
+        </li>
+      } @empty {
+        <li class="empty">No students.</li>
+      }
+    </ul>
+  } @else if (tab() === 'behavior') {
+    <p class="placeholder">Behavior — coming soon.</p>
+  } @else {
+    <p class="placeholder">Send to parents — coming soon.</p>
+  }
+</main>
