@@ -29,7 +29,7 @@ export class LoginPage {
     const { email, password } = this.form.getRawValue();
 
     this._auth.login ({ email: email!, password: password!}).subscribe({
-      next : () => this._router.navigate(['/dashboard']),
+      next : () => this._router.navigate([this._auth.isParent() ? '/parent' : '/dashboard']),
       error:(err) => console.error('Echec du login', err),
     });
   }

@@ -6,6 +6,6 @@
   <router-outlet />
 </main>
 
-@if (auth.isConnected()) {
+@if (auth.isConnected() && !auth.isParent()) {
   <app-bottom-nav />
 }

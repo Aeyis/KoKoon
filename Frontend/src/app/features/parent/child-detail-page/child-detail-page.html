@@ -1,0 +1,38 @@
+<main class="child">
+  <a class="child__back" routerLink="/parent">
+    <mat-icon>chevron_left</mat-icon> Back
+  </a>
+
+  @if (child(); as c) {
+    <header class="child__header">
+      <app-student-avatar [firstName]="c.firstName" [lastName]="c.lastName" [sex]="c.sex" />
+      <div>
+        <h1 class="child__name">{{ c.firstName }} {{ c.lastName }}</h1>
+        <p class="child__sub">{{ presentCount() }} present · {{ absentCount() }} absent</p>
+      </div>
+    </header>
+  }
+
+  <h2 class="child__title">Attendance</h2>
+
+  <ul class="att">
+    @for (a of attendance(); track a.id) {
+      <li class="att__row">
+        <div class="att__day">
+          <span class="att__date">{{ dayLabel(a.date) }}</span>
+          <span class="att__session">{{ sessionLabel(a.session) }}</span>
+        </div>
+        <span
+          class="att__status"
+          [class.is-present]="a.status === AttendanceStatus.PRESENT"
+          [class.is-absent]="a.status === AttendanceStatus.ABSENT"
+          [class.is-late]="a.status === AttendanceStatus.LATE"
+        >
+          {{ statusLabel(a.status) }}
+        </span>
+      </li>
+    } @empty {
+      <li class="empty">No attendance records.</li>
+    }
+  </ul>
+</main>

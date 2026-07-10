@@ -1,0 +1,35 @@
+<main class="parent">
+  <header class="parent__header">
+    <h1 class="parent__greeting">Hello {{ auth.currentUser()?.firstName }} 👋</h1>
+  </header>
+
+  <h2 class="parent__title">My children</h2>
+  <ul class="children">
+    @for (c of children(); track c.id) {
+      <li>
+        <a class="child" [routerLink]="['/parent/child', c.id]">
+          <app-student-avatar [firstName]="c.firstName" [lastName]="c.lastName" [sex]="c.sex" />
+          <span class="child__name">{{ c.firstName }} {{ c.lastName }}</span>
+          <mat-icon class="child__chevron">chevron_right</mat-icon>
+        </a>
+      </li>
+    } @empty {
+      <li class="empty">No children linked to your account.</li>
+    }
+  </ul>
+
+  <h2 class="parent__title">Notifications</h2>
+  <ul class="notifs">
+    @for (n of notifications(); track n.id) {
+      <li class="notif" [class.is-read]="n.isRead" [attr.data-type]="n.type">
+        <span class="notif__dot"></span>
+        <div class="notif__body">
+          <span class="notif__content">{{ n.content }}</span>
+          <span class="notif__date">{{ notifDate(n.createdAt) }}</span>
+        </div>
+      </li>
+    } @empty {
+      <li class="empty">No notifications.</li>
+    }
+  </ul>
+</main>

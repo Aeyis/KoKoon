@@ -6,8 +6,11 @@ export const isConnectedGuard: CanActivateFn = () => {
   const auth= inject(AuthService);
   const router = inject(Router);
 
-  if (auth.isConnected()) {
-    return true;
+  if (!auth.isConnected()) {
+    return router.createUrlTree(['/login']);
   }
-  return router.createUrlTree(['/login']);
+  if (auth.isParent()) {
+    return router.createUrlTree(['/parent']);
+  }
+  return true;
 };

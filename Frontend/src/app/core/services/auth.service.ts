@@ -4,6 +4,7 @@ import {environment} from '@env';
 import {Observable, tap} from 'rxjs';
 import {LoginPayload, LoginResponse} from '@core/models/auth.interface';
 import { User } from '@core/models/user.interface';
+import { UserRole } from '@core/enums/user-role.enum';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -13,6 +14,18 @@ export class AuthService {
   private readonly _token = signal<string | null> (localStorage.getItem('token'));
   readonly token = this._token.asReadonly();
   readonly isConnected = computed(()=> !!this.token());
+
+  readonly role = computed<UserRole | null>(() => {
+    const t = this._token();
+    if (!t) return null;
+    try {
+      return JSON.parse(atob(t.split('.')[1])).role ?? null;
+    } catch {
+      return null;
+    }
+  });
+
+  readonly isParent = computed(() => this.role() === UserRole.RESPONSABLE);
 
   private readonly _currentUser = signal <User | null>(null);
   readonly currentUser = this._currentUser.asReadonly();

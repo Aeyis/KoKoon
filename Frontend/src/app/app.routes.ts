@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import {isConnectedGuard} from '@core/guards/is-connected.guard';
+import { isParentGuard } from '@core/guards/is-parent.guard';
 
 export const routes: Routes = [{
   path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -59,5 +60,17 @@ export const routes: Routes = [{
     canActivate: [isConnectedGuard],
     loadComponent:() =>
       import('@features/agenda/agenda-page/agenda-page').then((m) => m.AgendaPage),
+  },
+  {
+    path: 'parent',
+    canActivate: [isParentGuard],
+    loadComponent: () =>
+      import('@features/parent/parent-home-page/parent-home-page').then((m) => m.ParentHomePage),
+  },
+  {
+    path: 'parent/child/:id',
+    canActivate: [isParentGuard],
+    loadComponent: () =>
+      import('@features/parent/child-detail-page/child-detail-page').then((m) => m.ChildDetailPage),
   },
 ];
