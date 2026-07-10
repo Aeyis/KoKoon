@@ -1,0 +1,248 @@
+.agenda {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 7rem;
+}
+
+.agenda__title {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.agenda__subtitle {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* calendar */
+.cal {
+  padding: 1rem;
+}
+
+.cal__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.cal__arrow {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: var(--mat-sys-surface);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cal__month {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.15rem;
+}
+
+.cal__wd {
+  text-align: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--mat-sys-on-surface-variant);
+  padding-bottom: 0.35rem;
+}
+
+.cal__day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cal__day--blank {
+  visibility: hidden;
+}
+
+.cal__num {
+  line-height: 1;
+}
+
+.cal__dot {
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  background: var(--mat-sys-outline);
+}
+
+.cal__day[data-cat='OUTING'] {
+  background: rgba(127, 184, 158, 0.25);
+}
+.cal__day[data-cat='MEETING'] {
+  background: rgba(168, 120, 235, 0.2);
+}
+.cal__day[data-cat='SCHOOL'] {
+  background: rgba(91, 141, 239, 0.2);
+}
+.cal__day[data-cat='OTHER'] {
+  background: rgba(239, 126, 94, 0.2);
+}
+
+.cal__day.is-today {
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font-weight: 800;
+}
+
+.cal__day.is-today .cal__dot {
+  background: var(--mat-sys-on-primary);
+}
+
+/* category dots */
+.cal__dot[data-cat='OUTING'],
+.event__dot[data-cat='OUTING'] {
+  background: #7fb89e;
+}
+.cal__dot[data-cat='MEETING'],
+.event__dot[data-cat='MEETING'] {
+  background: #a878eb;
+}
+.cal__dot[data-cat='SCHOOL'],
+.event__dot[data-cat='SCHOOL'] {
+  background: #5b8def;
+}
+.cal__dot[data-cat='OTHER'],
+.event__dot[data-cat='OTHER'] {
+  background: #ef7e5e;
+}
+
+/* events list */
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.event {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 16px;
+  background: var(--mat-sys-surface);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-bottom-width: 4px;
+}
+
+.event__date {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 14px;
+  line-height: 1;
+  background: var(--mat-sys-surface-container-high);
+  color: var(--mat-sys-on-surface);
+}
+
+.event__date strong {
+  font-size: 1.1rem;
+}
+
+.event__date small {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+}
+
+.event__date[data-cat='OUTING'] {
+  background: rgba(127, 184, 158, 0.22);
+  color: #2f7d5b;
+}
+.event__date[data-cat='MEETING'] {
+  background: rgba(168, 120, 235, 0.18);
+  color: #6b3fb0;
+}
+.event__date[data-cat='SCHOOL'] {
+  background: rgba(91, 141, 239, 0.18);
+  color: #3a63b0;
+}
+.event__date[data-cat='OTHER'] {
+  background: rgba(239, 126, 94, 0.18);
+  color: #b8502f;
+}
+
+.event__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.event__title {
+  font-weight: 600;
+}
+
+.event__cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.event__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--mat-sys-outline);
+}
+
+.empty {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.fab {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 5.5rem;
+  z-index: 50;
+  min-height: 3.5rem;
+  padding: 0 1.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}

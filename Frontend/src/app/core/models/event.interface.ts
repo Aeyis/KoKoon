@@ -11,3 +11,15 @@ export interface AgendaEvent {
   description: string | null;
   category : EventCategory | null;
 }
+
+export interface NewEvent {
+  title: string;
+  date: string;
+  allDay?: boolean;
+  startTime?: string;
+  endTime?: string;
+  location?: string;
+  description?: string;
+  category?: EventCategory;
+  classId?: number;
+}

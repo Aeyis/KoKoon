@@ -1,1 +1,71 @@
-<p>agenda-page works!</p>
+<main class="agenda">
+  <header class="agenda__header">
+    <h1 class="agenda__title">Agenda</h1>
+  </header>
+
+  <section class="cal glass">
+    <div class="cal__nav">
+      <button class="cal__arrow" type="button" (click)="prevMonth()" aria-label="Previous month">‹</button>
+      <span class="cal__month">{{ monthLabel() }}</span>
+      <button class="cal__arrow" type="button" (click)="nextMonth()" aria-label="Next month">›</button>
+    </div>
+
+    <div class="cal__grid">
+      @for (w of weekdays; track w) {
+        <span class="cal__wd">{{ w }}</span>
+      }
+
+      @for (cell of grid(); track $index) {
+        @if (cell) {
+          <button
+            type="button"
+            class="cal__day"
+            [class.is-today]="cell.isToday"
+            [attr.data-cat]="cell.events.length ? cell.events[0].category : null"
+            (click)="openForm(cell.iso)"
+          >
+            <span class="cal__num">{{ cell.day }}</span>
+            @if (cell.events.length) {
+              <span class="cal__dot" [attr.data-cat]="cell.events[0].category"></span>
+            }
+          </button>
+        } @else {
+          <div class="cal__day cal__day--blank"></div>
+        }
+      }
+    </div>
+  </section>
+
+  <h2 class="agenda__subtitle">This month's events</h2>
+
+  <ul class="events">
+    @for (e of monthEvents(); track e.id) {
+      <li class="event">
+        <span class="event__date" [attr.data-cat]="e.category">
+          <strong>{{ evDay(e) }}</strong>
+          <small>{{ evMonth(e) }}</small>
+        </span>
+        <div class="event__body">
+          <span class="event__title">{{ e.title }}</span>
+          <span class="event__cat">
+            <span class="event__dot" [attr.data-cat]="e.category"></span>
+            {{ catLabel(e.category) }}
+          </span>
+        </div>
+      </li>
+    } @empty {
+      <li class="empty">No events this month.</li>
+    }
+  </ul>
+
+  <button class="fab" type="button" (click)="openToday()">+ Add event</button>
+
+  @if (showForm() && classId(); as cid) {
+    <app-event-form
+      [classId]="cid"
+      [date]="formDate()"
+      (saved)="onSaved()"
+      (cancelled)="showForm.set(false)"
+    />
+  }
+</main>

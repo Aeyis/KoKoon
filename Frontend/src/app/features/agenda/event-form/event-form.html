@@ -1,0 +1,89 @@
+<div class="overlay">
+  <div class="sheet">
+    <header class="sheet__head">
+      <h2 class="sheet__title">New event</h2>
+      <button type="button" class="sheet__close" (click)="cancelled.emit()">✕</button>
+    </header>
+
+    <label class="label">Title</label>
+    <input
+      class="input"
+      type="text"
+      [value]="title()"
+      (input)="title.set($any($event.target).value)"
+      placeholder="e.g. Library workshop"
+    />
+
+    <div class="field-row">
+      <div class="col">
+        <label class="label">Date</label>
+        <input
+          class="input"
+          type="date"
+          [value]="dateVal()"
+          (input)="dateVal.set($any($event.target).value)"
+        />
+      </div>
+      <div class="col">
+        <label class="label">Category</label>
+        <app-dropdown
+          [options]="categories"
+          [value]="category()"
+          (changed)="category.set($any($event))"
+        />
+      </div>
+    </div>
+
+    <label class="toggle">
+      <input type="checkbox" [checked]="allDay()" (change)="allDay.set($any($event.target).checked)" />
+      All day
+    </label>
+
+    @if (!allDay()) {
+      <div class="field-row">
+        <div class="col">
+          <label class="label">Start</label>
+          <input
+            class="input"
+            type="time"
+            [value]="startTime()"
+            (input)="startTime.set($any($event.target).value)"
+          />
+        </div>
+        <div class="col">
+          <label class="label">End</label>
+          <input
+            class="input"
+            type="time"
+            [value]="endTime()"
+            (input)="endTime.set($any($event.target).value)"
+          />
+        </div>
+      </div>
+    }
+
+    <label class="label">Location (optional)</label>
+    <input
+      class="input"
+      type="text"
+      [value]="location()"
+      (input)="location.set($any($event.target).value)"
+      placeholder="e.g. Gym"
+    />
+
+    <label class="label">Description (optional)</label>
+    <textarea
+      class="input"
+      rows="2"
+      [value]="description()"
+      (input)="description.set($any($event.target).value)"
+    ></textarea>
+
+    <div class="actions">
+      <button type="button" class="btn btn--ghost" (click)="cancelled.emit()">Cancel</button>
+      <button type="button" class="btn" [disabled]="!canSave() || saving()" (click)="submit()">
+        Save event
+      </button>
+    </div>
+  </div>
+</div>
