@@ -1,0 +1,57 @@
+<main class="report">
+  <a class="report__back" routerLink="/report-card">
+    <mat-icon>chevron_left</mat-icon> Back
+  </a>
+
+  @if (student(); as s) {
+    <header class="report__header">
+      <app-student-avatar [firstName]="s.firstName" [lastName]="s.lastName" [sex]="s.sex" />
+      <div class="report__id">
+        <h1 class="report__name">{{ s.firstName }} {{ s.lastName }}</h1>
+        <p class="report__sub">Year average · {{ yearAverage() ?? '—' }}/100</p>
+      </div>
+    </header>
+  }
+
+  @for (b of blocks(); track b.id) {
+    <section class="subject" [attr.data-subject]="b.name">
+      <div class="subject__head">
+        <h2 class="subject__name">{{ b.name }}</h2>
+        <span class="subject__avg">{{ b.yearAvg ?? '—' }}</span>
+      </div>
+
+      <div class="grid-wrap">
+        <table class="grid">
+          <thead>
+            <tr>
+              <th class="grid__label">Competencies</th>
+              @for (p of periodLabels(); track p) {
+                <th>{{ p }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of b.competencies; track c.title) {
+              <tr>
+                <td class="grid__label">{{ c.title }}</td>
+                @for (sc of c.cells; track $index) {
+                  <td>{{ sc ?? '—' }}</td>
+                }
+              </tr>
+            }
+            @if (b.scale === 'numeric') {
+              <tr class="grid__avg">
+                <td class="grid__label">Average /100</td>
+                @for (a of b.avgByPeriod; track $index) {
+                  <td>{{ a ?? '—' }}</td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  } @empty {
+    <p class="placeholder">No results yet.</p>
+  }
+</main>

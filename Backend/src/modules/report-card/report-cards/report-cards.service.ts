@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { ReportCard } from './entities/report-card.entity';
@@ -16,6 +16,16 @@ export class ReportCardsService {
   ) {}
 
   async create(dto: CreateReportCardDto) {
+    const existing = await this.reportCardRepository.findOne({
+      where: { student: { id: dto.studentId }, period: { id: dto.periodId } },
+    });
+    if (existing) {
+      if (dto.comment !== undefined) existing.comment = dto.comment;
+      if (dto.status !== undefined) existing.status = dto.status;
+      if (dto.signature !== undefined) existing.signature = dto.signature;
+      if (dto.dueDate !== undefined) existing.dueDate = dto.dueDate;
+      return this.reportCardRepository.save(existing);
+    }
     const reportCard = this.reportCardRepository.create({
       comment: dto.comment,
       status: dto.status,
@@ -24,14 +34,7 @@ export class ReportCardsService {
       student: { id: dto.studentId },
       period: { id: dto.periodId },
     });
-    try {
-      return await this.reportCardRepository.save(reportCard);
-    } catch (e) {
-      if (e.code === '23505') {
-        throw new ConflictException('A report card already exists for this student and period');
-      }
-      throw e;
-    }
+    return this.reportCardRepository.save(reportCard);
   }
 
   findAll(classIds: number[] | null = null) {
@@ -74,6 +77,7 @@ export class ReportCardsService {
     // 1. Regrouper les pourcentages par matière
     const bySubject = new Map<string, number[]>(); // ici crée la map
     for (const e of evaluations) { //pour chaque eval e fait ceci
+      if (e.score == null || e.maxScore == null || e.maxScore === 0) continue; // skip les évals en lettres (TB/B/S/F)
       const percentage = (e.score / e.maxScore) * 100; // convertir la note en % ; 14/20*100 = 70 ; percentage = 70
       const list = bySubject.get(e.subject.name) ?? []; //le ?? [] donne un tableau vide. recupere la liste de la matiere
       list.push(percentage); // ajoute le pourcentage à la list. push ajoute 70 a lafin de la list

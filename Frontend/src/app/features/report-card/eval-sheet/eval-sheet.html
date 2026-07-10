@@ -1,0 +1,113 @@
+<div class="overlay">
+  <div class="sheet">
+    <header class="sheet__head">
+      <h2 class="sheet__title">Evaluation sheet</h2>
+      <button type="button" class="sheet__close" (click)="cancelled.emit()">✕</button>
+    </header>
+
+    <div class="controls">
+      <div class="field-row">
+        <div class="field field--grow">
+          <label class="label">Subject</label>
+          <div class="select">
+            <select (change)="setSubject(+$any($event.target).value || null)">
+              <option value="" [selected]="subjectId() === null">Choose…</option>
+              @for (s of gradableSubjects(); track s.id) {
+                <option [value]="s.id" [selected]="subjectId() === s.id">{{ s.name }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="field field--grow">
+          <label class="label">Term</label>
+          <div class="select">
+            <select (change)="periodId.set(+$any($event.target).value)">
+              @for (p of periods(); track p.id) {
+                <option [value]="p.id" [selected]="periodId() === p.id">{{ p.name }}</option>
+              }
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Competency</label>
+        <div class="select">
+          <select
+            [disabled]="competencyOptions().length === 0"
+            (change)="competency.set($any($event.target).value)"
+          >
+            <option value="" [selected]="competency() === ''">Choose…</option>
+            @for (c of competencyOptions(); track c) {
+              <option [value]="c" [selected]="competency() === c">{{ c }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field field--grow">
+          <label class="label">Title (optional)</label>
+          <input
+            class="input"
+            type="text"
+            [value]="title()"
+            (input)="title.set($any($event.target).value)"
+            placeholder="e.g. Dictation 3"
+          />
+        </div>
+        @if (scale() === 'numeric') {
+          <div class="field field--small">
+            <label class="label">Out of</label>
+            <input
+              class="input"
+              type="number"
+              min="1"
+              [value]="maxScore()"
+              (input)="maxScore.set(+$any($event.target).value)"
+            />
+          </div>
+        }
+      </div>
+    </div>
+
+    <ul class="grades">
+      @for (s of students(); track s.id) {
+        <li class="grade">
+          <app-student-avatar [firstName]="s.firstName" [lastName]="s.lastName" [sex]="s.sex" />
+          <span class="grade__name">{{ s.firstName }} {{ s.lastName }}</span>
+
+          @if (scale() === 'letter') {
+            <div class="select select--grade">
+              <select (change)="setGrade(s.id, $any($event.target).value)">
+                <option value="" [selected]="!grades()[s.id]">—</option>
+                @for (g of LETTER_GRADES; track g) {
+                  <option [value]="g" [selected]="grades()[s.id] === g">{{ g }}</option>
+                }
+              </select>
+            </div>
+          } @else {
+            <span class="grade__box">
+              <input
+                class="grade__input"
+                type="text"
+                inputmode="decimal"
+                [value]="grades()[s.id] ?? ''"
+                (input)="setGrade(s.id, $any($event.target).value)"
+              />
+              <span class="grade__max">/{{ maxScore() }}</span>
+            </span>
+          }
+        </li>
+      }
+    </ul>
+
+    <div class="actions">
+      <button type="button" class="btn btn--ghost" (click)="cancelled.emit()">Cancel</button>
+      <button type="button" class="btn" [disabled]="!canSave() || saving()" (click)="submit()">
+        Save grades
+      </button>
+    </div>
+  </div>
+</div>

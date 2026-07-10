@@ -15,8 +15,10 @@ export class EvaluationsService {
   create(dto: CreateEvaluationDto) {
     const evaluation = this.evaluationRepository.create({
       title: dto.title,
-      score: dto.score,
-      maxScore: dto.maxScore,
+      competency: dto.competency ?? null,
+      score: dto.score ?? null,
+      maxScore: dto.maxScore ?? null,
+      grade: dto.grade ?? null,
       date: dto.date,
       student: { id: dto.studentId },
       subject: { id: dto.subjectId },

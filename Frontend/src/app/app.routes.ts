@@ -39,6 +39,22 @@ export const routes: Routes = [{
       import('@features/report-card/report-card-page/report-card-page').then((m) => m.ReportCardPage),
   },
   {
+    path: 'report-card/:id',
+    canActivate: [isConnectedGuard],
+    loadComponent: () =>
+      import('@features/report-card/student-report-page/student-report-page').then(
+        (m) => m.StudentReportPage,
+      ),
+  },
+  {
+    path: 'report-card/:id/behavior',
+    canActivate: [isConnectedGuard],
+    loadComponent: () =>
+      import('@features/report-card/student-conduct-page/student-conduct-page').then(
+        (m) => m.StudentConductPage,
+      ),
+  },
+  {
     path: 'agenda',
     canActivate: [isConnectedGuard],
     loadComponent:() =>

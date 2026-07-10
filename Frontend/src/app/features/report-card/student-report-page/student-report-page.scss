@@ -1,0 +1,141 @@
+.report {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 7rem;
+}
+
+.report__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--mat-sys-primary);
+  text-decoration: none;
+}
+
+.report__header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.75rem 0 1.25rem;
+}
+
+.report__name {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.report__sub {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.subject {
+  margin-bottom: 1rem;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-bottom-width: 4px;
+  background: var(--mat-sys-surface);
+}
+
+.subject__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 0.9rem;
+  background: var(--mat-sys-surface-container-high);
+  border-left: 5px solid var(--mat-sys-outline-variant);
+}
+
+.subject__name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.subject__avg {
+  display: grid;
+  place-items: center;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: var(--mat-sys-surface);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.grid-wrap {
+  overflow-x: auto;
+}
+
+.grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.grid th,
+.grid td {
+  padding: 0.5rem 0.4rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.grid th {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.grid__label {
+  text-align: left;
+  width: 100%;
+  font-weight: 500;
+}
+
+.grid tbody tr {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.grid__avg {
+  font-weight: 800;
+}
+
+.grid__avg td {
+  background: var(--mat-sys-surface-container);
+}
+
+.placeholder {
+  margin-top: 2rem;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* subject colors */
+.subject[data-subject='Maths'] .subject__head {
+  border-left-color: #ef7e5e;
+}
+.subject[data-subject='French'] .subject__head {
+  border-left-color: #5b8def;
+}
+.subject[data-subject='Discovery'] .subject__head {
+  border-left-color: #7fb89e;
+}
+.subject[data-subject='PE'] .subject__head {
+  border-left-color: #42bebe;
+}
+.subject[data-subject='Philosophy'] .subject__head {
+  border-left-color: #a878eb;
+}
+.subject[data-subject='Ritual'] .subject__head {
+  border-left-color: #f5b342;
+}
+.subject[data-subject='Languages'] .subject__head {
+  border-left-color: #ec6a9c;
+}

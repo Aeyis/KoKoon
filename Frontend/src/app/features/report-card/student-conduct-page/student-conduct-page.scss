@@ -1,0 +1,96 @@
+.conduct {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 7rem;
+}
+
+.conduct__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--mat-sys-primary);
+  text-decoration: none;
+}
+
+.conduct__header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.conduct__name {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.conduct__subtitle {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.78rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.table {
+  display: grid;
+  align-items: center;
+  gap: 0.4rem 0.25rem;
+}
+
+.thead {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.thead--p {
+  text-align: center;
+}
+
+.cell-label {
+  font-size: 0.85rem;
+  padding: 0.35rem 0;
+}
+
+.dot {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: var(--mat-sys-outline-variant);
+}
+
+.dot--tap {
+  justify-self: center;
+  border: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dot[data-level='ACQUIRED'] {
+  background: #3f9d6d;
+}
+.dot[data-level='EVOLVING'] {
+  background: #e8a23d;
+}
+.dot[data-level='DIFFICULTY'] {
+  background: #d9534f;
+}

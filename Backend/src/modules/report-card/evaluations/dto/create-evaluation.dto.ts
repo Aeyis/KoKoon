@@ -1,4 +1,4 @@
-import { IsDateString, IsInt, IsNotEmpty, IsNumber, IsString, MaxLength, Min } from 'class-validator';
+import { IsDateString, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 export class CreateEvaluationDto {
     @IsString()
@@ -6,13 +6,25 @@ export class CreateEvaluationDto {
     @MaxLength(150)
     title: string;
 
-    @IsNumber()
-    @Min(0)
-    score: number;
+    @IsOptional()
+    @IsString()
+    @MaxLength(150)
+    competency?: string;
 
+    @IsOptional()
     @IsNumber()
     @Min(0)
-    maxScore: number;
+    score?: number;
+
+    @IsOptional()
+    @IsNumber()
+    @Min(0)
+    maxScore?: number;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(5)
+    grade?: string;
 
     @IsDateString()
     date: string;

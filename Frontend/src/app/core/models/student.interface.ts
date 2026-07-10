@@ -5,6 +5,7 @@ export interface Student {
   birthDate: string;
   photo: string | null;
   sex : 'MALE' | 'FEMALE' | null;
+  guardians?: Guardian[];
 }
 
 export interface MedicalRecord {

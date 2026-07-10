@@ -18,35 +18,104 @@
     </button>
   </div>
 
-  @if (tab() === 'results') {
-    @if (classAverage(); as avg) {
+  @if (tab() !== 'send') {
+    @if (tab() === 'results' && classAverage(); as avg) {
       <div class="classavg glass">
         <span class="classavg__score">{{ avg }}</span>
         <span class="classavg__label">Class average · out of 100</span>
       </div>
     }
 
+    @if (tab() === 'results') {
+      <button class="newbtn" type="button" (click)="showSheet.set(true)">
+        <mat-icon>add</mat-icon> New evaluation
+      </button>
+    }
+
+    <ul class="students">
+      @for (s of students(); track s.id) {
+        <li>
+          <a
+            class="student"
+            [routerLink]="tab() === 'results' ? ['/report-card', s.id] : ['/report-card', s.id, 'behavior']"
+          >
+            <span class="student__ball" [attr.data-behavior]="conductState(s.id)"></span>
+            <app-student-avatar [firstName]="s.firstName" [lastName]="s.lastName" [sex]="s.sex" />
+            <span class="student__body">
+              <span class="student__name">{{ s.firstName }} {{ s.lastName }}</span>
+              <span class="student__sub">
+                @if (tab() === 'results') {
+                  Year average · {{ average(s.id) ?? '—' }}/100
+                } @else {
+                  {{ conductLabel(s.id) }}
+                }
+              </span>
+            </span>
+            @if (tab() === 'results') {
+              <span class="student__score">{{ average(s.id) ?? '—' }}</span>
+            }
+            <mat-icon class="student__chevron">chevron_right</mat-icon>
+          </a>
+        </li>
+      } @empty {
+        <li class="empty">No students.</li>
+      }
+    </ul>
+  } @else {
+    <button class="sendall" type="button" (click)="sendAll()">
+      <mat-icon>send</mat-icon>
+      <span class="sendall__body">
+        <span class="sendall__title">Send to all parents</span>
+        <span class="sendall__sub">{{ students().length }} report cards · {{ sentCount() }} sent</span>
+      </span>
+    </button>
+
+    <p class="sendhint">Or a specific student</p>
+
     <ul class="students">
       @for (s of students(); track s.id) {
         <li>
           <div class="student">
-            <span class="student__ball" data-behavior="none"></span>
             <app-student-avatar [firstName]="s.firstName" [lastName]="s.lastName" [sex]="s.sex" />
             <span class="student__body">
               <span class="student__name">{{ s.firstName }} {{ s.lastName }}</span>
-              <span class="student__sub">Year average · {{ average(s.id) ?? '—' }}/100</span>
+              <span class="student__sub">
+                @if (guardianOf(s.id); as g) {
+                  {{ g.firstName }} {{ g.lastName }}
+                } @else {
+                  No parent linked
+                }
+              </span>
             </span>
-            <span class="student__score">{{ average(s.id) ?? '—' }}</span>
-            <mat-icon class="student__chevron">chevron_right</mat-icon>
+            <button
+              class="sendbtn"
+              type="button"
+              [class.is-sent]="isSent(s.id)"
+              [disabled]="!guardianOf(s.id)"
+              (click)="send(s.id)"
+            >
+              @if (isSent(s.id)) {
+                Sent
+              } @else {
+                Send
+              }
+            </button>
           </div>
         </li>
       } @empty {
         <li class="empty">No students.</li>
       }
     </ul>
-  } @else if (tab() === 'behavior') {
-    <p class="placeholder">Behavior — coming soon.</p>
-  } @else {
-    <p class="placeholder">Send to parents — coming soon.</p>
+  }
+
+  @if (showSheet() && classRoom(); as c) {
+    <app-eval-sheet
+      [classId]="c.id"
+      [students]="students()"
+      [subjects]="subjects()"
+      [periods]="periods()"
+      (saved)="onSheetSaved()"
+      (cancelled)="showSheet.set(false)"
+    />
   }
 </main>

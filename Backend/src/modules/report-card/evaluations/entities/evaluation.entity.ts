@@ -12,11 +12,17 @@ export class Evaluation {
     @Column({ length: 150 })
     title: string;
 
-    @Column( { type: 'float' })
-    score: number;
+    @Column({ type: 'varchar', nullable: true })
+    competency: string | null;
 
-    @Column({ type: 'float' })
-    maxScore: number;
+    @Column({ type: 'float', nullable: true })
+    score: number | null;
+
+    @Column({ type: 'float', nullable: true })
+    maxScore: number | null;
+
+    @Column({ type: 'varchar', nullable: true })
+    grade: string | null;
 
     @Column ({ type: 'date' })
     date: string;

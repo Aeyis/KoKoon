@@ -23,11 +23,11 @@ export class StudentsService {
 
   findAll(classIds: number[] | null = null) {
     if (classIds === null) {
-      return this.studentRepository.find({ relations: {classe:true} });
+      return this.studentRepository.find({ relations: { classe: true, guardians: true } });
     }
     return this.studentRepository.find({
       where: { classe: { id: In(classIds) } },
-      relations: {classe:true},
+      relations: { classe: true, guardians: true },
     });
   }
 

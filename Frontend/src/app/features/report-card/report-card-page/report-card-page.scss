@@ -103,6 +103,30 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
+.newbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 3rem;
+  margin-bottom: 1rem;
+  border: 2px dashed var(--mat-sys-primary);
+  border-radius: 16px;
+  background: transparent;
+  color: var(--mat-sys-primary);
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.newbtn mat-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
 /* student list */
 .students {
   list-style: none;
@@ -122,6 +146,8 @@
   background: var(--mat-sys-surface);
   border: 2px solid rgba(0, 0, 0, 0.08);
   border-bottom-width: 4px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .student__ball {
@@ -182,4 +208,81 @@
   margin-top: 1.5rem;
   text-align: center;
   color: var(--mat-sys-on-surface-variant);
+}
+
+/* send tab */
+.sendall {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.25rem;
+  border: 0;
+  border-radius: 18px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.06s ease,
+    box-shadow 0.06s ease;
+}
+
+.sendall:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+}
+
+.sendall__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.sendall__title {
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.sendall__sub {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+.sendhint {
+  margin: 0 0 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.sendbtn {
+  flex-shrink: 0;
+  min-height: 2.4rem;
+  padding: 0 1.1rem;
+  border: 2px solid var(--mat-sys-primary);
+  border-radius: 999px;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sendbtn.is-sent {
+  border-color: #3f9d6d;
+  background: rgba(127, 184, 158, 0.2);
+  color: #2f7d5b;
+}
+
+.sendbtn:disabled {
+  opacity: 0.4;
+  cursor: default;
 }

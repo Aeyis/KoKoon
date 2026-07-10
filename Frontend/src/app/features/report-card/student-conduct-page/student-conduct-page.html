@@ -1,0 +1,41 @@
+<main class="conduct">
+  <a class="conduct__back" routerLink="/report-card">
+    <mat-icon>chevron_left</mat-icon> Back
+  </a>
+
+  @if (student(); as s) {
+    <header class="conduct__header">
+      <app-student-avatar [firstName]="s.firstName" [lastName]="s.lastName" [sex]="s.sex" />
+      <div>
+        <h1 class="conduct__name">{{ s.firstName }} {{ s.lastName }}</h1>
+        <p class="conduct__subtitle">Behavior</p>
+      </div>
+    </header>
+  }
+
+  <div class="legend">
+    <span class="legend__item"><span class="dot" data-level="ACQUIRED"></span> Acquired</span>
+    <span class="legend__item"><span class="dot" data-level="EVOLVING"></span> Evolving</span>
+    <span class="legend__item"><span class="dot" data-level="DIFFICULTY"></span> Difficulty</span>
+  </div>
+
+  <div class="table" [style.grid-template-columns]="'1fr repeat(' + periods().length + ', 2.75rem)'">
+    <span class="thead"></span>
+    @for (p of periodLabels(); track p) {
+      <span class="thead thead--p">{{ p }}</span>
+    }
+
+    @for (item of items(); track item.id) {
+      <span class="cell-label">{{ item.label }}</span>
+      @for (p of periods(); track p.id) {
+        <button
+          class="dot dot--tap"
+          type="button"
+          [attr.data-level]="levelFor(item.id, p.id)"
+          (click)="cycle(item.id, p.id)"
+          aria-label="Set level"
+        ></button>
+      }
+    }
+  </div>
+</main>
