@@ -10,6 +10,9 @@
         <h1 class="report__name">{{ s.firstName }} {{ s.lastName }}</h1>
         <p class="report__sub">Year average · {{ yearAverage() ?? '—' }}/100</p>
       </div>
+      <button class="histbtn" type="button" (click)="showHistory.set(true)" aria-label="Test history">
+        <mat-icon>history</mat-icon>
+      </button>
     </header>
   }
 
@@ -53,5 +56,57 @@
     </section>
   } @empty {
     <p class="placeholder">No results yet.</p>
+  }
+
+  @if (showHistory()) {
+    <div class="overlay">
+      <div class="sheet">
+        <header class="sheet__head">
+          <h2 class="sheet__title">Test history</h2>
+          <button type="button" class="sheet__close" (click)="showHistory.set(false)">✕</button>
+        </header>
+
+        <input
+          class="search"
+          type="text"
+          [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value)"
+          placeholder="Search a test…"
+        />
+
+        <div class="history__filters">
+          <app-dropdown
+            [options]="subjectFilterOptions()"
+            [value]="filterSubject()"
+            (changed)="filterSubject.set($any($event))"
+          />
+          <app-dropdown
+            [options]="periodFilterOptions()"
+            [value]="filterPeriod()"
+            (changed)="filterPeriod.set($any($event))"
+          />
+        </div>
+
+        <ul class="tests">
+          @for (t of history(); track t.id) {
+            <li class="test">
+              <div class="test__body">
+                <span class="test__title">{{ t.title }}</span>
+                <span class="test__meta">{{ t.subject }} · {{ t.term }}</span>
+              </div>
+              <span class="test__score">
+                @if (t.grade) {
+                  {{ t.grade }}
+                } @else {
+                  {{ t.score }}/{{ t.maxScore }}
+                }
+              </span>
+            </li>
+          } @empty {
+            <li class="placeholder">No tests.</li>
+          }
+        </ul>
+      </div>
+    </div>
   }
 </main>

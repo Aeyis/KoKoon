@@ -170,6 +170,11 @@
   font-weight: 500;
 }
 
+.grade__dd {
+  flex-shrink: 0;
+  width: 5rem;
+}
+
 .grade__box {
   display: inline-flex;
   align-items: center;

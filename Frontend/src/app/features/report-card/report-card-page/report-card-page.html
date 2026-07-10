@@ -1,6 +1,13 @@
 <main class="reportcard">
   <header class="reportcard__header">
-    <h1 class="reportcard__title">Report cards</h1>
+    <div class="reportcard__top">
+      <h1 class="reportcard__title">Report cards</h1>
+      @if (tab() === 'results') {
+        <button class="histbtn" type="button" (click)="showHistory.set(true)" aria-label="Test history">
+          <mat-icon>history</mat-icon>
+        </button>
+      }
+    </div>
     @if (classRoom(); as c) {
       <p class="reportcard__sub">{{ c.name }} · {{ c.schoolYear }}</p>
     }
@@ -19,17 +26,17 @@
   </div>
 
   @if (tab() !== 'send') {
-    @if (tab() === 'results' && classAverage(); as avg) {
-      <div class="classavg glass">
-        <span class="classavg__score">{{ avg }}</span>
-        <span class="classavg__label">Class average · out of 100</span>
-      </div>
-    }
-
     @if (tab() === 'results') {
-      <button class="newbtn" type="button" (click)="showSheet.set(true)">
-        <mat-icon>add</mat-icon> New evaluation
-      </button>
+      <div class="classavg glass">
+        <span class="classavg__score">{{ classAverage() ?? '—' }}</span>
+        <div class="classavg__label">
+          <span class="classavg__label-title">Class average</span>
+          <span class="classavg__label-sub">out of 100</span>
+        </div>
+        <button class="newbtn" type="button" (click)="showSheet.set(true)">
+          <mat-icon>add</mat-icon> New evaluation
+        </button>
+      </div>
     }
 
     <ul class="students">
@@ -117,5 +124,70 @@
       (saved)="onSheetSaved()"
       (cancelled)="showSheet.set(false)"
     />
+  }
+
+  @if (showHistory()) {
+    <div class="overlay">
+      <div class="sheet">
+        <header class="sheet__head">
+          <h2 class="sheet__title">Test history</h2>
+          <button type="button" class="sheet__close" (click)="showHistory.set(false)">✕</button>
+        </header>
+
+        <input
+          class="search"
+          type="text"
+          [value]="histSearch()"
+          (input)="histSearch.set($any($event.target).value)"
+          placeholder="Search a test…"
+        />
+
+        <div class="history__filters">
+          <app-dropdown
+            [options]="histSubjectOptions()"
+            [value]="histSubject()"
+            (changed)="histSubject.set($any($event))"
+          />
+          <app-dropdown
+            [options]="histPeriodOptions()"
+            [value]="histPeriod()"
+            (changed)="histPeriod.set($any($event))"
+          />
+        </div>
+
+        <ul class="interros">
+          @for (it of interros(); track it.key) {
+            <li class="interro" [class.is-open]="expandedInterro() === it.key">
+              <button type="button" class="interro__head" (click)="toggleInterro(it.key)">
+                <span class="interro__body">
+                  <span class="interro__title">{{ it.title }}</span>
+                  <span class="interro__meta">{{ it.subject }} · {{ it.term }}</span>
+                </span>
+                <span class="interro__chev"></span>
+              </button>
+
+              @if (expandedInterro() === it.key) {
+                <ul class="istudents">
+                  @for (en of it.entries; track en.studentId) {
+                    <li class="istudent">
+                      <span class="istudent__name">{{ studentName(en.studentId) }}</span>
+                      <span class="istudent__score">
+                        @if (en.grade) {
+                          {{ en.grade }}
+                        } @else {
+                          {{ en.score }}/{{ en.maxScore }}
+                        }
+                      </span>
+                    </li>
+                  }
+                </ul>
+              }
+            </li>
+          } @empty {
+            <li class="placeholder">No tests.</li>
+          }
+        </ul>
+      </div>
+    </div>
   }
 </main>

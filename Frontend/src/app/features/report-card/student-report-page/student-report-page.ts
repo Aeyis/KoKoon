@@ -2,6 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { StudentAvatar } from '@shared/components/student-avatar/student-avatar';
+import { Dropdown, DropdownOption } from '@shared/components/dropdown/dropdown';
 import { StudentService } from '@core/services/student.service';
 import { PeriodService } from '@core/services/period.service';
 import { EvaluationService } from '@core/services/evaluation.service';
@@ -26,7 +27,7 @@ interface SubjectBlock {
 
 @Component({
   selector: 'app-student-report-page',
-  imports: [RouterLink, MatIcon, StudentAvatar],
+  imports: [RouterLink, MatIcon, StudentAvatar, Dropdown],
   templateUrl: './student-report-page.html',
   styleUrl: './student-report-page.scss',
 })
@@ -112,6 +113,50 @@ export class StudentReportPage implements OnInit {
         ),
       })),
     }));
+  });
+
+  protected readonly showHistory = signal(false);
+  protected readonly searchQuery = signal('');
+  protected readonly filterSubject = signal<number | 'all'>('all');
+  protected readonly filterPeriod = signal<number | 'all'>('all');
+
+  protected readonly subjectFilterOptions = computed<DropdownOption[]>(() => {
+    const seen = new Map<number, string>();
+    for (const e of this.evaluations()) seen.set(e.subject.id, e.subject.name);
+    return [
+      { value: 'all', label: 'All subjects' },
+      ...[...seen.entries()].map(([id, name]) => ({ value: id, label: name })),
+    ];
+  });
+
+  protected readonly periodFilterOptions = computed<DropdownOption[]>(() => [
+    { value: 'all', label: 'All terms' },
+    ...this.periods().map((p, i) => ({ value: p.id, label: `T${i + 1} · ${p.name}` })),
+  ]);
+
+  protected readonly history = computed(() => {
+    const fs = this.filterSubject();
+    const fp = this.filterPeriod();
+    const q = this.searchQuery().trim().toLowerCase();
+    const pLabel = new Map(this.periods().map((p, i) => [p.id, `T${i + 1}`]));
+    return this.evaluations()
+      .filter(
+        (e) =>
+          (fs === 'all' || e.subject.id === fs) &&
+          (fp === 'all' || e.period.id === fp) &&
+          (q === '' || e.title.toLowerCase().includes(q)),
+      )
+      .slice()
+      .sort((a, b) => a.period.id - b.period.id || a.subject.name.localeCompare(b.subject.name))
+      .map((e) => ({
+        id: e.id,
+        title: e.title,
+        subject: e.subject.name,
+        term: pLabel.get(e.period.id) ?? '',
+        score: e.score,
+        maxScore: e.maxScore,
+        grade: e.grade,
+      }));
   });
 
   ngOnInit(): void {

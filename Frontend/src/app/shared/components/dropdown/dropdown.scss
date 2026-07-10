@@ -1,0 +1,105 @@
+.dd {
+  position: relative;
+}
+
+.dd__head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  background: var(--mat-sys-surface);
+  font: inherit;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.dd.is-open .dd__head {
+  border-color: var(--mat-sys-primary);
+  color: var(--mat-sys-primary);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.dd.is-disabled .dd__head {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.dd__value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dd__value--empty {
+  color: var(--mat-sys-on-surface-variant);
+  font-weight: 500;
+}
+
+.dd__chev {
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.3s ease;
+}
+
+.dd.is-open .dd__chev {
+  transform: translateY(1px) rotate(-135deg);
+}
+
+.dd__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  background: var(--mat-sys-surface-container-high);
+  border-radius: 0 0 12px 12px;
+  transition: max-height 0.3s ease;
+}
+
+.dd.is-open .dd__menu {
+  max-height: 15rem;
+  overflow-y: auto;
+  border: 2px solid var(--mat-sys-primary);
+  border-top: 0;
+}
+
+.dd__opt {
+  width: 100%;
+  display: block;
+  padding: 0.65rem 0.9rem;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--mat-sys-on-surface);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dd__opt:hover {
+  background: var(--mat-sys-primary-container);
+}
+
+.dd__opt.is-selected {
+  color: var(--mat-sys-primary);
+  font-weight: 700;
+}

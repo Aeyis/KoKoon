@@ -10,6 +10,7 @@ import { ReportCardService } from '@core/services/report-card.service';
 import { SubjectService } from '@core/services/subject.service';
 import { StudentAvatar } from '@shared/components/student-avatar/student-avatar';
 import { EvalSheet } from '../eval-sheet/eval-sheet';
+import { Dropdown, DropdownOption } from '@shared/components/dropdown/dropdown';
 import { Subject } from '@core/models/subject.interface';
 import { ClassRoom } from '@core/models/class.interface';
 import { Evaluation } from '@core/models/evaluation.interface';
@@ -20,7 +21,7 @@ import { ReportCard } from '@core/models/report-card.interface';
 
 @Component({
   selector: 'app-report-card-page',
-  imports: [RouterLink, MatIcon, StudentAvatar, EvalSheet],
+  imports: [RouterLink, MatIcon, StudentAvatar, EvalSheet, Dropdown],
   templateUrl: './report-card-page.html',
   styleUrl: './report-card-page.scss',
 })
@@ -125,6 +126,90 @@ export class ReportCardPage implements OnInit {
   protected onSheetSaved(): void {
     this.showSheet.set(false);
     this._evaluationService.getAll().subscribe((list) => this.evaluations.set(list));
+  }
+
+  // --- Test history (class-level) ---
+  protected readonly showHistory = signal(false);
+  protected readonly histSearch = signal('');
+  protected readonly histSubject = signal<number | 'all'>('all');
+  protected readonly histPeriod = signal<number | 'all'>('all');
+  protected readonly expandedInterro = signal<string | null>(null);
+
+  private readonly _studentNameById = computed(() => {
+    const m = new Map<number, string>();
+    for (const s of this.students()) m.set(s.id, `${s.firstName} ${s.lastName}`);
+    return m;
+  });
+
+  protected readonly histSubjectOptions = computed<DropdownOption[]>(() => {
+    const seen = new Map<number, string>();
+    for (const e of this.evaluations()) seen.set(e.subject.id, e.subject.name);
+    return [
+      { value: 'all', label: 'All subjects' },
+      ...[...seen.entries()].map(([id, name]) => ({ value: id, label: name })),
+    ];
+  });
+
+  protected readonly histPeriodOptions = computed<DropdownOption[]>(() => [
+    { value: 'all', label: 'All terms' },
+    ...this.periods().map((p, i) => ({ value: p.id, label: `T${i + 1} · ${p.name}` })),
+  ]);
+
+  protected readonly interros = computed(() => {
+    const q = this.histSearch().trim().toLowerCase();
+    const fs = this.histSubject();
+    const fp = this.histPeriod();
+    const pLabel = new Map(this.periods().map((p, i) => [p.id, `T${i + 1}`]));
+    const groups = new Map<
+      string,
+      {
+        key: string;
+        title: string;
+        subject: string;
+        subjectId: number;
+        periodId: number;
+        term: string;
+        entries: { studentId: number; score: number | null; maxScore: number | null; grade: string | null }[];
+      }
+    >();
+    for (const e of this.evaluations()) {
+      const key = `${e.subject.id}#${e.period.id}#${e.title}#${e.maxScore ?? 'L'}#${e.date}`;
+      let g = groups.get(key);
+      if (!g) {
+        g = {
+          key,
+          title: e.title,
+          subject: e.subject.name,
+          subjectId: e.subject.id,
+          periodId: e.period.id,
+          term: pLabel.get(e.period.id) ?? '',
+          entries: [],
+        };
+        groups.set(key, g);
+      }
+      g.entries.push({ studentId: e.student.id, score: e.score, maxScore: e.maxScore, grade: e.grade });
+    }
+    return [...groups.values()]
+      .filter(
+        (g) =>
+          (fs === 'all' || g.subjectId === fs) &&
+          (fp === 'all' || g.periodId === fp) &&
+          (q === '' || g.title.toLowerCase().includes(q)),
+      )
+      .sort(
+        (a, b) =>
+          a.periodId - b.periodId ||
+          a.subject.localeCompare(b.subject) ||
+          a.title.localeCompare(b.title),
+      );
+  });
+
+  protected studentName(id: number): string {
+    return this._studentNameById().get(id) ?? '—';
+  }
+
+  protected toggleInterro(key: string): void {
+    this.expandedInterro.update((k) => (k === key ? null : key));
   }
 
   protected guardianOf(studentId: number): Guardian | null {

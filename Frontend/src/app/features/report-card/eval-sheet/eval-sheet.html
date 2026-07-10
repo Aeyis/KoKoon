@@ -9,41 +9,31 @@
       <div class="field-row">
         <div class="field field--grow">
           <label class="label">Subject</label>
-          <div class="select">
-            <select (change)="setSubject(+$any($event.target).value || null)">
-              <option value="" [selected]="subjectId() === null">Choose…</option>
-              @for (s of gradableSubjects(); track s.id) {
-                <option [value]="s.id" [selected]="subjectId() === s.id">{{ s.name }}</option>
-              }
-            </select>
-          </div>
+          <app-dropdown
+            [options]="subjectOptions()"
+            [value]="subjectId()"
+            (changed)="setSubject(+$any($event))"
+          />
         </div>
 
         <div class="field field--grow">
           <label class="label">Term</label>
-          <div class="select">
-            <select (change)="periodId.set(+$any($event.target).value)">
-              @for (p of periods(); track p.id) {
-                <option [value]="p.id" [selected]="periodId() === p.id">{{ p.name }}</option>
-              }
-            </select>
-          </div>
+          <app-dropdown
+            [options]="periodOptions()"
+            [value]="periodId()"
+            (changed)="periodId.set(+$any($event))"
+          />
         </div>
       </div>
 
       <div class="field">
         <label class="label">Competency</label>
-        <div class="select">
-          <select
-            [disabled]="competencyOptions().length === 0"
-            (change)="competency.set($any($event.target).value)"
-          >
-            <option value="" [selected]="competency() === ''">Choose…</option>
-            @for (c of competencyOptions(); track c) {
-              <option [value]="c" [selected]="competency() === c">{{ c }}</option>
-            }
-          </select>
-        </div>
+        <app-dropdown
+          [options]="competencyDdOptions()"
+          [value]="competency()"
+          [disabled]="competencyDdOptions().length === 0"
+          (changed)="competency.set($any($event))"
+        />
       </div>
 
       <div class="field-row">
@@ -79,14 +69,13 @@
           <span class="grade__name">{{ s.firstName }} {{ s.lastName }}</span>
 
           @if (scale() === 'letter') {
-            <div class="select select--grade">
-              <select (change)="setGrade(s.id, $any($event.target).value)">
-                <option value="" [selected]="!grades()[s.id]">—</option>
-                @for (g of LETTER_GRADES; track g) {
-                  <option [value]="g" [selected]="grades()[s.id] === g">{{ g }}</option>
-                }
-              </select>
-            </div>
+            <app-dropdown
+              class="grade__dd"
+              [options]="letterOptions"
+              [value]="grades()[s.id] ?? null"
+              placeholder="—"
+              (changed)="setGrade(s.id, $any($event))"
+            />
           } @else {
             <span class="grade__box">
               <input

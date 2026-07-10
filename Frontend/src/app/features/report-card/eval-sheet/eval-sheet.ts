@@ -1,6 +1,7 @@
 import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { StudentAvatar } from '@shared/components/student-avatar/student-avatar';
+import { Dropdown, DropdownOption } from '@shared/components/dropdown/dropdown';
 import { EvaluationService } from '@core/services/evaluation.service';
 import { Student } from '@core/models/student.interface';
 import { Subject } from '@core/models/subject.interface';
@@ -9,7 +10,7 @@ import { SUBJECT_COMPETENCIES, LETTER_GRADES } from '@core/constants/subject-com
 
 @Component({
   selector: 'app-eval-sheet',
-  imports: [StudentAvatar],
+  imports: [StudentAvatar, Dropdown],
   templateUrl: './eval-sheet.html',
   styleUrl: './eval-sheet.scss',
 })
@@ -45,6 +46,20 @@ export class EvalSheet implements OnInit {
 
   protected readonly competencyOptions = computed(() => this._spec()?.competencies ?? []);
   protected readonly scale = computed(() => this._spec()?.scale ?? 'numeric');
+
+  protected readonly subjectOptions = computed<DropdownOption[]>(() =>
+    this.gradableSubjects().map((s) => ({ value: s.id, label: s.name })),
+  );
+  protected readonly periodOptions = computed<DropdownOption[]>(() =>
+    this.periods().map((p) => ({ value: p.id, label: p.name })),
+  );
+  protected readonly competencyDdOptions = computed<DropdownOption[]>(() =>
+    this.competencyOptions().map((c) => ({ value: c, label: c })),
+  );
+  protected readonly letterOptions: DropdownOption[] = LETTER_GRADES.map((g) => ({
+    value: g,
+    label: g,
+  }));
 
   protected readonly canSave = computed(
     () =>

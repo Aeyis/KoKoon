@@ -1,0 +1,21 @@
+<div class="dd" [class.is-open]="open()" [class.is-disabled]="disabled()">
+  <button type="button" class="dd__head" [disabled]="disabled()" (click)="toggle()">
+    <span class="dd__value" [class.dd__value--empty]="!hasValue()">{{ selectedLabel() }}</span>
+    <span class="dd__chev"></span>
+  </button>
+
+  <ul class="dd__menu">
+    @for (o of options(); track o.value) {
+      <li>
+        <button
+          type="button"
+          class="dd__opt"
+          [class.is-selected]="o.value === value()"
+          (click)="select(o.value)"
+        >
+          {{ o.label }}
+        </button>
+      </li>
+    }
+  </ul>
+</div>

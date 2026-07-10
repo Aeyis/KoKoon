@@ -1,4 +1,25 @@
 <main class="home">
+  <svg class="todo-defs" viewBox="0 0 0 0" aria-hidden="true">
+    <defs>
+      <linearGradient id="boxGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="25" y2="25">
+        <stop offset="0%" stop-color="#5cc98e" />
+        <stop offset="100%" stop-color="#2f9e6d" />
+      </linearGradient>
+      <linearGradient id="lineGradient">
+        <stop offset="0%" stop-color="#2f9e6d" />
+        <stop offset="100%" stop-color="#5cc98e" />
+      </linearGradient>
+      <path id="todo__line" stroke="url(#lineGradient)" d="M21 12.3h168v0.1z" />
+      <path
+        id="todo__box"
+        stroke="url(#boxGradient)"
+        d="M21 12.7v5c0 1.3-1 2.3-2.3 2.3H8.3C7 20 6 19 6 17.7V7.3C6 6 7 5 8.3 5h10.4C20 5 21 6 21 7.3v5.4"
+      />
+      <path id="todo__check" stroke="url(#boxGradient)" d="M10 13l2 2 5-5" />
+      <circle id="todo__circle" cx="13.5" cy="12.5" r="10" />
+    </defs>
+  </svg>
+
   <header class="home__header">
     <h1 class="home__greeting">Hello {{ auth.currentUser()?.firstName }} 👋</h1>
   </header>
@@ -30,18 +51,24 @@
     <ul class="journal">
       @for (item of todayJournal(); track item.id) {
         <li>
-          <button
-            class="jrow"
-            type="button"
-            [class.is-done]="item.done"
-            (click)="toggleJournalDone(item)"
-          >
-            <span class="jrow__check">@if (item.done) { ✓ }</span>
-            <span class="jrow__content">{{ item.content }}</span>
+          <label class="todo">
+            <input
+              class="todo__state"
+              type="checkbox"
+              [checked]="item.done"
+              (change)="toggleJournalDone(item)"
+            />
+            <svg viewBox="0 0 200 25" class="todo__icon" aria-hidden="true">
+              <use href="#todo__line" class="todo__line"></use>
+              <use href="#todo__box" class="todo__box"></use>
+              <use href="#todo__check" class="todo__check"></use>
+              <use href="#todo__circle" class="todo__circle"></use>
+            </svg>
+            <div class="todo__text">{{ item.content }}</div>
             @if (item.category) {
               <span class="chip" [class]="'chip chip--' + item.category">{{ item.category }}</span>
             }
-          </button>
+          </label>
         </li>
       } @empty {
         <li class="journal__empty">Nothing planned today.</li>
