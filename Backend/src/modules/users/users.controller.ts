@@ -38,6 +38,12 @@ export class UsersController {
   }
 
   @Roles(UserRole.ADMIN, UserRole.PRINCIPAL)
+  @Get('teachers')
+  findTeachers() {
+    return this.usersService.findTeachers();
+  }
+
+  @Roles(UserRole.ADMIN, UserRole.PRINCIPAL)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);

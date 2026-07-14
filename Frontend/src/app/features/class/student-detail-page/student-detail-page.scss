@@ -139,3 +139,128 @@
 .count--absent {
   color: #b23b3b;
 }
+
+/* invite parent */
+.invitebtn {
+  width: 100%;
+  margin-top: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 2.6rem;
+  border: 2px dashed var(--mat-sys-outline-variant);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--mat-sys-primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  touch-action: manipulation;
+
+  mat-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
+
+.invite {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.invite__input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: inherit;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: var(--mat-sys-primary);
+  }
+}
+
+.invite__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.invite__cancel {
+  flex: 1;
+  min-height: 2.6rem;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--mat-sys-on-surface-variant);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.invite__send {
+  flex: 2;
+  min-height: 2.6rem;
+  border: 0;
+  border-radius: 12px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font-weight: 800;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
+
+.inviteresult {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: var(--mat-sys-surface-container-high);
+}
+
+.inviteresult__msg {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.inviteresult__linkrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inviteresult__link {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.inviteresult__copy {
+  flex-shrink: 0;
+  min-height: 2.2rem;
+  padding: 0 0.8rem;
+  border: 0;
+  border-radius: 10px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+}

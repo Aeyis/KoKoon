@@ -26,3 +26,24 @@ export interface StudentDetail extends Student {
   medicalRecord: MedicalRecord | null;
   guardians: Guardian[];
 }
+
+export interface NewStudent {
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  sex: 'MALE' | 'FEMALE';
+  classId?: number;
+  schoolId?: number;
+}
+
+export interface InviteGuardian {
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface InviteGuardianResult {
+  guardian: Guardian;
+  invitationLink: string | null;
+  alreadyExisted: boolean;
+}

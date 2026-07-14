@@ -22,7 +22,29 @@
 
   <header class="home__header">
     <h1 class="home__greeting">Hello {{ auth.currentUser()?.firstName }} 👋</h1>
+    @if (schoolOptions().length > 1) {
+      <div class="home__school">
+        <app-dropdown
+          [options]="schoolOptions()"
+          [value]="context.schoolId()"
+          placeholder="Choose a school"
+          (changed)="onSchoolChange($event)"
+        />
+      </div>
+    } @else if (context.selectedSchool(); as s) {
+      <p class="home__schoolname">{{ s.name }}</p>
+    }
   </header>
+
+  @if (isManager()) {
+    <a class="manage" routerLink="/authorizations">
+      <span class="manage__body">
+        <span class="manage__title">Teacher access</span>
+        <span class="manage__sub">Manage schools &amp; classes per teacher</span>
+      </span>
+      <span class="manage__chev">›</span>
+    </a>
+  }
 
   <app-attendance-card
     title="Morning attendance"

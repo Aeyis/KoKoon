@@ -2,7 +2,7 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {InjectRepository} from "@nestjs/typeorm";
-import {User, ThemeMode} from "./entities/user.entity";
+import {User, ThemeMode, UserRole} from "./entities/user.entity";
 import {Repository} from "typeorm";
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
@@ -16,7 +16,8 @@ export class UsersService {
       private readonly mailService: MailService,
   ) {}
 
-  async create(createUserDto: CreateUserDto){
+  // Crée un compte en attente d'activation et renvoie le lien d'onboarding.
+  async invite(createUserDto: CreateUserDto): Promise<{ user: User; invitationLink: string }> {
     const rawToken = crypto.randomBytes(32).toString('hex');
     const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
 
@@ -38,8 +39,12 @@ export class UsersService {
       throw e;
     }
 
-    await this.mailService.sendInvitation(user.email, rawToken);
+    const invitationLink = await this.mailService.sendInvitation(user.email, rawToken);
+    return { user, invitationLink };
+  }
 
+  async create(createUserDto: CreateUserDto) {
+    const { user } = await this.invite(createUserDto);
     return user;
   }
 
@@ -63,6 +68,13 @@ export class UsersService {
   }
 
   findAll() { return this.usersRepository.find(); }
+  findTeachers() {
+    return this.usersRepository.find({
+      where: { role: UserRole.TEACHER },
+      relations: { schools: true },
+      order: { lastName: 'ASC', firstName: 'ASC' },
+    });
+  }
   findOne(id: number) { return this.usersRepository.findOneBy({id}); }
   update(id: number, dto: UpdateUserDto){ return this.usersRepository.update(id, dto); }
   remove(id: number) { return this.usersRepository.delete(id); }

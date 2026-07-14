@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {isConnectedGuard} from '@core/guards/is-connected.guard';
 import { isParentGuard } from '@core/guards/is-parent.guard';
 import { authOnlyGuard } from '@core/guards/auth-only.guard';
+import { isPrincipalGuard } from '@core/guards/is-principal.guard';
 
 export const routes: Routes = [{
   path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -72,6 +73,14 @@ export const routes: Routes = [{
     canActivate: [authOnlyGuard],
     loadComponent: () =>
       import('@features/settings/settings-page/settings-page').then((m) => m.SettingsPage),
+  },
+  {
+    path: 'authorizations',
+    canActivate: [isPrincipalGuard],
+    loadComponent: () =>
+      import('@features/authorizations/authorizations-page/authorizations-page').then(
+        (m) => m.AuthorizationsPage,
+      ),
   },
   {
     path: 'messages',

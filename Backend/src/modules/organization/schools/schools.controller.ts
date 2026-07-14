@@ -26,6 +26,11 @@ export class SchoolsController {
     return this.schoolsService.findAll();
   }
 
+  @Get('mine')
+  mine(@Request() req) {
+    return this.schoolsService.findForUser(req.user);
+  }
+
   @Roles(UserRole.TEACHER)
   @Post('join')
   joinByCode(@Request() req, @Body() dto: JoinSchoolDto) {

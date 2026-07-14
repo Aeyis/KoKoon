@@ -21,7 +21,11 @@ export class ClassesController {
 
   @Roles(UserRole.ADMIN, UserRole.PRINCIPAL)
   @Post()
-  create(@Body() createClassDto: CreateClassDto) {
+  async create(@Request() req, @Body() createClassDto: CreateClassDto) {
+    const ids = await this.classAccess.accessibleSchoolIds(req.user);
+    if (ids !== null && (!createClassDto.schoolId || !ids.includes(createClassDto.schoolId))) {
+      throw new ForbiddenException('You cannot create a class in this school');
+    }
     return this.classesService.create(createClassDto);
   }
 

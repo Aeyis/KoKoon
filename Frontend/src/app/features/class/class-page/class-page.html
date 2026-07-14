@@ -1,6 +1,23 @@
 <main class="class">
   <header class="class__header">
-    <h1 class="class__title">My class</h1>
+    <div class="class__titlerow">
+      <h1 class="class__title">My class</h1>
+      <button class="ghostbtn" type="button" (click)="showClassForm.set(true)">
+        <mat-icon>add</mat-icon> New class
+      </button>
+    </div>
+
+    @if (classOptions().length) {
+      <div class="class__select">
+        <app-dropdown
+          [options]="classOptions()"
+          [value]="context.classId()"
+          placeholder="Choose a class"
+          (changed)="onClassChange($event)"
+        />
+      </div>
+    }
+
     <p class="class__sub">
       {{ presentCount() }}/{{ students().length }} present today · Tap for details
     </p>
@@ -12,7 +29,7 @@
   </div>
 
   @if (view() === 'seating') {
-    @if (classId(); as cid) {
+    @if (context.classId(); as cid) {
       <app-seating-plan [classId]="cid" [students]="students()" />
     }
   } @else {
@@ -39,5 +56,23 @@
       <p class="empty">No students yet.</p>
     }
   </div>
+
+  <button class="addbtn" type="button" (click)="showPicker.set(true)" [disabled]="context.classId() == null">
+    <mat-icon>person_add</mat-icon> Add student
+  </button>
+  }
+
+  @if (showPicker() && context.classId(); as cid) {
+    <app-student-picker
+      [classId]="cid"
+      [schoolId]="context.schoolId()"
+      [canCreate]="canCreateStudents()"
+      (changed)="onPickerChanged()"
+      (cancelled)="showPicker.set(false)"
+    />
+  }
+
+  @if (showClassForm()) {
+    <app-class-form [schoolId]="context.schoolId()" (saved)="onClassSaved()" (cancelled)="showClassForm.set(false)" />
   }
 </main>

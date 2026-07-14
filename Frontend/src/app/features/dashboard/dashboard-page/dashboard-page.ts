@@ -2,24 +2,25 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
-import { ClassService } from '@core/services/class.service';
+import { ContextService } from '@core/services/context.service';
 import { JournalService } from '@core/services/journal.service';
 import { EventService } from '@core/services/event.service';
-import { Student } from '@core/models/student.interface';
 import { ClassJournal } from '@core/models/journal.interface';
 import { AgendaEvent } from '@core/models/event.interface';
 import { AttendanceSession } from '@core/enums/attendance.enum';
+import { UserRole } from '@core/enums/user-role.enum';
 import { AttendanceCard } from '../attendance-card/attendance-card';
+import { Dropdown, DropdownOption } from '@shared/components/dropdown/dropdown';
 
 @Component({
   selector: 'app-dashboard-page',
-  imports: [RouterLink, AttendanceCard],
+  imports: [RouterLink, AttendanceCard, Dropdown],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss',
 })
 export class DashboardPage implements OnInit {
   protected readonly auth = inject(AuthService);
-  private readonly _classService = inject(ClassService);
+  protected readonly context = inject(ContextService);
   private readonly _journalService = inject(JournalService);
   private readonly _eventService = inject(EventService);
 
@@ -28,9 +29,18 @@ export class DashboardPage implements OnInit {
 
   protected readonly AttendanceSession = AttendanceSession;
 
-  protected readonly students = signal<Student[]>([]);
+  protected readonly students = computed(() => this.context.selectedClass()?.students ?? []);
   protected readonly journal = signal<ClassJournal[]>([]);
   protected readonly events = signal<AgendaEvent[]>([]);
+
+  protected readonly schoolOptions = computed<DropdownOption[]>(() =>
+    this.context.schools().map((s) => ({ value: s.id, label: s.name })),
+  );
+
+  protected readonly isManager = computed(() => {
+    const r = this.auth.role();
+    return r === UserRole.ADMIN || r === UserRole.PRINCIPAL;
+  });
 
   protected readonly isWednesday = this._now.getDay() === 3;
   protected readonly afternoonAvailable = !this.isWednesday && this._now.getHours() >= 13;
@@ -55,9 +65,13 @@ export class DashboardPage implements OnInit {
 
   ngOnInit(): void {
     this.auth.loadCurrentUser().subscribe();
-    this._classService.getAll().subscribe((classes) => this.students.set(classes[0]?.students ?? []));
+    this.context.load();
     this._journalService.getAll().subscribe((list) => this.journal.set(list));
     this._eventService.getAll().subscribe((list) => this.events.set(list));
+  }
+
+  protected onSchoolChange(id: string | number): void {
+    this.context.setSchool(Number(id));
   }
 
   protected toggleAllJournal(): void {

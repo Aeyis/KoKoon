@@ -4,6 +4,7 @@ import { UpdateSchoolDto } from './dto/update-school.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {School} from "./entities/school.entity";
+import {UserRole} from "../../users/entities/user.entity";
 import * as crypto from 'crypto';
 import { NotFoundException } from '@nestjs/common';
 
@@ -23,6 +24,12 @@ export class SchoolsService {
     return this.schoolRepository.find();
   }
 
+  // Écoles rattachées à l'utilisateur (ADMIN = toutes).
+  findForUser(user: { id: number; role: UserRole }) {
+    if (user.role === UserRole.ADMIN) return this.schoolRepository.find();
+    return this.schoolRepository.find({ where: { staff: { id: user.id } } });
+  }
+
   findOne(id: number) {
     return this.schoolRepository.findOne({ where: { id }, relations: { staff: true } });
   }
@@ -36,11 +43,15 @@ export class SchoolsService {
   }
 
   async addStaff(schoolId: number, userId: number) {
-    await this.schoolRepository
-        .createQueryBuilder()
-        .relation(School, 'staff')
-        .of(schoolId)
-        .add(userId);
+    try {
+      await this.schoolRepository
+          .createQueryBuilder()
+          .relation(School, 'staff')
+          .of(schoolId)
+          .add(userId);
+    } catch (e: any) {
+      if (e.code !== '23505') throw e; // déjà membre → idempotent
+    }
     return this.findOne(schoolId);
   }
 

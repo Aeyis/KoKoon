@@ -1,0 +1,35 @@
+<div class="overlay" (click)="cancelled.emit()">
+  <div class="sheet" (click)="$event.stopPropagation()">
+    <header class="sheet__head">
+      <h2 class="sheet__title">Add a student</h2>
+      <button type="button" class="sheet__close" (click)="cancelled.emit()">✕</button>
+    </header>
+
+    <label class="field">
+      <span class="field__label">First name</span>
+      <input class="field__input" type="text" [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" placeholder="First name" />
+    </label>
+
+    <label class="field">
+      <span class="field__label">Last name</span>
+      <input class="field__input" type="text" [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" placeholder="Last name" />
+    </label>
+
+    <label class="field">
+      <span class="field__label">Birth date</span>
+      <input class="field__input" type="date" [ngModel]="birthDate()" (ngModelChange)="birthDate.set($event)" />
+    </label>
+
+    <label class="field">
+      <span class="field__label">Sex</span>
+      <div class="seg">
+        <button type="button" class="seg__btn" [class.is-active]="sex() === 'MALE'" (click)="sex.set('MALE')">Boy</button>
+        <button type="button" class="seg__btn" [class.is-active]="sex() === 'FEMALE'" (click)="sex.set('FEMALE')">Girl</button>
+      </div>
+    </label>
+
+    <button class="submit" type="button" [disabled]="saving()" (click)="submit()">
+      {{ saving() ? 'Adding…' : 'Add student' }}
+    </button>
+  </div>
+</div>

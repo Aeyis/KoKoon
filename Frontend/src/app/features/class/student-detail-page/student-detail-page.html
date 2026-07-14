@@ -45,6 +45,38 @@
           <span class="contact__email">{{ s.medicalRecord?.emergencyContact }}</span>
         </div>
       }
+
+      @if (!showInvite()) {
+        <button class="invitebtn" type="button" (click)="showInvite.set(true)">
+          <mat-icon>person_add</mat-icon> Invite a parent
+        </button>
+      } @else {
+        <div class="invite">
+          <input class="invite__input" type="text" placeholder="First name" [ngModel]="inviteFirst()" (ngModelChange)="inviteFirst.set($event)" />
+          <input class="invite__input" type="text" placeholder="Last name" [ngModel]="inviteLast()" (ngModelChange)="inviteLast.set($event)" />
+          <input class="invite__input" type="email" placeholder="Email" [ngModel]="inviteEmail()" (ngModelChange)="inviteEmail.set($event)" />
+          <div class="invite__actions">
+            <button class="invite__cancel" type="button" (click)="showInvite.set(false)">Cancel</button>
+            <button class="invite__send" type="button" [disabled]="inviting()" (click)="sendInvite()">
+              {{ inviting() ? 'Sending…' : 'Send invitation' }}
+            </button>
+          </div>
+        </div>
+      }
+
+      @if (inviteMsg()) {
+        <div class="inviteresult">
+          <p class="inviteresult__msg">{{ inviteMsg() }}</p>
+          @if (inviteLink(); as link) {
+            <div class="inviteresult__linkrow">
+              <code class="inviteresult__link">{{ link }}</code>
+              <button class="inviteresult__copy" type="button" (click)="copyLink()">
+                {{ copied() ? 'Copied ✓' : 'Copy' }}
+              </button>
+            </div>
+          }
+        </div>
+      }
     </section>
 
     <section class="card glass">

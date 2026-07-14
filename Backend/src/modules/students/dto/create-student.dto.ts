@@ -23,7 +23,11 @@ export class CreateStudentDto {
 
     @IsOptional()
     @IsInt()
-    classId: number;
+    classId?: number;
+
+    @IsOptional()
+    @IsInt()
+    schoolId?: number;
 
     @IsEnum(Sex)
     sex: Sex;

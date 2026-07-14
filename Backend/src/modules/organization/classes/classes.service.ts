@@ -4,6 +4,7 @@ import { UpdateClassDto } from './dto/update-class.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {In, Repository} from "typeorm";
 import {Class, SeatingPlan} from "./entities/class.entity";
+import {School} from "../schools/entities/school.entity";
 
 @Injectable()
 export class ClassesService {
@@ -13,15 +14,22 @@ export class ClassesService {
   ) {}
 
   create(dto: CreateClassDto) {
-    const entity = this.classRepository.create(dto);
+    const { schoolId, ...rest } = dto;
+    const entity = this.classRepository.create({
+      ...rest,
+      school: schoolId ? ({ id: schoolId } as School) : undefined,
+    });
     return this.classRepository.save(entity);
   }
 
   findAll(classIds: number[] | null = null) {
     if (classIds === null) {
-      return this.classRepository.find({ relations: { students: true } });
+      return this.classRepository.find({ relations: { students: true, school: true } });
     }
-    return this.classRepository.find({ where: { id: In(classIds) }, relations: { students: true } });
+    return this.classRepository.find({
+      where: { id: In(classIds) },
+      relations: { students: true, school: true },
+    });
   }
 
   update(id:number, dto: UpdateClassDto) {

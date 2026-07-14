@@ -1,0 +1,58 @@
+<div class="overlay" (click)="cancelled.emit()">
+  <div class="sheet" (click)="$event.stopPropagation()">
+    <header class="sheet__head">
+      <h2 class="sheet__title">Add a student</h2>
+      <button type="button" class="sheet__close" (click)="cancelled.emit()">✕</button>
+    </header>
+
+    @if (!showCreate()) {
+      <p class="hint">Pick a student from your school</p>
+      <ul class="picklist">
+        @for (s of available(); track s.id) {
+          <li>
+            <button class="pick" type="button" [disabled]="busy()" (click)="assign(s)">
+              <app-student-avatar [firstName]="s.firstName" [lastName]="s.lastName" [sex]="s.sex" />
+              <span class="pick__name">{{ s.firstName }} {{ s.lastName }}</span>
+              <span class="pick__add">+</span>
+            </button>
+          </li>
+        } @empty {
+          <li class="empty">No available student in this school.</li>
+        }
+      </ul>
+
+      @if (canCreate()) {
+        <button class="newlink" type="button" (click)="showCreate.set(true)">
+          + Create a new student
+        </button>
+      }
+    } @else {
+      <p class="hint">New student (added to the school)</p>
+      <label class="field">
+        <span class="field__label">First name</span>
+        <input class="field__input" type="text" [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" />
+      </label>
+      <label class="field">
+        <span class="field__label">Last name</span>
+        <input class="field__input" type="text" [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" />
+      </label>
+      <label class="field">
+        <span class="field__label">Birth date</span>
+        <input class="field__input" type="date" [ngModel]="birthDate()" (ngModelChange)="birthDate.set($event)" />
+      </label>
+      <label class="field">
+        <span class="field__label">Sex</span>
+        <div class="seg">
+          <button type="button" class="seg__btn" [class.is-active]="sex() === 'MALE'" (click)="sex.set('MALE')">Boy</button>
+          <button type="button" class="seg__btn" [class.is-active]="sex() === 'FEMALE'" (click)="sex.set('FEMALE')">Girl</button>
+        </div>
+      </label>
+      <div class="createactions">
+        <button class="createactions__back" type="button" (click)="showCreate.set(false)">Back</button>
+        <button class="createactions__save" type="button" [disabled]="busy()" (click)="createAndAssign()">
+          {{ busy() ? 'Saving…' : 'Create & add' }}
+        </button>
+      </div>
+    }
+  </div>
+</div>

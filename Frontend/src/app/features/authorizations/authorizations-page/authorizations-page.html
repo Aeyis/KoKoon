@@ -1,0 +1,67 @@
+<main class="authz">
+  <header class="authz__header">
+    <h1 class="authz__title">Teacher access</h1>
+    <p class="authz__sub">Choose the schools and classes each teacher can access.</p>
+  </header>
+
+  <ul class="teachers">
+    @for (t of teachers(); track t.id) {
+      <li class="teacher" [class.is-open]="expandedId() === t.id">
+        <button class="teacher__head" type="button" (click)="toggle(t.id)">
+          <app-student-avatar [firstName]="t.firstName" [lastName]="t.lastName" [sex]="null" />
+          <span class="teacher__body">
+            <span class="teacher__name">{{ t.firstName }} {{ t.lastName }}</span>
+            <span class="teacher__meta">{{ schoolCount(t) }} school(s)</span>
+          </span>
+          <span class="teacher__chev"></span>
+        </button>
+
+        @if (expandedId() === t.id) {
+          <div class="teacher__panel">
+            @for (s of schools(); track s.id) {
+              <div class="schoolrow">
+                <span class="schoolrow__name">{{ s.name }}</span>
+                <button
+                  class="switch"
+                  type="button"
+                  role="switch"
+                  [attr.aria-checked]="isInSchool(t, s.id)"
+                  [class.is-on]="isInSchool(t, s.id)"
+                  [disabled]="busy()"
+                  (click)="toggleSchool(t, s.id)"
+                >
+                  <span class="switch__knob"></span>
+                </button>
+              </div>
+
+              @if (isInSchool(t, s.id)) {
+                <div class="classes">
+                  @for (c of classesOfSchool(s.id); track c.id) {
+                    <div class="classrow">
+                      <span class="classrow__name">{{ c.name }}</span>
+                      <button
+                        class="switch switch--sm"
+                        type="button"
+                        role="switch"
+                        [attr.aria-checked]="!!linkFor(t.id, c.id)"
+                        [class.is-on]="!!linkFor(t.id, c.id)"
+                        [disabled]="busy()"
+                        (click)="toggleClass(t.id, c.id)"
+                      >
+                        <span class="switch__knob"></span>
+                      </button>
+                    </div>
+                  } @empty {
+                    <p class="classes__empty">No class in this school yet.</p>
+                  }
+                </div>
+              }
+            }
+          </div>
+        }
+      </li>
+    } @empty {
+      <li class="empty">No teacher found.</li>
+    }
+  </ul>
+</main>
