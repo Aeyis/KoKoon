@@ -1,0 +1,67 @@
+<main class="records">
+  <header class="records__header">
+    <h1 class="records__title">Records</h1>
+    <p class="records__sub">Keep your contact and medical details up to date.</p>
+  </header>
+
+  <section class="card glass">
+    <h2 class="card__title">My contact details</h2>
+
+    <label class="field">
+      <span class="field__label">Phone</span>
+      <input class="field__input" type="tel" [ngModel]="phone()" (ngModelChange)="phone.set($event)" placeholder="+32 …" />
+    </label>
+
+    <label class="field">
+      <span class="field__label">Address</span>
+      <textarea class="field__input" rows="2" [ngModel]="address()" (ngModelChange)="address.set($event)" placeholder="Street, number, city…"></textarea>
+    </label>
+
+    <button class="save" type="button" [disabled]="savingProfile()" (click)="saveProfile()">
+      {{ savingProfile() ? 'Saving…' : profileSaved() ? 'Saved ✓' : 'Save contact' }}
+    </button>
+  </section>
+
+  <section class="card glass">
+    <h2 class="card__title">Medical record</h2>
+
+    @if (children().length > 1) {
+      <div class="chips">
+        @for (c of children(); track c.id) {
+          <button
+            type="button"
+            class="chip"
+            [class.is-active]="selectedChildId() === c.id"
+            (click)="selectChild(c.id)"
+          >
+            {{ c.firstName }}
+          </button>
+        }
+      </div>
+    }
+
+    <label class="field">
+      <span class="field__label">Allergies</span>
+      <textarea class="field__input" rows="2" [ngModel]="allergies()" (ngModelChange)="allergies.set($event)" placeholder="None"></textarea>
+    </label>
+
+    <label class="field">
+      <span class="field__label">Diet</span>
+      <textarea class="field__input" rows="2" [ngModel]="diet()" (ngModelChange)="diet.set($event)" placeholder="No restriction"></textarea>
+    </label>
+
+    <label class="field">
+      <span class="field__label">Medical conditions</span>
+      <textarea class="field__input" rows="2" [ngModel]="medicalConditions()" (ngModelChange)="medicalConditions.set($event)" placeholder="None"></textarea>
+    </label>
+
+    <label class="field">
+      <span class="field__label">Emergency contact</span>
+      <input class="field__input" type="text" [ngModel]="emergencyContact()" (ngModelChange)="emergencyContact.set($event)" placeholder="Name · phone" />
+    </label>
+
+    <button class="save" type="button" [disabled]="savingMedical()" (click)="saveMedical()">
+      {{ savingMedical() ? 'Saving…' : medicalSaved() ? 'Saved ✓' : 'Save medical record' }}
+    </button>
+  </section>
+</main>

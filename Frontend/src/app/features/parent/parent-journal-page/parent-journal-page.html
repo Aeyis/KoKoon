@@ -1,0 +1,49 @@
+<main class="pjournal">
+  <header class="pjournal__header">
+    <h1 class="pjournal__title">Class journal</h1>
+    <p class="pjournal__sub">
+      @if (child(); as c) {
+        {{ c.firstName }} · {{ todayLabel() }}
+      }
+    </p>
+  </header>
+
+  @if (homework().length) {
+    <section class="hw glass">
+      <h2 class="hw__title">Homework</h2>
+      <ul class="hw__list">
+        @for (j of homework(); track j.id) {
+          <li class="hw__item">
+            @if (j.subject) {
+              <span class="chip" [style.background]="j.color ? j.color + '22' : null">{{ j.subject.name }}</span>
+            }
+            <span>{{ j.homework }}</span>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  <h2 class="pjournal__section">Today's lessons</h2>
+
+  <ul class="lessons">
+    @for (j of todayEntries(); track j.id) {
+      <li class="lesson" [style.border-left-color]="j.color">
+        <div class="lesson__body">
+          @if (j.subject) {
+            <span class="chip" [style.background]="j.color ? j.color + '22' : null">{{ j.subject.name }}</span>
+          }
+          <p class="lesson__title">{{ j.title || j.content }}</p>
+          @if (j.title && j.content) {
+            <p class="lesson__desc">{{ j.content }}</p>
+          }
+          @if (j.homework) {
+            <p class="lesson__hw"><strong>Homework:</strong> {{ j.homework }}</p>
+          }
+        </div>
+      </li>
+    } @empty {
+      <li class="empty">No lessons planned today.</li>
+    }
+  </ul>
+</main>

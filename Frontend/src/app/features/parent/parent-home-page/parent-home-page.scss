@@ -18,6 +18,57 @@
   font-weight: 700;
 }
 
+.report-absence {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1.1rem;
+  border: 0;
+  border-radius: 18px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
+  touch-action: manipulation;
+
+  mat-icon {
+    flex-shrink: 0;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+}
+
+.report-absence__body {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.report-absence__title {
+  font-weight: 800;
+  font-size: 0.98rem;
+}
+
+.report-absence__sub {
+  font-size: 0.76rem;
+  opacity: 0.85;
+}
+
+.toast {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(63, 157, 109, 0.15);
+  color: #2f7d5b;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
 .parent__logout {
   flex-shrink: 0;
   min-height: 2.2rem;

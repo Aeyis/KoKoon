@@ -1,0 +1,32 @@
+<main class="conv">
+  <header class="conv__head">
+    <a class="conv__back" routerLink="/messages" aria-label="Back">‹</a>
+    <app-student-avatar [firstName]="otherFirstName()" [lastName]="otherLastName()" [sex]="null" />
+    <span class="conv__name">{{ otherFirstName() }} {{ otherLastName() }}</span>
+  </header>
+
+  <div class="conv__scroll" #scroll>
+    @for (m of messages(); track m.id) {
+      <div class="bubble" [class.bubble--mine]="m.mine">
+        <span class="bubble__text">{{ m.content }}</span>
+        <span class="bubble__time">{{ timeLabel(m.createdAt) }}</span>
+      </div>
+    } @empty {
+      <p class="conv__empty">No messages yet. Say hello 👋</p>
+    }
+  </div>
+
+  <form class="composer" (ngSubmit)="send()">
+    <textarea
+      class="composer__input"
+      rows="1"
+      placeholder="Write a message…"
+      [ngModel]="draft()"
+      (ngModelChange)="draft.set($event)"
+      name="draft"
+    ></textarea>
+    <button class="composer__send" type="submit" [disabled]="!draft().trim() || sending()" aria-label="Send">
+      ➤
+    </button>
+  </form>
+</main>

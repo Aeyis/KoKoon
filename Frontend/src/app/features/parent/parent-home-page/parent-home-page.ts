@@ -6,10 +6,11 @@ import { MeService } from '@core/services/me.service';
 import { Student } from '@core/models/student.interface';
 import { AppNotification } from '@core/models/notification.interface';
 import { StudentAvatar } from '@shared/components/student-avatar/student-avatar';
+import { AbsenceForm } from '../absence-form/absence-form';
 
 @Component({
   selector: 'app-parent-home-page',
-  imports: [RouterLink, MatIcon, StudentAvatar],
+  imports: [RouterLink, MatIcon, StudentAvatar, AbsenceForm],
   templateUrl: './parent-home-page.html',
   styleUrl: './parent-home-page.scss',
 })
@@ -19,10 +20,23 @@ export class ParentHomePage implements OnInit {
 
   protected readonly children = signal<Student[]>([]);
   protected readonly notifications = signal<AppNotification[]>([]);
+  protected readonly showAbsence = signal(false);
+  protected readonly absenceSent = signal(false);
 
   ngOnInit(): void {
     this.auth.loadCurrentUser().subscribe();
     this._meService.getChildren().subscribe((list) => this.children.set(list));
+    this._loadNotifications();
+  }
+
+  protected onAbsenceSaved(): void {
+    this.showAbsence.set(false);
+    this.absenceSent.set(true);
+    this._loadNotifications();
+    setTimeout(() => this.absenceSent.set(false), 4000);
+  }
+
+  private _loadNotifications(): void {
     this._meService.getNotifications().subscribe((list) => this.notifications.set(list));
   }
 

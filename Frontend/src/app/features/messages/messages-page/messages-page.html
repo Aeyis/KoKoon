@@ -1,0 +1,53 @@
+<main class="messages">
+  <header class="messages__header">
+    <h1 class="messages__title">Messages</h1>
+    <button class="newbtn" type="button" (click)="showContacts.set(true)" [disabled]="!contacts().length">
+      New
+    </button>
+  </header>
+
+  <ul class="convs">
+    @for (c of conversations(); track c.user.id) {
+      <li>
+        <a class="conv" [routerLink]="['/messages', c.user.id]">
+          <app-student-avatar [firstName]="c.user.firstName" [lastName]="c.user.lastName" [sex]="null" />
+          <div class="conv__body">
+            <span class="conv__name">{{ c.user.firstName }} {{ c.user.lastName }}</span>
+            <span class="conv__preview" [class.is-unread]="c.unread > 0">{{ preview(c.lastMessage) }}</span>
+          </div>
+          <div class="conv__meta">
+            <span class="conv__time">{{ timeLabel(c.lastAt) }}</span>
+            @if (c.unread > 0) {
+              <span class="conv__badge">{{ c.unread }}</span>
+            }
+          </div>
+        </a>
+      </li>
+    } @empty {
+      <li class="empty">No conversations yet. Tap “New” to start one.</li>
+    }
+  </ul>
+
+  @if (showContacts()) {
+    <div class="overlay" (click)="showContacts.set(false)">
+      <div class="sheet" (click)="$event.stopPropagation()">
+        <header class="sheet__head">
+          <h2 class="sheet__title">New message</h2>
+          <button type="button" class="sheet__close" (click)="showContacts.set(false)">✕</button>
+        </header>
+        <ul class="contacts">
+          @for (p of contacts(); track p.id) {
+            <li>
+              <a class="contact" [routerLink]="['/messages', p.id]" (click)="showContacts.set(false)">
+                <app-student-avatar [firstName]="p.firstName" [lastName]="p.lastName" [sex]="null" />
+                <span class="contact__name">{{ p.firstName }} {{ p.lastName }}</span>
+              </a>
+            </li>
+          } @empty {
+            <li class="empty">No contacts available.</li>
+          }
+        </ul>
+      </div>
+    </div>
+  }
+</main>

@@ -1,0 +1,103 @@
+.records {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 7rem;
+}
+
+.records__title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.records__sub {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.card {
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.15rem 1.25rem;
+}
+
+.card__title {
+  margin: 0 0 0.9rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.chip {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  background: var(--mat-sys-surface-container-high);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--mat-sys-on-surface-variant);
+  cursor: pointer;
+
+  &.is-active {
+    background: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+    border-color: transparent;
+  }
+}
+
+.field {
+  display: block;
+  margin-bottom: 0.9rem;
+}
+
+.field__label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.field__input {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border-radius: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: var(--mat-sys-primary);
+  }
+}
+
+.save {
+  width: 100%;
+  margin-top: 0.4rem;
+  min-height: 46px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
+  touch-action: manipulation;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: default;
+  }
+}

@@ -53,6 +53,12 @@ export class User {
     @Column({ length: 255 })
     lastName: string;
 
+    @Column({ type: 'varchar', nullable: true })
+    phone: string | null;
+
+    @Column({ type: 'varchar', nullable: true })
+    address: string | null;
+
     @CreateDateColumn()
     createdAt: Date;
 

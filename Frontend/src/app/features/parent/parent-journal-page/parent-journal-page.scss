@@ -1,0 +1,100 @@
+.pjournal {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 7rem;
+}
+
+.pjournal__title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.pjournal__sub {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.pjournal__section {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.hw {
+  margin-top: 1.25rem;
+  padding: 1rem;
+}
+
+.hw__title {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.hw__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hw__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.lessons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lesson {
+  padding: 0.7rem 0.8rem;
+  border-radius: 16px;
+  background: var(--mat-sys-surface);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-bottom-width: 4px;
+  border-left: 5px solid var(--mat-sys-outline-variant);
+}
+
+.lesson__title {
+  margin: 0.3rem 0 0;
+  font-weight: 600;
+}
+
+.lesson__desc {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.lesson__hw {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  background: var(--mat-sys-surface-container-high);
+  color: var(--mat-sys-on-surface);
+}
+
+.empty {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.85rem;
+}

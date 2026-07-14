@@ -1,0 +1,36 @@
+<main class="settings">
+  <header class="settings__header">
+    <h1 class="settings__title">Settings</h1>
+  </header>
+
+  @if (auth.currentUser(); as u) {
+    <section class="profile glass">
+      <app-student-avatar [firstName]="u.firstName" [lastName]="u.lastName" [sex]="null" />
+      <div class="profile__body">
+        <span class="profile__name">{{ u.firstName }} {{ u.lastName }}</span>
+        <span class="profile__email">{{ u.email }}</span>
+        <span class="profile__role">{{ roleLabel() }}</span>
+      </div>
+    </section>
+  }
+
+  <h2 class="settings__section">Appearance</h2>
+  <section class="glass row">
+    <div class="row__body">
+      <span class="row__title">Dark mode</span>
+      <span class="row__sub">Easier on the eyes at night</span>
+    </div>
+    <button
+      class="switch"
+      type="button"
+      role="switch"
+      [attr.aria-checked]="theme.isDark()"
+      [class.is-on]="theme.isDark()"
+      (click)="toggleTheme()"
+    >
+      <span class="switch__knob"></span>
+    </button>
+  </section>
+
+  <button class="logout" type="button" (click)="logout()">Log out</button>
+</main>

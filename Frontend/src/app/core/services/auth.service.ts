@@ -44,6 +44,17 @@ export class AuthService {
       }),
     );
   }
+
+  acceptInvitation(token: string, password: string): Observable<LoginResponse> {
+    return this._http
+      .post<LoginResponse>(`${this._apiUrl}auth/accept-invitation`, { token, password })
+      .pipe(
+        tap((res) => {
+          this._token.set(res.access_token);
+          localStorage.setItem('token', res.access_token);
+        }),
+      );
+  }
   logout(): void {
     this._token.set(null);
     localStorage.removeItem('token');

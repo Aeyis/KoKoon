@@ -20,8 +20,7 @@
   color: var(--mat-sys-primary);
 }
 
-.topbar__logout {
-  margin-left: auto;
+.topbar__action {
   display: grid;
   place-items: center;
   width: 2.4rem;
@@ -31,11 +30,20 @@
   background: var(--mat-sys-surface-container-high);
   color: var(--mat-sys-on-surface-variant);
   cursor: pointer;
+  text-decoration: none;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
-.topbar__logout mat-icon {
+.topbar__action:first-of-type {
+  margin-left: auto;
+}
+
+.topbar__action + .topbar__action {
+  margin-left: 0.5rem;
+}
+
+.topbar__action mat-icon {
   font-size: 1.3rem;
   width: 1.3rem;
   height: 1.3rem;

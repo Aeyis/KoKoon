@@ -1,4 +1,16 @@
 <main class="parent">
+  <button class="report-absence" type="button" (click)="showAbsence.set(true)" [disabled]="!children().length">
+    <mat-icon>event_busy</mat-icon>
+    <span class="report-absence__body">
+      <span class="report-absence__title">Report an absence</span>
+      <span class="report-absence__sub">Notify the teacher in one tap</span>
+    </span>
+  </button>
+
+  @if (absenceSent()) {
+    <p class="toast">✓ Absence sent to the teacher.</p>
+  }
+
   <header class="parent__header">
     <h1 class="parent__greeting">Hello {{ auth.currentUser()?.firstName }} 👋</h1>
   </header>
@@ -32,4 +44,12 @@
       <li class="empty">No notifications.</li>
     }
   </ul>
+
+  @if (showAbsence()) {
+    <app-absence-form
+      [children]="children()"
+      (saved)="onAbsenceSaved()"
+      (cancelled)="showAbsence.set(false)"
+    />
+  }
 </main>

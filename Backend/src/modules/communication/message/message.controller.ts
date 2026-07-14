@@ -25,6 +25,21 @@ export class MessageController {
     return this.messageService.sent(req.user.id);
   }
 
+  @Get('contacts')
+  contacts(@Request() req) {
+    return this.messageService.contacts(req.user.id, req.user.role);
+  }
+
+  @Get('conversations')
+  conversations(@Request() req) {
+    return this.messageService.conversations(req.user.id);
+  }
+
+  @Get('thread/:otherId')
+  thread(@Request() req, @Param('otherId') otherId: string) {
+    return this.messageService.thread(req.user.id, +otherId);
+  }
+
   @Patch(':id/read')
   markAsRead(@Param('id') id: string) {
     return this.messageService.markAsRead(+id);

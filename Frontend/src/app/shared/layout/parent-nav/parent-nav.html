@@ -1,0 +1,32 @@
+<nav class="pnav">
+  <a class="pnav__item" routerLink="/parent/records" routerLinkActive="is-active" aria-label="Records">
+    <img src="/Icons/file.webp" alt="Records" />
+    <span class="pnav__label">Records</span>
+  </a>
+
+  <a class="pnav__item" routerLink="/parent/journal" routerLinkActive="is-active" aria-label="Class journal">
+    <img src="/Icons/jdc.webp" alt="Journal" />
+    <span class="pnav__label">Journal</span>
+  </a>
+
+  <a
+    class="pnav__item"
+    routerLink="/parent"
+    routerLinkActive="is-active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    aria-label="Home"
+  >
+    <img src="/Icons/home.webp" alt="Home" />
+    <span class="pnav__label">Home</span>
+  </a>
+
+  <a class="pnav__item" routerLink="/parent/report" routerLinkActive="is-active" aria-label="Report card">
+    <img src="/Icons/bulletin.webp" alt="Report" />
+    <span class="pnav__label">Report</span>
+  </a>
+
+  <a class="pnav__item" routerLink="/parent/agenda" routerLinkActive="is-active" aria-label="Agenda">
+    <img src="/Icons/calendar.webp" alt="Agenda" />
+    <span class="pnav__label">Agenda</span>
+  </a>
+</nav>

@@ -1,0 +1,56 @@
+<main class="onboarding">
+  <div class="onboarding__card glass">
+    <header class="brand">
+      <span class="brand__logo"><mat-icon>location_on</mat-icon></span>
+    </header>
+
+    @if (missingToken()) {
+      <h1 class="onboarding__title">Invalid link</h1>
+      <p class="onboarding__subtitle">
+        This activation link is incomplete. Please use the link from your invitation email.
+      </p>
+      <a class="submit" routerLink="/login">Go to login</a>
+    } @else {
+      <h1 class="onboarding__title">Welcome to KoKoon</h1>
+      <p class="onboarding__subtitle">Choose a password to activate your account.</p>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <label class="field">
+          <mat-icon class="field__icon">lock</mat-icon>
+          <input
+            class="field__input"
+            type="password"
+            formControlName="password"
+            placeholder="new password"
+            autocomplete="new-password"
+          />
+        </label>
+        <label class="field">
+          <mat-icon class="field__icon">lock</mat-icon>
+          <input
+            class="field__input"
+            type="password"
+            formControlName="confirm"
+            placeholder="confirm password"
+            autocomplete="new-password"
+          />
+        </label>
+
+        @if (form.hasError('mismatch') && form.get('confirm')?.touched) {
+          <p class="hint">Passwords don't match.</p>
+        }
+        @if (form.get('password')?.touched && form.get('password')?.hasError('minlength')) {
+          <p class="hint">Password must be at least 8 characters.</p>
+        }
+        @if (error()) {
+          <p class="hint hint--error">{{ error() }}</p>
+        }
+
+        <button class="submit" type="submit" [disabled]="loading()">
+          {{ loading() ? 'Activating…' : 'Activate account' }}
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </form>
+    }
+  </div>
+</main>

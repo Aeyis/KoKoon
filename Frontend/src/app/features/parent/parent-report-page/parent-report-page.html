@@ -1,0 +1,120 @@
+<main class="preport">
+  <header class="preport__header">
+    <h1 class="preport__title">Report card</h1>
+    <p class="preport__sub">
+      @if (child(); as c) {
+        {{ c.firstName }} {{ c.lastName }} · Year average {{ yearAverage() ?? '—' }}/100
+      }
+    </p>
+  </header>
+
+  <div class="tabs" [attr.data-tab]="tab()">
+    <button class="tab" type="button" [class.is-active]="tab() === 'behavior'" (click)="tab.set('behavior')">
+      Behavior
+    </button>
+    <button class="tab" type="button" [class.is-active]="tab() === 'results'" (click)="tab.set('results')">
+      Results
+    </button>
+  </div>
+
+  @if (tab() === 'results') {
+    @for (b of blocks(); track b.id) {
+      <section class="subject" [attr.data-subject]="b.name">
+        <div class="subject__head">
+          <h3 class="subject__name">{{ b.name }}</h3>
+          <span class="subject__avg">{{ b.yearAvg ?? '—' }}</span>
+        </div>
+        <div class="grid-wrap">
+          <table class="grid">
+            <thead>
+              <tr>
+                <th class="grid__label">Competencies</th>
+                @for (p of periodLabels(); track p) {
+                  <th>{{ p }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (c of b.competencies; track c.title) {
+                <tr>
+                  <td class="grid__label">{{ c.title }}</td>
+                  @for (sc of c.cells; track $index) {
+                    <td>{{ sc ?? '—' }}</td>
+                  }
+                </tr>
+              }
+              @if (b.scale === 'numeric') {
+                <tr class="grid__avg">
+                  <td class="grid__label">Average /100</td>
+                  @for (a of b.avgByPeriod; track $index) {
+                    <td>{{ a ?? '—' }}</td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    } @empty {
+      <p class="empty">No results yet.</p>
+    }
+
+    <h2 class="preport__section">Test history</h2>
+    <ul class="tests">
+      @for (t of history(); track t.id) {
+        <li class="test">
+          <div class="test__body">
+            <span class="test__title">{{ t.title }}</span>
+            <span class="test__meta">{{ t.subject }} · {{ t.term }}</span>
+          </div>
+          <span class="test__score">
+            @if (t.grade) {
+              {{ t.grade }}
+            } @else {
+              {{ t.score }}/{{ t.maxScore }}
+            }
+          </span>
+        </li>
+      } @empty {
+        <li class="empty">No tests yet.</li>
+      }
+    </ul>
+  } @else {
+    @if (hasConduct()) {
+      <section class="subject">
+        <div class="grid-wrap">
+          <table class="grid">
+            <thead>
+              <tr>
+                <th class="grid__label">Behavior</th>
+                @for (p of periodLabels(); track p) {
+                  <th>{{ p }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of conductItems(); track item.id) {
+                <tr>
+                  <td class="grid__label">{{ item.label }}</td>
+                  @for (p of periods(); track p.id) {
+                    <td>
+                      <span class="dot" [attr.data-level]="conductLevel(item.id, p.id)"></span>
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <ul class="legend">
+        <li><span class="dot" data-level="ACQUIRED"></span> Acquired</li>
+        <li><span class="dot" data-level="EVOLVING"></span> Evolving</li>
+        <li><span class="dot" data-level="DIFFICULTY"></span> Difficulty</li>
+      </ul>
+    } @else {
+      <p class="empty">No behavior assessment yet.</p>
+    }
+  }
+</main>

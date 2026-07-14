@@ -1,6 +1,9 @@
 <header class="topbar">
   <span class="topbar__brand">KoKoon</span>
-  <button class="topbar__logout" type="button" (click)="logout()" aria-label="Log out">
-    <mat-icon>logout</mat-icon>
-  </button>
+  <a class="topbar__action" routerLink="/messages" aria-label="Messages">
+    <mat-icon>chat_bubble_outline</mat-icon>
+  </a>
+  <a class="topbar__action" routerLink="/settings" aria-label="Settings">
+    <mat-icon>settings</mat-icon>
+  </a>
 </header>

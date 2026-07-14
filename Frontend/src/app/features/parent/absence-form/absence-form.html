@@ -1,0 +1,62 @@
+<div class="overlay" (click)="cancelled.emit()">
+  <div class="sheet" (click)="$event.stopPropagation()">
+    <header class="sheet__head">
+      <h2 class="sheet__title">Report an absence</h2>
+      <button type="button" class="sheet__close" (click)="cancelled.emit()">✕</button>
+    </header>
+
+    @if (children().length > 1) {
+      <label class="field">
+        <span class="field__label">Child</span>
+        <div class="chips">
+          @for (c of children(); track c.id) {
+            <button
+              type="button"
+              class="chip"
+              [class.is-active]="childId() === c.id"
+              (click)="childId.set(c.id)"
+            >
+              {{ c.firstName }}
+            </button>
+          }
+        </div>
+      </label>
+    }
+
+    <label class="field">
+      <span class="field__label">Date</span>
+      <input class="field__input" type="date" [ngModel]="date()" (ngModelChange)="date.set($event)" />
+    </label>
+
+    <label class="field">
+      <span class="field__label">When</span>
+      <div class="seg">
+        @for (s of scopes; track s.value) {
+          <button
+            type="button"
+            class="seg__btn"
+            [class.is-active]="scope() === s.value"
+            (click)="scope.set(s.value)"
+          >
+            {{ s.label }}
+          </button>
+        }
+      </div>
+    </label>
+
+    <label class="field">
+      <span class="field__label">Reason <span class="field__opt">(optional)</span></span>
+      <textarea
+        class="field__input"
+        rows="3"
+        [ngModel]="reason()"
+        (ngModelChange)="reason.set($event)"
+        placeholder="Sick, medical appointment…"
+      ></textarea>
+    </label>
+
+    <button class="submit" type="button" [disabled]="saving() || childId() == null" (click)="submit()">
+      {{ saving() ? 'Sending…' : 'Send to teacher' }}
+    </button>
+  </div>
+</div>

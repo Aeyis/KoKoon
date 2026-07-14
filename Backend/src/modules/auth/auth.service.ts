@@ -24,7 +24,7 @@ export class AuthService {
     }
 
     async acceptInvitation(dto: AcceptInvitationDto) {
-        const hashedToken = crypto.createHash('sha256').update(dto.password).digest('hex');
+        const hashedToken = crypto.createHash('sha256').update(dto.token).digest('hex');
         const user = await this.usersService.findByInvitationToken(hashedToken);
 
         if (!user || !user.invitationExpireAt || user.invitationExpireAt < new Date()) {
