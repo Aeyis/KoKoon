@@ -34,7 +34,16 @@ export class ContextService {
     () => this._classes().find((c) => c.id === this._classId()) ?? null,
   );
 
+  private _loaded = false;
+
+  // Charge une seule fois (idempotent). Utiliser reload() après une mutation.
   load(): void {
+    if (this._loaded) return;
+    this._loaded = true;
+    this.reload();
+  }
+
+  reload(): void {
     this._schoolService.getMine().subscribe((list) => {
       this._schools.set(list);
       if (this._schoolId() == null || !list.some((s) => s.id === this._schoolId())) {

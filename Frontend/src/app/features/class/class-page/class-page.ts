@@ -7,14 +7,13 @@ import { AttendanceService } from '@core/services/attendance.service';
 import { AttendanceStatus } from '@core/enums/attendance.enum';
 import { UserRole } from '@core/enums/user-role.enum';
 import { StudentAvatar } from '@shared/components/student-avatar/student-avatar';
-import { Dropdown, DropdownOption } from '@shared/components/dropdown/dropdown';
 import { SeatingPlan } from '../seating-plan/seating-plan';
 import { StudentPicker } from '../student-picker/student-picker';
 import { ClassForm } from '../class-form/class-form';
 
 @Component({
   selector: 'app-class-page',
-  imports: [RouterLink, MatIcon, StudentAvatar, Dropdown, SeatingPlan, StudentPicker, ClassForm],
+  imports: [RouterLink, MatIcon, StudentAvatar, SeatingPlan, StudentPicker, ClassForm],
   templateUrl: './class-page.html',
   styleUrl: './class-page.scss',
 })
@@ -32,10 +31,6 @@ export class ClassPage implements OnInit {
   protected readonly statusById = signal<Record<number, AttendanceStatus>>({});
   protected readonly showPicker = signal(false);
   protected readonly showClassForm = signal(false);
-
-  protected readonly classOptions = computed<DropdownOption[]>(() =>
-    this.context.classesOfSchool().map((c) => ({ value: c.id, label: c.name })),
-  );
 
   protected readonly canCreateStudents = computed(() => {
     const r = this._auth.role();
@@ -57,17 +52,13 @@ export class ClassPage implements OnInit {
     });
   }
 
-  protected onClassChange(id: string | number): void {
-    this.context.setClass(Number(id));
-  }
-
   protected onPickerChanged(): void {
-    this.context.load();
+    this.context.reload();
   }
 
   protected onClassSaved(): void {
     this.showClassForm.set(false);
-    this.context.load();
+    this.context.reload();
   }
 
   protected statusOf(studentId: number): AttendanceStatus | null {

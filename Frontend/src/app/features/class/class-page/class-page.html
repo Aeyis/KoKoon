@@ -7,17 +7,6 @@
       </button>
     </div>
 
-    @if (classOptions().length) {
-      <div class="class__select">
-        <app-dropdown
-          [options]="classOptions()"
-          [value]="context.classId()"
-          placeholder="Choose a class"
-          (changed)="onClassChange($event)"
-        />
-      </div>
-    }
-
     <p class="class__sub">
       {{ presentCount() }}/{{ students().length }} present today · Tap for details
     </p>

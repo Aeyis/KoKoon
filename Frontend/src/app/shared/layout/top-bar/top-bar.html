@@ -1,5 +1,9 @@
 <header class="topbar">
-  <span class="topbar__brand">KoKoon</span>
+  @if (auth.isParent()) {
+    <span class="topbar__brand">KoKoon</span>
+  } @else {
+    <app-context-switcher />
+  }
   <a class="topbar__action" routerLink="/messages" aria-label="Messages">
     <mat-icon>chat_bubble_outline</mat-icon>
   </a>

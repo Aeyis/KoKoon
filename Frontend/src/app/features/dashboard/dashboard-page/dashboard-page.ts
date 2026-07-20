@@ -10,11 +10,10 @@ import { AgendaEvent } from '@core/models/event.interface';
 import { AttendanceSession } from '@core/enums/attendance.enum';
 import { UserRole } from '@core/enums/user-role.enum';
 import { AttendanceCard } from '../attendance-card/attendance-card';
-import { Dropdown, DropdownOption } from '@shared/components/dropdown/dropdown';
 
 @Component({
   selector: 'app-dashboard-page',
-  imports: [RouterLink, AttendanceCard, Dropdown],
+  imports: [RouterLink, AttendanceCard],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss',
 })
@@ -32,10 +31,6 @@ export class DashboardPage implements OnInit {
   protected readonly students = computed(() => this.context.selectedClass()?.students ?? []);
   protected readonly journal = signal<ClassJournal[]>([]);
   protected readonly events = signal<AgendaEvent[]>([]);
-
-  protected readonly schoolOptions = computed<DropdownOption[]>(() =>
-    this.context.schools().map((s) => ({ value: s.id, label: s.name })),
-  );
 
   protected readonly isManager = computed(() => {
     const r = this.auth.role();
@@ -68,10 +63,6 @@ export class DashboardPage implements OnInit {
     this.context.load();
     this._journalService.getAll().subscribe((list) => this.journal.set(list));
     this._eventService.getAll().subscribe((list) => this.events.set(list));
-  }
-
-  protected onSchoolChange(id: string | number): void {
-    this.context.setSchool(Number(id));
   }
 
   protected toggleAllJournal(): void {

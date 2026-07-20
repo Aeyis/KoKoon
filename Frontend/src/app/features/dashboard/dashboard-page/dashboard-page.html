@@ -22,17 +22,8 @@
 
   <header class="home__header">
     <h1 class="home__greeting">Hello {{ auth.currentUser()?.firstName }} 👋</h1>
-    @if (schoolOptions().length > 1) {
-      <div class="home__school">
-        <app-dropdown
-          [options]="schoolOptions()"
-          [value]="context.schoolId()"
-          placeholder="Choose a school"
-          (changed)="onSchoolChange($event)"
-        />
-      </div>
-    } @else if (context.selectedSchool(); as s) {
-      <p class="home__schoolname">{{ s.name }}</p>
+    @if (context.selectedSchool(); as s) {
+      <p class="home__schoolname">{{ s.name }} · {{ context.selectedClass()?.name }}</p>
     }
   </header>
 

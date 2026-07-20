@@ -75,7 +75,7 @@
   position: absolute;
   left: 50%;
   top: 0;
-  transform: translate(-50%, -30%);
+  transform: translate(-50%, -15%);
   display: grid;
   place-items: center;
   text-decoration: none;
@@ -89,5 +89,5 @@
 }
 
 .navbar__center:hover {
-  transform: translate(-50%, -36%);
+  transform: translate(-50%, -25%);
 }

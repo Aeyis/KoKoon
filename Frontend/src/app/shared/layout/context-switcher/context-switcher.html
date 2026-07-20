@@ -1,0 +1,68 @@
+@if (context.classesOfSchool().length || context.schools().length > 1) {
+  <div class="switch">
+    @if (context.schools().length > 1) {
+      <div class="pop">
+        <button
+          type="button"
+          class="pill pill--school"
+          [class.is-open]="openMenu() === 'school'"
+          (click)="toggle('school')"
+        >
+          <mat-icon class="pill__icon">apartment</mat-icon>
+          <span class="pill__label">{{ context.selectedSchool()?.name || 'School' }}</span>
+          <span class="pill__chev"></span>
+        </button>
+
+        @if (openMenu() === 'school') {
+          <ul class="menu">
+            @for (s of context.schools(); track s.id) {
+              <li>
+                <button
+                  type="button"
+                  class="menu__opt"
+                  [class.is-sel]="s.id === context.schoolId()"
+                  (click)="pickSchool(s.id)"
+                >
+                  {{ s.name }}
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    }
+
+    <div class="pop">
+      <button
+        type="button"
+        class="pill"
+        [class.is-open]="openMenu() === 'class'"
+        (click)="toggle('class')"
+      >
+        <span class="pill__label">{{ context.selectedClass()?.name || 'Class' }}</span>
+        <span class="pill__chev"></span>
+      </button>
+
+      @if (openMenu() === 'class') {
+        <ul class="menu">
+          @for (c of context.classesOfSchool(); track c.id) {
+            <li>
+              <button
+                type="button"
+                class="menu__opt"
+                [class.is-sel]="c.id === context.classId()"
+                (click)="pickClass(c.id)"
+              >
+                {{ c.name }}
+              </button>
+            </li>
+          } @empty {
+            <li class="menu__empty">No class in this school</li>
+          }
+        </ul>
+      }
+    </div>
+  </div>
+} @else {
+  <span class="brand">KoKoon</span>
+}
