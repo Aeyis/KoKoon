@@ -34,6 +34,8 @@ body {
   background-color: var(--mat-sys-surface-container);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
+  overflow-x: hidden;
+  overscroll-behavior: none;
 
   // Reset the user agent margin.
   margin: 0;
@@ -48,7 +50,6 @@ body {
   border-radius: 20px;
 }
 
-// Keep the chunky borders visible on dark surfaces (black borders vanish otherwise).
 html[data-theme='dark'] .glass {
   border-color: rgba(255, 255, 255, 0.14);
 }
