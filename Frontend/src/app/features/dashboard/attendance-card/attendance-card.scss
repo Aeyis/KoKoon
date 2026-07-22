@@ -76,8 +76,8 @@
   align-self: center;
   border: 0;
   border-radius: 999px;
-  padding: 0.4rem 0.9rem;
-  font-size: 0.72rem;
+  padding: 0.55rem 1.15rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   background: var(--mat-sys-tertiary-container);
@@ -228,4 +228,13 @@
   justify-content: center;
   gap: 0.4rem;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18);
+}
+/* Grand écran : la liste d'élèves scrolle à l'intérieur si elle dépasse l'écran */
+@media (min-width: 1024px) {
+  .students {
+    max-height: calc(100vh - 21rem);
+    overflow-y: auto;
+    padding-right: 0.4rem;
+    overscroll-behavior: contain;
+  }
 }

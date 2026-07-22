@@ -48,3 +48,9 @@
   width: 1.3rem;
   height: 1.3rem;
 }
+
+@media (min-width: 1024px) {
+  .topbar--desk {
+    left: 5rem;
+  }
+}

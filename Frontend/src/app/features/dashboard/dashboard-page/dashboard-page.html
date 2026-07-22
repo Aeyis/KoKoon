@@ -37,20 +37,23 @@
     </a>
   }
 
-  <app-attendance-card
-    title="Morning attendance"
-    [session]="AttendanceSession.MORNING"
-    [students]="students()"
-  />
+  <div class="home__attendance">
+    <app-attendance-card
+      title="Morning attendance"
+      [session]="AttendanceSession.MORNING"
+      [students]="students()"
+    />
 
-  <app-attendance-card
-    title="Afternoon attendance"
-    [session]="AttendanceSession.AFTERNOON"
-    [students]="students()"
-    [locked]="!afternoonAvailable"
-    [lockedReason]="afternoonReason"
-  />
+    <app-attendance-card
+      title="Afternoon attendance"
+      [session]="AttendanceSession.AFTERNOON"
+      [students]="students()"
+      [locked]="!afternoonAvailable"
+      [lockedReason]="afternoonReason"
+    />
+  </div>
 
+  <div class="home__grid">
   <section class="card glass">
     <div class="card__head">
       <h2 class="card__title">Class journal</h2>
@@ -115,4 +118,5 @@
 
     <a class="card__link" routerLink="/agenda">Open agenda →</a>
   </section>
+  </div>
 </main>

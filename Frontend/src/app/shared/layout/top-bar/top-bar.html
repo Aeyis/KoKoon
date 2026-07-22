@@ -1,4 +1,4 @@
-<header class="topbar">
+<header class="topbar" [class.topbar--desk]="!auth.isParent()">
   @if (auth.isParent()) {
     <span class="topbar__brand">KoKoon</span>
   } @else {

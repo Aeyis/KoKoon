@@ -2,3 +2,9 @@
   display: block;
   padding-top: calc(3.75rem + env(safe-area-inset-top));
 }
+
+@media (min-width: 1024px) {
+  .app-shell--sidenav {
+    padding-left: 5rem;
+  }
+}

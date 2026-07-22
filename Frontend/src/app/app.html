@@ -2,7 +2,11 @@
   <app-top-bar />
 }
 
-<main class="app-shell" [class.app-shell--connected]="auth.isConnected()">
+<main
+  class="app-shell"
+  [class.app-shell--connected]="auth.isConnected()"
+  [class.app-shell--sidenav]="auth.isConnected() && !auth.isParent()"
+>
   <router-outlet />
 </main>
 
