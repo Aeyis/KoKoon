@@ -84,6 +84,11 @@
   gap: 0.3rem;
 }
 
+/* Sur mobile, "Edit" n'apparaît que dans l'onglet Week */
+.movebtn--mobile-hide {
+  display: none;
+}
+
 .movebtn mat-icon {
   font-size: 1.15rem;
   width: 1.15rem;
@@ -145,9 +150,25 @@
   color: var(--mat-sys-on-primary);
 }
 
+.daycard__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+/* le titre "Today" fait doublon avec la date du header sur mobile */
+.daycard__title {
+  display: none;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
 .checkall {
   display: block;
-  margin: 1.25rem 0 0 auto;
+  margin-left: auto;
   min-height: 2.6rem;
   padding: 0 1.1rem;
   border: 2px solid rgba(0, 0, 0, 0.1);
@@ -333,3 +354,89 @@
 }
 
 /* color = per-entry, chosen by the user (applied inline via [style.border-left-color]) */
+
+/* Mobile : les onglets contrôlent le volet visible */
+.journal__pane.is-hidden {
+  display: none;
+}
+
+/* ---- Grand écran : journée à gauche, semainier à droite ---- */
+@media (min-width: 1024px) {
+  .journal {
+    max-width: none;
+    padding: 1.5rem 2rem 3rem;
+  }
+
+  /* plus d'onglets : on montre les deux volets */
+  .tabs {
+    display: none;
+  }
+  .journal__pane.is-hidden {
+    display: block;
+  }
+
+  .journal__top {
+    align-items: flex-start;
+  }
+
+  /* "Edit" toujours visible et posé dans le header (plus de bouton flottant) */
+  .movebtn,
+  .movebtn--mobile-hide {
+    display: inline-flex;
+    position: static;
+  }
+
+  .journal__content {
+    display: grid;
+    grid-template-columns: minmax(22rem, 26rem) 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    margin-top: 1.25rem;
+  }
+
+  /* Volet gauche : carte blanche, la liste des périodes scrolle à l'intérieur */
+  .daycard {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 12rem);
+    padding: 1rem 1.1rem 1.1rem;
+    border-radius: 20px;
+    background: var(--mat-sys-surface);
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-bottom-width: 4px;
+  }
+
+  .daycard__title {
+    display: block;
+  }
+
+  .daycard__head {
+    margin-top: 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .day {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 0.4rem;
+    overscroll-behavior: contain;
+  }
+
+  .half:first-child {
+    margin-top: 1rem;
+  }
+
+  /* Volet droit : le semainier occupe toute la largeur restante */
+  .journal__pane--week {
+    min-width: 0;
+  }
+
+  html[data-theme='dark'] .daycard {
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+  html[data-theme='dark'] .daycard__head {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+}

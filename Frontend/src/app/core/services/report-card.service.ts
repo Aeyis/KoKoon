@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {Observable, ObservableLike} from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '@env';
 import { ReportCard } from '@core/models/report-card.interface';
 
@@ -18,6 +18,19 @@ export class ReportCardService {
       studentId,
       periodId,
       status: 'PUBLISHED',
+    });
+  }
+
+  /** Upsert du bulletin : n'écrase que les champs fournis */
+  saveComment(
+    studentId: number,
+    periodId: number,
+    patch: { comment?: string; conductComment?: string },
+  ): Observable<ReportCard> {
+    return this._http.post<ReportCard>(`${this._apiUrl}report-cards`, {
+      studentId,
+      periodId,
+      ...patch,
     });
   }
 }

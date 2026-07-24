@@ -208,3 +208,128 @@
 }
 
 /* cell color = per-entry, applied inline via [style.background] / [style.border-left-color] */
+
+/* ---- Grand écran : le semainier tient dans la hauteur dispo, en carte ---- */
+@media (min-width: 1024px) {
+  :host {
+    display: block;
+  }
+
+  .planner {
+    height: calc(100vh - 12rem);
+    padding: 1rem 1.1rem 1.1rem;
+    border-radius: 20px;
+    background: var(--mat-sys-surface);
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-bottom-width: 4px;
+    gap: 1rem;
+  }
+
+  /* nav de semaine centrée, boutons discrets */
+  .weeknav {
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .weeknav__btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    font-size: 1.25rem;
+  }
+
+  .weeknav__label {
+    flex: 0 0 auto;
+    min-width: 16rem;
+    font-size: 1.15rem;
+  }
+
+  .grid-wrap {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding-bottom: 0;
+  }
+
+  /* les rangées se partagent la hauteur restante */
+  .grid {
+    height: 100%;
+    grid-template-columns: 3.25rem repeat(5, minmax(0, 1fr));
+    grid-template-rows: auto;
+    grid-auto-rows: minmax(3.25rem, 1fr);
+    gap: 0.45rem;
+  }
+
+  .dayhead {
+    padding: 0.45rem 0;
+    border-radius: 14px;
+    background: var(--mat-sys-surface-container);
+  }
+
+  .dayhead__wd {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+  }
+
+  .dayhead__num {
+    font-size: 1.35rem;
+  }
+
+  .dayhead.is-today {
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.12);
+  }
+
+  .rowhead {
+    border-radius: 12px;
+    background: var(--mat-sys-surface-container);
+  }
+
+  .rowhead__p {
+    font-size: 0.9rem;
+  }
+
+  .cell {
+    min-height: 0;
+    border-radius: 12px;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .cell__item,
+  .cell__add,
+  .cell__target {
+    min-height: 0;
+    border-radius: 12px;
+  }
+
+  .cell__item {
+    border-left-width: 4px;
+    transition:
+      transform 0.08s ease,
+      box-shadow 0.12s ease;
+  }
+
+  .cell__item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .cell__add {
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+
+  .cell:hover .cell__add {
+    opacity: 1;
+  }
+
+  .cell__title {
+    font-size: 0.9rem;
+  }
+
+  html[data-theme='dark'] .planner {
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+  html[data-theme='dark'] .cell {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+}

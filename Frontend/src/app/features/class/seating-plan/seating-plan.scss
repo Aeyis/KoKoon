@@ -111,14 +111,15 @@
 }
 
 .grid-wrap {
-  overflow-x: auto;
+  width: 100%;
   padding-bottom: 0.4rem;
 }
 
 .grid {
   display: grid;
+  width: 100%;
   gap: 0.4rem;
-  grid-auto-rows: 5.5rem;
+  grid-auto-rows: minmax(6.5rem, auto);
 }
 
 .cell {
@@ -161,8 +162,8 @@
 .seat {
   display: grid;
   place-items: center;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 3.2rem;
+  height: 3.2rem;
   border-radius: 50%;
   border: 2px dashed rgba(0, 0, 0, 0.15);
   background: transparent;
@@ -179,9 +180,9 @@
 }
 
 .seat__add {
-  font-size: 1.4rem;
-  width: 1.4rem;
-  height: 1.4rem;
+  font-size: 1.8rem;
+  width: 1.8rem;
+  height: 1.8rem;
   color: var(--mat-sys-on-surface-variant);
 }
 
@@ -253,4 +254,28 @@
 
 .cdk-drag-placeholder {
   opacity: 0.3;
+}
+
+/* ---- Grand écran : le plan tient dans la hauteur disponible sans scroll ---- */
+@media (min-width: 1024px) {
+  :host {
+    display: block;
+    height: 100%;
+  }
+
+  .seating {
+    height: 100%;
+  }
+
+  .grid-wrap {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  /* les rangées se partagent la hauteur restante au lieu d'une taille fixe */
+  .grid {
+    height: 100%;
+    grid-auto-rows: minmax(6.5rem, 1fr);
+  }
 }

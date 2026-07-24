@@ -1,0 +1,206 @@
+:host {
+  display: block;
+}
+
+.cc {
+  margin-top: 1.25rem;
+  padding: 0.9rem 1rem 1rem;
+  border-radius: 18px;
+  background: var(--mat-sys-surface);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-bottom-width: 4px;
+}
+
+.cc__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cc__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.cc__icon {
+  font-size: 1.15rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--mat-sys-primary);
+}
+
+.cc__edit {
+  flex-shrink: 0;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom-width: 3px;
+  border-radius: 12px;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cc__edit mat-icon {
+  font-size: 1.15rem;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.cc__terms {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.cc__term {
+  flex: 1;
+  min-height: 2.2rem;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  background: var(--mat-sys-surface);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--mat-sys-on-surface-variant);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cc__term.is-active {
+  border-color: transparent;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+}
+
+.cc__text {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.cc__add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  margin-top: 0.75rem;
+  min-height: 2.75rem;
+  border: 2px dashed rgba(0, 0, 0, 0.18);
+  border-radius: 14px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--mat-sys-primary);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cc__add mat-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* --- feuille d'édition --- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.sheet {
+  width: 100%;
+  max-width: 30rem;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--mat-sys-surface);
+  border-radius: 24px 24px 0 0;
+  padding: 1rem 1.25rem 1.5rem;
+}
+
+.sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.sheet__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.sheet__close {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--mat-sys-surface-container-high);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.sheet__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 0.9rem;
+  border-radius: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  background: var(--mat-sys-surface);
+  font: inherit;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--mat-sys-on-surface);
+  resize: vertical;
+}
+
+.sheet__input:focus {
+  outline: none;
+  border-color: var(--mat-sys-primary);
+}
+
+.sheet__save {
+  width: 100%;
+  margin-top: 0.9rem;
+  min-height: 3rem;
+  border: 0;
+  border-radius: 16px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
+  touch-action: manipulation;
+}
+
+.sheet__save:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+}
+
+html[data-theme='dark'] .cc {
+  border-color: rgba(255, 255, 255, 0.14);
+}

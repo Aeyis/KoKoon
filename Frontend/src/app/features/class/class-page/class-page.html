@@ -1,10 +1,23 @@
-<main class="class">
+<main class="class" [class.class--wide]="view() === 'seating'">
   <header class="class__header">
     <div class="class__titlerow">
       <h1 class="class__title">My class</h1>
-      <button class="ghostbtn" type="button" (click)="showClassForm.set(true)">
-        <mat-icon>add</mat-icon> New class
-      </button>
+      <div class="class__actions">
+        @if (seating(); as seat) {
+          <button
+            class="ghostbtn seatedit"
+            [class.seatedit--mobile-hide]="view() !== 'seating'"
+            type="button"
+            (click)="toggleSeatEdit()"
+          >
+            <mat-icon>{{ seat.editing() ? 'check' : 'edit' }}</mat-icon>
+            {{ seat.editing() ? 'Save' : 'Edit seats' }}
+          </button>
+        }
+        <button class="ghostbtn" type="button" (click)="showClassForm.set(true)">
+          <mat-icon>add</mat-icon> New class
+        </button>
+      </div>
     </div>
 
     <p class="class__sub">
@@ -17,39 +30,45 @@
     <button class="tab" type="button" [class.is-active]="view() === 'seating'" (click)="view.set('seating')">Seating plan</button>
   </div>
 
-  @if (view() === 'seating') {
-    @if (context.classId(); as cid) {
-      <app-seating-plan [classId]="cid" [students]="students()" />
-    }
-  } @else {
-  <div class="students">
-    @for (student of students(); track student.id) {
-      <a class="student" [routerLink]="['/class', student.id]">
-        <app-student-avatar
-          [firstName]="student.firstName"
-          [lastName]="student.lastName"
-          [sex]="student.sex"
-        />
-        <span class="student__name">{{ student.firstName }} {{ student.lastName }}</span>
-        @if (statusOf(student.id); as st) {
-          <span
-            class="status"
-            [class.is-present]="st === AttendanceStatus.PRESENT"
-            [class.is-absent]="st === AttendanceStatus.ABSENT"
-            [class.is-late]="st === AttendanceStatus.LATE"
-          >{{ statusLabel(st) }}</span>
-        }
-        <mat-icon class="student__chevron">chevron_right</mat-icon>
-      </a>
-    } @empty {
-      <p class="empty">No students yet.</p>
-    }
-  </div>
+  <div class="class__content">
+    <section class="class__pane class__pane--list" [class.is-hidden]="view() !== 'list'">
+      <div class="students-card">
+        <div class="students">
+          @for (student of students(); track student.id) {
+            <a class="student" [routerLink]="['/class', student.id]">
+              <app-student-avatar
+                [firstName]="student.firstName"
+                [lastName]="student.lastName"
+                [sex]="student.sex"
+              />
+              <span class="student__name">{{ student.firstName }} {{ student.lastName }}</span>
+              @if (statusOf(student.id); as st) {
+                <span
+                  class="status"
+                  [class.is-present]="st === AttendanceStatus.PRESENT"
+                  [class.is-absent]="st === AttendanceStatus.ABSENT"
+                  [class.is-late]="st === AttendanceStatus.LATE"
+                >{{ statusLabel(st) }}</span>
+              }
+              <mat-icon class="student__chevron">chevron_right</mat-icon>
+            </a>
+          } @empty {
+            <p class="empty">No students yet.</p>
+          }
+        </div>
+      </div>
 
-  <button class="addbtn" type="button" (click)="showPicker.set(true)" [disabled]="context.classId() == null">
-    <mat-icon>person_add</mat-icon> Add student
-  </button>
-  }
+      <button class="addbtn" type="button" (click)="showPicker.set(true)" [disabled]="context.classId() == null">
+        <mat-icon>person_add</mat-icon> Add student
+      </button>
+    </section>
+
+    <section class="class__pane class__pane--seating" [class.is-hidden]="view() !== 'seating'">
+      @if (context.classId(); as cid) {
+        <app-seating-plan [classId]="cid" [students]="students()" />
+      }
+    </section>
+  </div>
 
   @if (showPicker() && context.classId(); as cid) {
     <app-student-picker

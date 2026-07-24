@@ -21,6 +21,7 @@ export class ReportCardsService {
     });
     if (existing) {
       if (dto.comment !== undefined) existing.comment = dto.comment;
+      if (dto.conductComment !== undefined) existing.conductComment = dto.conductComment;
       if (dto.status !== undefined) existing.status = dto.status;
       if (dto.signature !== undefined) existing.signature = dto.signature;
       if (dto.dueDate !== undefined) existing.dueDate = dto.dueDate;
@@ -28,6 +29,7 @@ export class ReportCardsService {
     }
     const reportCard = this.reportCardRepository.create({
       comment: dto.comment,
+      conductComment: dto.conductComment,
       status: dto.status,
       signature: dto.signature,
       dueDate: dto.dueDate,

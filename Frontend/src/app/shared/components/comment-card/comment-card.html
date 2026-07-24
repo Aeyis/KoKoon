@@ -1,0 +1,57 @@
+<section class="cc">
+  <header class="cc__head">
+    <h2 class="cc__title">
+      <mat-icon class="cc__icon">chat_bubble</mat-icon>
+      {{ title() }}
+    </h2>
+    @if (text()) {
+      <button class="cc__edit" type="button" (click)="open()" aria-label="Edit comment">
+        <mat-icon>edit</mat-icon>
+      </button>
+    }
+  </header>
+
+  @if (terms().length > 1) {
+    <div class="cc__terms">
+      @for (t of terms(); track t.id) {
+        <button
+          class="cc__term"
+          type="button"
+          [class.is-active]="periodId() === t.id"
+          (click)="periodChanged.emit(t.id)"
+        >
+          {{ t.label }}
+        </button>
+      }
+    </div>
+  }
+
+  @if (text(); as txt) {
+    <p class="cc__text">{{ txt }}</p>
+  } @else {
+    <button class="cc__add" type="button" (click)="open()">
+      <mat-icon>add_comment</mat-icon> Add a comment
+    </button>
+  }
+</section>
+
+@if (editing()) {
+  <div class="overlay" (click)="editing.set(false)">
+    <div class="sheet" (click)="$event.stopPropagation()">
+      <header class="sheet__head">
+        <h2 class="sheet__title">{{ title() }}</h2>
+        <button type="button" class="sheet__close" (click)="editing.set(false)">✕</button>
+      </header>
+
+      <textarea
+        class="sheet__input"
+        rows="6"
+        [value]="draft()"
+        (input)="draft.set($any($event.target).value)"
+        [placeholder]="placeholder()"
+      ></textarea>
+
+      <button class="sheet__save" type="button" (click)="submit()">Save</button>
+    </div>
+  </div>
+}

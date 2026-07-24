@@ -10,8 +10,13 @@ export class ReportCard {
     @PrimaryGeneratedColumn()
     id: number;
 
+    /** Appréciation du titulaire sur les résultats */
     @Column({ type: 'text', nullable: true })
     comment: string;
+
+    /** Appréciation du titulaire sur le comportement */
+    @Column({ type: 'text', nullable: true })
+    conductComment: string;
 
     @Column({ type: 'enum', enum: ReportCardStatus, default: ReportCardStatus.DRAFT })
     status: ReportCardStatus;

@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { ClassService } from '@core/services/class.service';
 import { EvaluationService } from '@core/services/evaluation.service';
@@ -33,6 +33,8 @@ export class ReportCardPage implements OnInit {
   private readonly _periodService = inject(PeriodService);
   private readonly _reportCardService = inject(ReportCardService);
   private readonly _subjectService = inject(SubjectService);
+  private readonly _route = inject(ActivatedRoute);
+  private readonly _router = inject(Router);
 
   protected readonly reportCards = signal<ReportCard[]>([]);
   protected readonly periods = signal<Period[]>([]);
@@ -68,7 +70,16 @@ export class ReportCardPage implements OnInit {
     () => this.students().filter((s) => this._sentSet().has(s.id)).length,
   );
 
-  protected readonly tab = signal<'behavior' | 'results' | 'send'>('results');
+  protected readonly tab = signal<'behavior' | 'results'>(
+    this._route.snapshot.queryParamMap.get('tab') === 'behavior' ? 'behavior' : 'results',
+  );
+
+  protected setTab(t: 'behavior' | 'results'): void {
+    this.tab.set(t);
+    this._router.navigate([], { queryParams: { tab: t }, replaceUrl: true });
+  }
+
+  protected readonly showSend = signal(false);
   protected readonly classRoom = signal<ClassRoom | null>(null);
   protected readonly evaluations = signal<Evaluation[]>([]);
   protected readonly conduct = signal<ConductAssessment[]>([]);

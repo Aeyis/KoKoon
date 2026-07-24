@@ -7,6 +7,10 @@ export class CreateReportCardDto {
     comment?: string;
 
     @IsOptional()
+    @IsString()
+    conductComment?: string;
+
+    @IsOptional()
     @IsEnum(ReportCardStatus)
     status?: ReportCardStatus;
     @IsOptional()

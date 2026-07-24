@@ -1,5 +1,5 @@
 <main class="conduct">
-  <a class="conduct__back" routerLink="/report-card">
+  <a class="conduct__back" routerLink="/report-card" [queryParams]="{ tab: 'behavior' }">
     <mat-icon>chevron_left</mat-icon> Back
   </a>
 
@@ -38,4 +38,14 @@
       }
     }
   </div>
+
+  <app-comment-card
+    title="Comment on behavior"
+    placeholder="Describe the student's attitude for the parents…"
+    [text]="comment()"
+    [terms]="commentTerms()"
+    [periodId]="commentPeriodId()"
+    (periodChanged)="commentPeriodId.set($event)"
+    (saved)="saveComment($event)"
+  />
 </main>

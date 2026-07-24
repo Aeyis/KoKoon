@@ -1,18 +1,11 @@
 <div class="seating">
-  <div class="toolbar">
-    @if (!editing()) {
-      <button class="btn" type="button" (click)="editing.set(true)">
-        <mat-icon>edit</mat-icon> Edit seats
-      </button>
-    } @else {
+  @if (editing()) {
+    <div class="toolbar">
       <button class="btn btn--ghost" type="button" (click)="addDesk()">
         <mat-icon>add</mat-icon> Desk
       </button>
-      <button class="btn" type="button" (click)="save()">
-        <mat-icon>check</mat-icon> Save
-      </button>
-    }
-  </div>
+    </div>
+  }
 
   @if (editing()) {
     <div class="dims">
@@ -50,7 +43,7 @@
       class="grid"
       cdkDropListGroup
       [class.is-editing]="editing()"
-      [style.grid-template-columns]="'repeat(' + plan().cols + ', minmax(5rem, 1fr))'"
+      [style.grid-template-columns]="'repeat(' + plan().cols + ', minmax(0, 1fr))'"
     >
       @for (cell of cells(); track cell.key) {
         <div class="cell" cdkDropList (cdkDropListDropped)="dropDesk($event, cell.row, cell.col)">
@@ -74,7 +67,7 @@
                     (click)="onSeat(desk, $index); $event.stopPropagation()"
                   >
                     @if (seat !== null && studentById()[seat]; as st) {
-                      <app-student-avatar [firstName]="st.firstName" [lastName]="st.lastName" [sex]="st.sex" [size]="1.8" />
+                      <app-student-avatar [firstName]="st.firstName" [lastName]="st.lastName" [sex]="st.sex" [size]="2.6" />
                     } @else if (editing()) {
                       <mat-icon class="seat__add">add</mat-icon>
                     }

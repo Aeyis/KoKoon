@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { AuthService } from '@core/services/auth.service';
@@ -26,6 +26,8 @@ export class ClassPage implements OnInit {
 
   protected readonly AttendanceStatus = AttendanceStatus;
 
+  protected readonly seating = viewChild(SeatingPlan);
+
   protected readonly view = signal<'list' | 'seating'>('list');
   protected readonly students = computed(() => this.context.selectedClass()?.students ?? []);
   protected readonly statusById = signal<Record<number, AttendanceStatus>>({});
@@ -50,6 +52,13 @@ export class ClassPage implements OnInit {
       }
       this.statusById.set(map);
     });
+  }
+
+  protected toggleSeatEdit(): void {
+    const s = this.seating();
+    if (!s) return;
+    if (s.editing()) s.save();
+    else s.editing.set(true);
   }
 
   protected onPickerChanged(): void {

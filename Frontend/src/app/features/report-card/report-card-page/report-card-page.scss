@@ -16,7 +16,7 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
-/* tabs (3) */
+/* tabs (2) */
 .tabs {
   position: relative;
   display: flex;
@@ -36,7 +36,7 @@
   top: 0.25rem;
   bottom: 0.25rem;
   left: 0.25rem;
-  width: calc((100% - 0.5rem) / 3);
+  width: calc(50% - 0.25rem);
   border-radius: 999px;
   background: var(--mat-sys-primary);
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
@@ -45,10 +45,6 @@
 
 .tabs[data-tab='results']::before {
   transform: translateX(100%);
-}
-
-.tabs[data-tab='send']::before {
-  transform: translateX(200%);
 }
 
 .tab {
@@ -238,7 +234,7 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
-/* send tab */
+/* send sheet */
 .sendall {
   display: flex;
   align-items: center;
@@ -324,6 +320,13 @@
   min-height: 2.9rem;
 }
 
+.reportcard__actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .histbtn {
   flex-shrink: 0;
   display: grid;
@@ -344,6 +347,19 @@
   font-size: 1.4rem;
   width: 1.4rem;
   height: 1.4rem;
+}
+
+/* le "Send" est l'action principale : plein coral */
+.histbtn--send {
+  border-color: transparent;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
+}
+
+.histbtn--send:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
 }
 
 .overlay {

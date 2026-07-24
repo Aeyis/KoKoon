@@ -19,7 +19,7 @@ export class SeatingPlan implements OnInit {
   readonly students = input.required<Student[]>();
 
   protected readonly plan = signal<SeatingPlanData>({ rows: 5, cols: 5, desks: [] });
-  protected readonly editing = signal(false);
+  readonly editing = signal(false);
   protected readonly selectedStudentId = signal<number | null>(null);
   protected readonly selectedDeskId = signal<string | null>(null);
 
@@ -161,7 +161,7 @@ export class SeatingPlan implements OnInit {
     }));
   }
 
-  protected save(): void {
+  save(): void {
     this._classService.setSeating(this.classId(), this.plan()).subscribe(() => {
       this.editing.set(false);
       this.selectedDeskId.set(null);

@@ -4,6 +4,13 @@
   padding: 1.5rem 1.25rem 7rem;
 }
 
+/* Onglet "Seating plan" : le plan prend toute la largeur de l'écran */
+.class--wide {
+  max-width: none;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
 .class__titlerow {
   display: flex;
   align-items: center;
@@ -15,6 +22,17 @@
   margin: 0;
   font-size: 1.6rem;
   font-weight: 700;
+}
+
+.class__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Sur mobile, "Edit seats" n'apparaît que dans l'onglet Seating plan */
+.seatedit--mobile-hide {
+  display: none;
 }
 
 .class__select {
@@ -188,4 +206,62 @@
 
 .empty {
   color: var(--mat-sys-on-surface-variant);
+}
+
+/* Mobile : les onglets contrôlent le volet visible */
+.class__pane.is-hidden {
+  display: none;
+}
+
+/* ---- Grand écran : liste + plan de classe côte à côte, le tout tient à l'écran ---- */
+@media (min-width: 1024px) {
+  .class {
+    max-width: none;
+    padding: 1.5rem 2rem 3rem;
+  }
+
+  /* plus d'onglets : on montre les deux volets */
+  .tabs {
+    display: none;
+  }
+  .class__pane.is-hidden {
+    display: block;
+  }
+
+  /* "Edit seats" toujours visible en grand écran (les deux volets sont montrés) */
+  .seatedit--mobile-hide {
+    display: inline-flex;
+  }
+
+  .class__content {
+    display: grid;
+    grid-template-columns: minmax(20rem, 24rem) 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  /* Liste d'élèves dans une carte blanche scrollable */
+  .students-card {
+    background: var(--mat-sys-surface);
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-bottom-width: 4px;
+    border-radius: 20px;
+    padding: 1rem;
+  }
+  .students-card .students {
+    max-height: calc(100vh - 18rem);
+    overflow-y: auto;
+    padding-right: 0.4rem;
+    overscroll-behavior: contain;
+  }
+
+  /* Plan de classe : hauteur fixe → la grille se met à l'échelle pour tenir sans scroll */
+  .class__pane--seating {
+    height: calc(100vh - 9.5rem);
+    overflow: auto;
+  }
+
+  html[data-theme='dark'] .students-card {
+    border-color: rgba(255, 255, 255, 0.14);
+  }
 }
